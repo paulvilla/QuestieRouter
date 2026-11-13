@@ -7,6 +7,7 @@
 ## Author: Lizerius
 ## Version: 0.9.2
 ## Category: Quests
+## X-Curse-Project-ID: 1802059
 ## IconTexture: Interface\AddOns\QuestieRouter\Media\Icons\QuestieRouter.tga
 ## AddonCompartmentFunc: QuestieRouter_OnAddonCompartmentClick
 ## AddonCompartmentFuncOnEnter: QuestieRouter_OnAddonCompartmentEnter
