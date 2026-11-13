@@ -35,9 +35,32 @@ local function FindLib(...)
     end
 end
 
+--- Las versiones nuevas de Questie ya no registran su HereBeDragons en LibStub: es un modulo suyo ("HBD" y
+--- "HBDPins"). Sin esto se cogia la copia de otro addon (la de Spy es antigua: sin
+--- GetZoneCoordinatesFromWorldInstance -> error continuo al despegar). Se mira la tabla de modulos directamente,
+--- porque ImportModule crearia un modulo vacio si no existe.
+local function QuestieModule(name, probe)
+    local mods = QuestieLoader and QuestieLoader._modules
+    local m = mods and mods[name]
+    if type(m) == "table" and type(m[probe]) == "function" then return m end
+end
+
+--- Coordenadas de zona (0-1) de un punto del mundo. Con instancia si la libreria lo permite; las copias
+--- antiguas de HereBeDragons no tienen GetZoneCoordinatesFromWorldInstance y se usa la conversion clasica.
+function QR:ZoneCoordsFromWorld(x, y, inst, zone, allowOutOfBounds)
+    local HBD = self.HBD
+    if not HBD then return nil end
+    if inst and HBD.GetZoneCoordinatesFromWorldInstance then
+        return HBD:GetZoneCoordinatesFromWorldInstance(x, y, inst, zone, allowOutOfBounds)
+    end
+    return HBD:GetZoneCoordinatesFromWorld(x, y, zone, allowOutOfBounds)
+end
+
 function Bridge:FindMapLibs(tries)
-    self.HBD = self.HBD or FindLib("HereBeDragonsQuestie-2.0", "HereBeDragons-2.0")
-    self.HBDPins = self.HBDPins or FindLib("HereBeDragonsQuestie-Pins-2.0", "HereBeDragons-Pins-2.0")
+    self.HBD = self.HBD or QuestieModule("HBD", "GetPlayerWorldPosition")
+        or FindLib("HereBeDragonsQuestie-2.0", "HereBeDragons-2.0")
+    self.HBDPins = self.HBDPins or QuestieModule("HBDPins", "AddMinimapIconWorld")
+        or FindLib("HereBeDragonsQuestie-Pins-2.0", "HereBeDragons-Pins-2.0")
     QR.HBD, QR.HBDPins = self.HBD, self.HBDPins
     if self.HBD and self.HBDPins then
         if tries then QR:Fire("SETTINGS_CHANGED") end   -- llegaron tarde: recalcular todo

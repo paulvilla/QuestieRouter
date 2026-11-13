@@ -4,6 +4,15 @@ local _, QR = ...
 QR.Changelogs = QR.Changelogs or {}
 QR.Changelogs.esES = {
     {
+        version = "0.9.3", date = "2026-11-13",
+        title = "Arreglo de rutas y vuelos",
+        lines = {
+            "Arreglado el error continuo al coger un vuelo o al ir a una ciudad (Router.lua:551) con las versiones nuevas de Questie.",
+            "QuestieRouter usa siempre la libreria de mapas de Questie y no la copia antigua de otros addons (como Spy).",
+            "Arreglado el error del informe del mapa de vuelos con vuelos que el addon no conoce (por ejemplo, Cima de la Eternidad en Monte Hyjal).",
+        },
+    },
+    {
         version = "0.9.2", date = "2026-11-12",
         title = "Asistente de instalacion y guias nuevas",
         lines = {

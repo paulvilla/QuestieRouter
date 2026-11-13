@@ -146,7 +146,7 @@ local function CanvasFromWorld(wx, wy, inst)
         local ok, cx, cy = pcall(OpenMapAPI.CanvasFromWorldPos, inst, X, Y)
         if ok and cx then return cx, cy end
     end
-    if inst then return QR.HBD:GetZoneCoordinatesFromWorldInstance(wx, wy, inst, host, true) end
+    if inst then return QR:ZoneCoordsFromWorld(wx, wy, inst, host, true) end
     return QR.HBD:GetZoneCoordinatesFromWorld(wx, wy, host, true)
 end
 
@@ -163,7 +163,7 @@ local function CanvasFromZone(uiMapId, x, y)
     local wx, wy, inst = QR.HBD:GetWorldCoordinatesFromZone(x, y, uiMapId)
     if not wx then return nil end
     -- con el continente: un punto de otro continente no se coloca (salvo en el mapa de Azeroth)
-    return QR.HBD:GetZoneCoordinatesFromWorldInstance(wx, wy, inst, host, true)
+    return QR:ZoneCoordsFromWorld(wx, wy, inst, host, true)
 end
 
 local function PlayerZonePosition()

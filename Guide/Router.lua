@@ -301,8 +301,10 @@ function Router:TaxiMapReport()
     local bySlot, how = SlotNodes(select(3, QR.HBD:GetPlayerWorldPosition()))
     for i = 1, NumTaxiNodes() do
         local id = bySlot[i]
+        -- el juego puede dar vuelos que no estan en Data/Travel.lua (p. ej. 559, Cima de la Eternidad en Hyjal)
+        local node = id and D.nodes[id]
         QR:Print(string.format("%d. %s: %s -> %s", i, tostring(TaxiNodeName(i)), tostring(TaxiNodeGetType(i)),
-            id and string.format("[%d] %s (%s)", id, D.nodes[id][1], how[i]) or "?"))
+            id and string.format("[%d] %s (%s)", id, node and node[1] or "(no esta en los datos del addon)", how[i] or "?") or "?"))
     end
 end
 
@@ -548,7 +550,7 @@ end
 local function ZoneAt(inst, x, y)
     local cont = CONTINENT_MAP[inst]
     if not (cont and C_Map and C_Map.GetMapInfoAtPosition) then return nil end
-    local nx, ny = QR.HBD:GetZoneCoordinatesFromWorldInstance(x, y, inst, cont)
+    local nx, ny = QR:ZoneCoordsFromWorld(x, y, inst, cont)
     if not nx then return nil end
     local ok, info = pcall(C_Map.GetMapInfoAtPosition, cont, nx, ny)
     local map = ok and info and NormalizeZone(info.mapID) or nil
@@ -556,7 +558,7 @@ local function ZoneAt(inst, x, y)
     -- Ciudades amuralladas: en el mapa del continente el punto cae en la zona que la rodea (Ventormenta ->
     -- Bosque de Elwynn). Se pregunta tambien al mapa de esa zona: si el punto esta en una ciudad (otro mapa de
     -- tipo zona), la zona es la ciudad. Asi entrar o salir de ella obliga a pasar por la puerta (Data/Borders.lua).
-    local zx, zy = QR.HBD:GetZoneCoordinatesFromWorldInstance(x, y, inst, map, true)
+    local zx, zy = QR:ZoneCoordsFromWorld(x, y, inst, map, true)
     if zx and zx >= 0 and zx <= 1 and zy >= 0 and zy <= 1 then
         local ok2, sub = pcall(C_Map.GetMapInfoAtPosition, map, zx, zy)
         if ok2 and sub and sub.mapID ~= map and sub.mapType == 3 then map = sub.mapID end
@@ -685,7 +687,7 @@ function Router:PlayerZonePoint(x, y)
     if zone ~= map then
         local wx, wy, inst = QR.HBD:GetWorldCoordinatesFromZone(px, py, map)
         if not wx then return nil end
-        px, py = QR.HBD:GetZoneCoordinatesFromWorldInstance(wx, wy, inst, zone, true)
+        px, py = QR:ZoneCoordsFromWorld(wx, wy, inst, zone, true)
         if not px then return nil end
     end
     return zone, px, py

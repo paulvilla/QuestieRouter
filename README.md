@@ -1,218 +1,135 @@
-![QuestieRouter](https://i.imgur.com/sWVJpdV.png)
+# QuestieRouter
 
-# QuestieRouter: level through every zone without ever getting lost
+Extensión de Questie: cuando enfocas una misión en el tracker de Questie (botón de foco), muestra
 
-**QuestieRouter turns Questie's quest database into a full levelling guide.** It tells you what to pick up, where to do it and when to turn it in, in the same order an experienced player would. On top of that you get a navigation arrow, an animated route on the map, flights and boats worked out for you, dungeon guides, and an interface that changes with the zone and the time of day.
+- una **flecha estilo TomTom** con nombre del objetivo y distancia,
+- una **línea en el minimapa** del jugador hacia el objetivo (el icono flota en el borde si está lejos),
+- una **línea en el mapa del mundo** del jugador al objetivo.
 
-**69 zone guides · 41 dungeon guides · 4,220 quests · 97 arrow styles · 73 flight masters**
+Si la misión está completa, el destino pasa a ser el NPC/objeto de entrega.
 
-Requires **Questie** · Made for **WoW Forever** · Available in **English, Spanish, French, German and Russian**
+## Uso
 
----
+1. Coge misiones como siempre.
+2. En el tracker de Questie pulsa el botón de foco de la misión que quieres hacer.
+3. Sigue la flecha. `/qr info` muestra el destino actual; `/qr help` lista los comandos.
 
-## A guide for every zone
+## Guías por zona (`/qr guide`)
 
-![Zone guides](https://i.imgur.com/4FdocSV.png)
+Archivos en `Zones/<Facción>/<Facción>_<Zona>_<min>-<max>.lua` (p. ej. `Alliance_ElwynnForest_1-12.lua`),
+**generados** con `python tools/zone_guides.py` a partir de QuestieDB. La misión de entrada de cada zona
+está fijada en `tools/data/zone_entries.json`.
+Eliges una zona en la ventana y el addon te va llevando a coger, hacer y entregar todas sus misiones.
 
-- One guide per zone and faction, for both Alliance and Horde, including **Zephras Isle** and the **Darkspear Islands (PvP)**.
-- Each guide uses the level range shown on the zone's map, so you always know whether a zone suits you.
-- Quests are sorted by level and distance, and every prerequisite is respected.
-- Each zone starts with its entry quest.
-- City quests are placed in the zone where you actually do them.
-- The guide that best fits your level is marked as recommended.
+- **Zona de una misión** = donde está quien la da (las de Northshire caen en Elwynn).
+- **Rango de niveles** = bloque principal de niveles (se corta por huecos de ≥4 niveles). Lo que se coge
+  aquí pero es mucho más alto (p. ej. la cadena de Stalvan, nivel 28, en Elwynn) va a `later`.
+- **Orden de la lista** = primero la misión de entrada a la zona, luego por nivel y, dentro del mismo nivel,
+  por cercanía del NPC que la da a la misión anterior (y por ID si empatan), respetando siempre los requisitos previos.
+- **Orden real (planificador, `Planner.lua`)**, recalculado en vivo:
+  1. *Hub*: cualquier coger/entregar a <120 yd → el más cercano (vacía el hub antes de irte).
+  2. *Campo*: el objetivo más cercano; si de camino hay un coger/entregar a <35 % de esa distancia, primero ese.
+  3. Entregar lo que quede.
+  4. *Siguiente hub*: la misión disponible con menor posición en la lista (de nivel bajo a alto).
+  5. Si no queda nada: te dice a qué nivel se desbloquea la siguiente, o que la zona está terminada.
+- No propone objetivos de misiones más de 3 niveles por encima, ni recoger con el registro lleno.
+- Mayús+clic en una misión de la lista = saltarla.
 
-## Pick up · Do · Turn in
+## Guías de mazmorras
 
-![Planner](https://i.imgur.com/wKixRgL.png)
+Archivos en `Dungeons/<Facción>/<Facción>_Dungeon_<Mazmorra>.lua`, **generados** con `python tools/dungeon_guides.py`:
+una guía por mazmorra con sus misiones (las del área de la mazmorra en QuestieDB más la lista de
+`tools/data/dungeon_quests.json`). Usan el mismo planificador que las de zona: te lleva a coger las misiones por el
+mundo y, cuando lo que queda está dentro (objetivos, entregas o NPCs de dentro), a la **entrada** de la mazmorra
+(`Data/Dungeons.lua`). Dentro de la instancia no hay flecha (el juego no da coordenadas); la lista de pasos dice
+qué hacer, marcado «(dentro de …)».
 
-Forget doing one quest at a time. QuestieRouter plans your session the way an experienced player does:
+## Apariencia (estilo "Round - Minimal" de Fusion)
 
-1. **Hub:** pick up and turn in everything nearby.
-2. **Field:** head to the objective area, or straight to the densest group of enemies.
-3. **Turn in:** finish the rest. Anything newly unlocked takes you back to the hub.
-4. **Next hub:** move on, without bouncing back and forth between two nearby quests.
+Ventana sin marco, solo tarjetas redondeadas, en este orden:
 
-**In capital cities**, every completed quest you can turn in there comes first, starting with the nearest NPC. Then the guide picks up where it left off.
+1. **Tarjeta activa**: qué hacer ahora, con los nombres en color (enemigos en rojo, objetos en azul,
+   NPC en verde), contadores (`Alimaña kóbold: 3/10`), «Te faltan 7 de 10», distancia y número de paso.
+2. **Banner de la zona**: cielo panorámico que avanza con la hora del juego (día → atardecer → noche),
+   estrellas de noche, luna en Tanaris, niebla al amanecer en zonas brumosas, ilustración de la zona,
+   nombre de la zona, niveles, misiones hechas y reloj. Botones (zona, opciones, bloquear, cerrar)
+   que aparecen al pasar el ratón.
+3. **Pasos**: los últimos hechos (atenuados), el actual (resaltado, con barra de color) y los próximos.
+   Los próximos salen de simular el planificador: coger por NPC → hacer por misión → entregar por NPC.
+4. **Pie**: recuento y pestañas *Pasos* / *Misiones*.
 
-## Dungeon guides
+**Sin guía elegida** la ventana muestra el banner de tu zona («Bienvenido a QuestieRouter / Elige una guía:»)
+y las categorías: *Guías para completar zonas* (las únicas con contenido por ahora), *Speedrun*, *Mazmorras*
+y *Profesiones* (próximamente). Al entrar en una categoría aparecen sus guías y una tarjeta «Atrás»;
+al elegir una guía desaparece la navegación. **Clic derecho en la imagen** abre el menú: *Guías disponibles*
+(con submenús; las zonas agrupadas por tramos de nivel), *Opciones…*, *Skin*, *Flecha*, *Lista de misiones*,
+*Bloquear ventana*, *Reiniciar historial*, *Salir de la guía* y *Cerrar*.
 
-![Dungeon guides](https://i.imgur.com/RcLV06E.png)
+**Flecha**: por defecto la «Brújula de arco»; en Opciones hay un desplegable con la vista previa de todas (HD de Fusion, RX, RX redonda, RX 3D prisma y bloque, y el paquete).
+Debajo muestra la misión, lo que falta (`Alimaña kóbold 3/10`, o a quién coger/entregar) y la distancia;
+dentro del área del objetivo (≤50 yd) cambia la distancia por «En la zona».
 
-41 dungeon guides, from The Deadmines to Scholomance. QuestieRouter sends you around the world to collect the dungeon's quests, then routes you to the entrance. Steps done inside the dungeon are clearly marked, and once you're out it takes you to turn everything in.
+La **skin cambia según la zona** en la que estás (paleta y arte, con fundido de 2,5 s); también puede
+seguir la zona de la guía o una zona fija. Sin guía elegida sale el selector «¿Qué zona quieres completar?»
+con la ilustración de cada zona. `/qr options` abre las opciones gráficas: modo de skin, esquinas,
+transparencias, alto del banner, estrellas/niebla/reloj, vista previa de la hora, fuente y tamaños,
+ancho/alto, pasos hechos visibles y la flecha (18 estilos HD + clásica, color de zona, verde/rojo o materiales).
 
-## Quest chains and quest list
+El material gráfico lo generan los scripts de `tools/media/` y `tools/icon/` (ver `Media/CREDITS.md`); la copia del anterior está en `backups/Media_2026-11-09/`.
 
-![Quest chains](https://i.imgur.com/hlMVhV6.png)
+## Rutas
 
-The **Quests** tab lists every quest in the zone and shows exactly where you stand on each one: available, in progress, ready to turn in or locked.
+- `/qr dungeon <nombre>`: ruta hasta la entrada de una mazmorra (`/qr dungeon stop` la quita).
+- `/qr road add [x y]`: añade un punto a un camino de la zona (tu posición o coordenadas del mapa); `/qr road rec`
+  graba un camino mientras andas; `new`, `undo`, `list`, `clear`. Los caminos propios se guardan en la configuración.
 
-- **What's missing:** if a quest isn't available yet, the list shows the earlier quest you still need and its zone.
-- **The whole chain at a glance:** right-click any quest to see its chain, numbered in the order you do it. Each quest shows its status on the right: done, in progress, ready to turn in, available, the level you still need, or locked, with the reason when it isn't an earlier quest.
-- **One click to start:** click any quest in the chain to get a route to whoever gives it. If you can't pick it up yet, you get a warning instead of a wasted trip.
-- **Only what's yours:** quests for another race or class never show up as the previous quest.
-- Skip quests and bring them back whenever you like.
-- **Elite** and **dungeon** quests are marked with icons in the list, in the steps and in the chain.
+## Idiomas
 
-## Auto accept and turn in
+La interfaz sale en el idioma del cliente si hay traducción; si no, en inglés. Los nombres de misiones,
+NPCs y zonas los traducen Questie y el propio juego (siempre en el idioma del cliente).
 
-![Automation](https://i.imgur.com/Naq56mn.png)
+- `/qr load_es`, `/qr load_en`, `/qr load_fr`, `/qr load_de`, `/qr load_ru`: carga la interfaz del
+  addon en ese idioma (se guarda y recarga la interfaz). `/qr load_auto` vuelve al idioma del cliente.
+- `/qr locale`: idioma activo y textos que faltan por traducir.
+- Traducciones en `Locales/`: `enUS.lua` tiene **todas** las claves (el texto en inglés); cada idioma
+  es un archivo `<código>.lua` que llama a `QR:RegisterLocale("<código>", { ["clave"] = "texto" })` y
+  se añade a `Locales/Locales.xml`. En el código: `local L = QR.L` y `L["Turn in to %s"]`.
+- Hoy: inglés y español (esES/esMX). Francés, alemán y ruso: pendientes (el ruso necesita una
+  fuente con cirílico; LizeUI no lo tiene).
 
-Talk to an NPC and QuestieRouter accepts the guide's quests and turns in the completed ones for you.
+## Arquitectura
 
-- It only accepts quests from the guide's steps, and never anything far above your level.
-- When there's a reward to choose, the choice is always yours.
-- Hold **Shift** to skip the automation for that NPC.
-- Turn it on or off from the right-click menu or in Settings.
+Carpetas: `Core/` (arranque, Questie, comandos), `Guide/` (qué hacer y adónde ir), `UI/` (lo que se ve),
+`Navigation/` (flecha y líneas del mapa), `Locales/`, `Data/`, `Zones/` y `Media/`. El orden de carga está en el `.toc`.
 
-## A living interface
-
-![Day and night](https://i.imgur.com/tTtpOE6.png)
-
-![Zone skins](https://i.imgur.com/32bB2mj.png)
-
-- The banner follows the in-game clock, from day to dusk to night, with stars, moon and morning mist.
-- **50 zones have their own artwork and palette.** The skin fades smoothly when you change zone, or it can follow the guide's zone instead.
-
-### 50 hand-crafted zone skins
-
-Every zone below has its own skin. Step into a zone and the whole interface fades into it over a couple of seconds:
-
-- **Banner artwork:** an illustration of the zone's landmark across the top of the guide. Hillsbrad Foothills even has a separate version for Alliance and for Horde.
-- **Sky:** a backdrop painted for that zone, behind the day and night cycle.
-- **Colour palette:** an accent colour taken from the zone's landscape, which tints the cards, the borders and the arrow.
-
-| Kalimdor | Eastern Kingdoms |
+| Archivo | Función |
 |---|---|
-| Ashenvale | Alterac Mountains |
-| Azshara | Arathi Highlands |
-| Darkshore | Badlands |
-| Desolace | Blasted Lands |
-| Durotar | Burning Steppes |
-| Dustwallow Marsh | Deadwind Pass |
-| Felwood | Dun Morogh |
-| Feralas | Duskwood |
-| Moonglade | Eastern Plaguelands |
-| Mount Hyjal | Elwynn Forest |
-| Mulgore | Hillsbrad Foothills |
-| Silithus | Loch Modan |
-| Stonetalon Mountains | Redridge Mountains |
-| Tanaris | Searing Gorge |
-| Teldrassil | Silverpine Forest |
-| The Barrens | Stranglethorn Vale |
-| Thousand Needles | Swamp of Sorrows |
-| Un'Goro Crater | The Hinterlands |
-| Winterspring | Tirisfal Glades |
-| **WoW Forever** | Western Plaguelands |
-| Riverglades | Westfall |
-| Shen'dralas | Wetlands |
-| Zephras Isle | |
+| `Locales/` | Traducciones (`Locales.lua` núcleo, `enUS.lua` base con todas las claves, `esES.lua`...) |
+| `Core/Core.lua` | Namespace, ajustes (`QuestieRouterDB`), bus de mensajes, arranque con `Questie.API.RegisterOnReady` |
+| `Core/QuestieBridge.lua` | **Único** punto que toca internos de Questie (foco, `DistanceUtils`, `ZoneDB`, HereBeDragons) |
+| `Guide/Target.lua` | Elige el destino (con histéresis para que no "salte" entre spawns) y emite `TARGET_CHANGED` |
+| `Navigation/Arrow.lua` | Flecha giratoria |
+| `Navigation/MapLines.lua` | Pines + líneas en mapa y minimapa (HereBeDragons-Pins de Questie) |
+| `Guide/ZoneGuides.lua` | Registro de las guías de `Zones/` (solo las de tu facción) y guía recomendada |
+| `Guide/Planner.lua` | Planificador coger → hacer → entregar por hubs |
+| `UI/GuideUI.lua` | Ventana: tarjeta activa, banner, lista de pasos/misiones y pie |
+| `UI/Skin.lua` | Zonas, detección, paleta por zona, fundidos, fuentes, tarjetas redondeadas, iconos |
+| `UI/Banner.lua` | Banner con ciclo día/noche (cielo, estrellas, luna, niebla, ilustración, textos) |
+| `Guide/Steps.lua` | Pasos agrupados, simulación del orden futuro e historial de lo hecho |
+| `UI/ZonePicker.lua` | Selector de zona con miniaturas (`/qr pick`) |
+| `UI/Options.lua` | Opciones gráficas (incluye la cuadrícula de flechas) |
+| `UI/Menu.lua` | Menú contextual del clic derecho, con submenús |
+| `Core/Slash.lua` | `/qr` (`guide`, `pick`, `options`, `zone <texto>`, `stop`, `info`...) |
+| `Guide/Router.lua` | Viajes: ruta más rápida (vuelos, barcos, zepelines), ruta completa para el mapa y la lista, vuelo en curso |
+| `UI/ActiveFrames.lua` | Ventanitas de Objetivo (bichos / NPC) y Objetos (objetos de misión) |
+| `UI/MinimapButton.lua` | Botón del minimapa y de la lista de addons |
+| `Data/` | Datos propios: red de viajes (`Travel.lua`), pasos entre zonas, tranvía y portales (`Borders.lua`), caminos dentro de las zonas (`Roads.lua`), entradas de mazmorras (`Dungeons.lua`) y paquete de flechas (`ArrowPack.lua`) |
+| `Zones/` | Las guías por zona, generadas con `tools/zone_guides.py` |
+| `Media/` | Imágenes, fuentes (`Media/Fonts/Fonts.xml`) y créditos |
 
-**Capital cities:** Stormwind City · Ironforge · Darnassus · Orgrimmar · Thunder Bluff · Undercity
+## Ideas siguientes
 
-Zones without a skin of their own use a neutral palette.
-
-## Navigation arrow
-
-![Arrow](https://i.imgur.com/SmNGVcB.png)
-
-Choose from 97 original arrow styles, in the zone's colour or any colour you like. Under the arrow you can see what's left to do and how far away it is. Once you reach the objective area, the arrow moves out of your way.
-
-## Animated map route
-
-![Map route](https://i.imgur.com/KW7IKlx.png)
-
-An animated line runs from you to the objective, with the step number, on both the world map and the minimap.
-
-- 4 line styles to choose from.
-- The line keeps the same thickness at any zoom level.
-- Travel routes are drawn leg by leg.
-
-## Targets and items
-
-![Targets and items](https://i.imgur.com/GzYwY3T.png)
-
-Two compact windows sit right next to the guide.
-
-**Target window**
-- Shows the current step's enemies, plus the NPC you need to pick up from or turn in to.
-- Left-click to target. Each button places its own raid marker, and only living enemies are selected.
-- Shows a square 2D portrait or a 3D model. Right-click to talk to the NPC or cast the ability of your choice.
-
-**Items window**
-- Lists your usable quest items, ready with one click.
-- Items for the current step come first, with their count and cooldown.
-
-Place both windows anywhere and set their button size and title position. Both are safe to use in combat and update as soon as combat ends.
-
-## Travel and flights
-
-![Travel](https://i.imgur.com/CV60T0K.png)
-
-When the objective is far away, QuestieRouter finds the fastest way there using:
-
-- **The flights you've learned.** They're checked automatically every time you open a flight master's map.
-- **Boats and zeppelins**, including waiting and travel times.
-- **The tram and portals** of your faction.
-- **City gates**, so routes never go through walls.
-
-While you fly, a bar at the bottom of the screen counts down your arrival based on real flight times.
-
-## Make it yours
-
-![Options](https://i.imgur.com/Cat08Bn.png)
-
-The skin, banner, cards, arrow, map, travel and the small windows each have their own size, opacity and colour settings. You'll also find the options, the changelog and support in **Settings > AddOns > QuestieRouter**.
-
-![Before and after](https://i.imgur.com/XSsgUUQ.png)
-
----
-
-## Getting started
-
-1. Install **Questie** and **QuestieRouter**.
-2. Log in. A short **setup wizard** opens the first time: choose the text size and what the guide shows. You can open it again at any time with `/qr install`.
-3. Pick a zone, or take the recommended one.
-4. Follow the arrow.
-
-| Command | What it does |
-|---|---|
-| `/qr` | Turn QuestieRouter on or off |
-| `/qr guide` | Show or hide the guide window |
-| `/qr pick` | Open the zone picker |
-| `/qr options` | Graphics options |
-| `/qr settings` | Panel in Settings > AddOns (changelog, support) |
-| `/qr install` | Open the setup wizard again |
-| `/qr dungeon <name>` | Route to a dungeon entrance |
-| `/qr load_en` · `load_es` · `load_fr` · `load_de` · `load_ru` | Change the addon's language |
-| `/qr load_auto` | Use your client's language |
-
-You can also **right-click the banner** or the minimap button to open the full menu.
-
-## Languages
-
-The interface is fully translated into:
-
-- **English** (enUS / enGB)
-- **Spanish** (esES / esMX)
-- **French** (frFR)
-- **German** (deDE)
-- **Russian** (ruRU)
-
-It follows your client's language automatically, or you can pick one with `/qr load_xx`. Quest, NPC and zone names always appear in your client's language.
-
----
-
-## Copyright
-
-**© 2026 Lizerius. All rights reserved.**
-
-QuestieRouter, including its code, artwork, arrow styles, guides and data, is protected by copyright. Without the author's prior written permission you may not:
-
-- modify, adapt or create derivative works from it, in whole or in part;
-- copy or reuse its code, artwork or guides in other projects;
-- redistribute or re-upload it, on any website, platform or package;
-- sell it, or use it for any commercial purpose.
-
-You may download it from its official pages and use it for your own personal play. Questie belongs to its own authors. World of Warcraft is a trademark of Blizzard Entertainment, Inc.
-
-![QuestieRouter](https://i.imgur.com/8ak4XMd.png)
+- Objetivos: ir al centro del grupo de spawns más denso en vez de al spawn más cercano, y agrupar
+  objetivos de varias misiones que están en la misma área.
+- Al terminar una zona, proponer automáticamente la siguiente guía.
+- Panel de opciones (AceConfig ya viene con Questie).
