@@ -1,0 +1,5 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <!-- Registro de cambios por idioma (seccion "Cambios" de Ajustes > AddOns). enUS es el de reserva. -->
+    <Script file="enUS.lua"/>
+    <Script file="esES.lua"/>
+</Ui>

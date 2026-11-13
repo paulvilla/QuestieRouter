@@ -1,0 +1,50 @@
+## Interface: 16001
+## Title: |cff33ccffQuestie|r|cffffd166Router|r
+## Notes: Zone guides on top of Questie: arrow and map lines that route you to pick up, complete and turn in every quest of a zone.
+## Notes-esES: Guias por zona y faccion sobre Questie: te lleva a coger, hacer y entregar las misiones de la zona en orden, con flecha y lineas en mapa/minimapa.
+## Notes-enUS: Zone guides on top of Questie: arrow and map lines that route you to pick up, complete and turn in every quest of a zone.
+## Notes-esMX: Guias por zona y faccion sobre Questie: te lleva a coger, hacer y entregar las misiones de la zona en orden, con flecha y lineas en mapa/minimapa.
+## Author: Lizerius
+## Version: 0.9.2
+## Category: Quests
+## IconTexture: Interface\AddOns\QuestieRouter\Media\Icons\QuestieRouter.tga
+## AddonCompartmentFunc: QuestieRouter_OnAddonCompartmentClick
+## AddonCompartmentFuncOnEnter: QuestieRouter_OnAddonCompartmentEnter
+## AddonCompartmentFuncOnLeave: QuestieRouter_OnAddonCompartmentLeave
+## Dependencies: Questie
+## SavedVariables: QuestieRouterDB
+## SavedVariablesPerCharacter: QuestieRouterCharDB
+
+Media\Fonts\Fonts.xml
+Locales\Locales.xml
+Locales\Changelog\Changelog.xml
+Core\Core.lua
+Core\QuestieBridge.lua
+UI\Skin.lua
+UI\Banner.lua
+Guide\ZoneGuides.lua
+Zones\Zones.xml
+Dungeons\Dungeons.xml
+Guide\Planner.lua
+Guide\AutoQuest.lua
+Guide\Steps.lua
+Data\Travel.lua
+Data\TaxiTimes.lua
+Data\Borders.lua
+Data\Roads.lua
+Data\Dungeons.lua
+Data\NpcDisplays.lua
+Guide\Router.lua
+Guide\Target.lua
+Navigation\Arrow.lua
+Data\ArrowPack.lua
+Navigation\MapLines.lua
+UI\ZonePicker.lua
+UI\Menu.lua
+UI\MinimapButton.lua
+UI\Options.lua
+UI\SettingsPanel.lua
+UI\Install.lua
+UI\GuideUI.lua
+UI\ActiveFrames.lua
+Core\Slash.lua

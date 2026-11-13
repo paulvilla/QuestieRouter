@@ -1,0 +1,80 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <!-- Generado: todas las fuentes del addon declaradas como objetos de fuente.
+         WoW carga estos archivos durante la pantalla de carga, asi que cuando se pinta la ventana
+         ya estan listos y los textos no salen en blanco (ni hay que elegir la fuente dos veces). -->
+    <Font name="QuestieRouterFont_Barlow_Bold" font="Interface\AddOns\QuestieRouter\Media\Fonts\Barlow-Bold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_Barlow_Regular" font="Interface\AddOns\QuestieRouter\Media\Fonts\Barlow-Regular.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_Barlow_SemiBold" font="Interface\AddOns\QuestieRouter\Media\Fonts\Barlow-SemiBold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_BarlowCondensed_Bold" font="Interface\AddOns\QuestieRouter\Media\Fonts\BarlowCondensed-Bold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_BarlowCondensed_Regular" font="Interface\AddOns\QuestieRouter\Media\Fonts\BarlowCondensed-Regular.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_BarlowCondensed_SemiBold" font="Interface\AddOns\QuestieRouter\Media\Fonts\BarlowCondensed-SemiBold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_FiraSans_Bold" font="Interface\AddOns\QuestieRouter\Media\Fonts\FiraSans-Bold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_FiraSans_Regular" font="Interface\AddOns\QuestieRouter\Media\Fonts\FiraSans-Regular.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_FiraSans_SemiBold" font="Interface\AddOns\QuestieRouter\Media\Fonts\FiraSans-SemiBold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_Inter_Bold" font="Interface\AddOns\QuestieRouter\Media\Fonts\Inter-Bold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_Inter_Regular" font="Interface\AddOns\QuestieRouter\Media\Fonts\Inter-Regular.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_Inter_SemiBold" font="Interface\AddOns\QuestieRouter\Media\Fonts\Inter-SemiBold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_Lato_Bold" font="Interface\AddOns\QuestieRouter\Media\Fonts\Lato-Bold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_Lato_Regular" font="Interface\AddOns\QuestieRouter\Media\Fonts\Lato-Regular.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_LizeUI_Bold" font="Interface\AddOns\QuestieRouter\Media\Fonts\LizeUI-Bold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_LizeUI_Demi" font="Interface\AddOns\QuestieRouter\Media\Fonts\LizeUI-Demi.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_LizeUI_Medium" font="Interface\AddOns\QuestieRouter\Media\Fonts\LizeUI-Medium.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_LizeUI_Number" font="Interface\AddOns\QuestieRouter\Media\Fonts\LizeUI-Number.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_LizeUI_Regular" font="Interface\AddOns\QuestieRouter\Media\Fonts\LizeUI-Regular.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_Rajdhani_Bold" font="Interface\AddOns\QuestieRouter\Media\Fonts\Rajdhani-Bold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_Rajdhani_Regular" font="Interface\AddOns\QuestieRouter\Media\Fonts\Rajdhani-Regular.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_Rajdhani_SemiBold" font="Interface\AddOns\QuestieRouter\Media\Fonts\Rajdhani-SemiBold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_SourceSans3_Bold" font="Interface\AddOns\QuestieRouter\Media\Fonts\SourceSans3-Bold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_SourceSans3_Regular" font="Interface\AddOns\QuestieRouter\Media\Fonts\SourceSans3-Regular.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+    <Font name="QuestieRouterFont_SourceSans3_SemiBold" font="Interface\AddOns\QuestieRouter\Media\Fonts\SourceSans3-SemiBold.ttf" outline="NONE">
+        <FontHeight><AbsValue val="12"/></FontHeight>
+    </Font>
+</Ui>
