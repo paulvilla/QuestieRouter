@@ -4,7 +4,7 @@
 
 **QuestieRouter turns Questie's quest database into a full levelling guide.** It tells you what to pick up, where to do it and when to turn it in, in the same order an experienced player would. On top of that you get a navigation arrow, an animated route on the map, flights and boats worked out for you, dungeon guides, and an interface that changes with the zone and the time of day.
 
-**69 zone guides · 41 dungeon guides · 4,220 quests · 97 arrow styles · 73 flight masters**
+**75 zone guides · 42 dungeon guides · Darkmoon Faire event guide · 3,860 quests · 97 arrow styles · 73 flight masters**
 
 Requires **Questie** · Made for **WoW Forever** · Available in **English, Spanish, French, German and Russian**
 
@@ -14,7 +14,8 @@ Requires **Questie** · Made for **WoW Forever** · Available in **English, Span
 
 ![Zone guides](https://i.imgur.com/4FdocSV.png)
 
-- One guide per zone and faction, for both Alliance and Horde, including **Zephras Isle** and the **Darkspear Islands (PvP)**.
+- One guide per zone and faction, for both Alliance and Horde, including **Zephras Isle**, the **Darkspear Islands (PvP)**, **Mount Hyjal**, **Riverglades** and **Shen'dralas**.
+- Only quests that exist on WoW Forever: nothing from other expansions and nothing above level 60.
 - Each guide uses the level range shown on the zone's map, so you always know whether a zone suits you.
 - Quests are sorted by level and distance, and every prerequisite is respected.
 - Each zone starts with its entry quest.
@@ -38,7 +39,21 @@ Forget doing one quest at a time. QuestieRouter plans your session the way an ex
 
 ![Dungeon guides](https://i.imgur.com/RcLV06E.png)
 
-41 dungeon guides, from The Deadmines to Scholomance. QuestieRouter sends you around the world to collect the dungeon's quests, then routes you to the entrance. Steps done inside the dungeon are clearly marked, and once you're out it takes you to turn everything in.
+42 dungeon guides, from The Deadmines to Scholomance. QuestieRouter sends you around the world to collect the dungeon's quests, then routes you to the entrance. Steps done inside the dungeon are clearly marked, and once you're out it takes you to turn everything in.
+
+## Event guides
+
+![Event guides](https://i.imgur.com/SixqCfS.jpeg)
+
+A new **Event guides** category, between the profession and speedrun guides. The **Darkmoon Faire** is the first one; the rest of the world events are already listed under **Coming soon** and will arrive as they reach the game.
+
+- **Always in the right place:** the faire moves between **Elwynn Forest** and **Mulgore** every month. QuestieRouter knows whether it's up and where, and every faire NPC points to that zone.
+- **Not up?** The menu and the banner tell you the date and place of the next faire.
+- **Tickets for every prize:** one route that takes you through every ticket turn-in and then buys the prizes from cheapest to most expensive, up to the Orb and the Amulet of the Darkmoon. The banner shows your tickets and the next prize.
+- **One section per NPC:** Chronos (leatherworking), Kerri Hicks (blacksmithing), Rinling (engineering) and Yebb Neblegear (farmed items), plus Sayge's fortune, the card decks and the pets (Jubjub and Flik's frogs).
+- Crafted turn-ins are only suggested when you already carry the items; farmed ones take you to the creatures that drop them.
+- **Real levels:** the game lists every faire quest as level 60, so QuestieRouter shows the level each one really requires and the level range of each section.
+- Prize redemptions use a **coin icon**, since they are just a purchase.
 
 ## Quest chains and quest list
 
@@ -126,6 +141,7 @@ An animated line runs from you to the objective, with the step number, on both t
 - 4 line styles to choose from.
 - The line keeps the same thickness at any zoom level.
 - Travel routes are drawn leg by leg.
+- Smooth zooming, also with OpenMap: lines and markers are only redrawn when something changes, and flight paths use fewer points.
 
 ## Targets and items
 
@@ -183,6 +199,7 @@ The skin, banner, cards, arrow, map, travel and the small windows each have thei
 | `/qr settings` | Panel in Settings > AddOns (changelog, support) |
 | `/qr install` | Open the setup wizard again |
 | `/qr dungeon <name>` | Route to a dungeon entrance |
+| `/qr perf` | Measure for 10 seconds how long the map lines take (open the world map and zoom) |
 | `/qr load_en` · `load_es` · `load_fr` · `load_de` · `load_ru` | Change the addon's language |
 | `/qr load_auto` | Use your client's language |
 
