@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Silithus · niveles 55-60 · 128 misiones
+-- Horde · Silithus · niveles 55-60 · 125 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Horde_Silithus",
@@ -55,9 +55,18 @@ QR:RegisterZoneGuide({
         { 8709, 60, 60 }, -- La daga de las sombras ocultas  [clase]
         { 8710, 60, 60 }, -- El kris de los nombres prohibidos  [clase]
         { 8712, 60, 60 }, -- La guadaña de la Senda Oculta  [clase]
-        { 8858, 60, 51 }, -- Los secretos de los Colosos: Regal
-        { 8859, 60, 51 }, -- Los secretos de los Colosos: Zora
-        { 8857, 60, 51 }, -- Los secretos de los Colosos: Ashi
+        { 8320, 60, 60 }, -- Geoseñores Crepusculares
+        { 8321, 60, 60 }, -- Vyral el Vil
+        { 8331, 60, 60 }, -- Aurel Hojaurea
+        { 8343, 60, 60 }, -- El descubrimiento de Hojaurea
+        { 8318, 60, 57 }, -- Mensajes secretos
+        { 8319, 60, 57 }, -- Textos Crepusculares encriptados
+        { 8348, 60, 60 }, -- Sellos de los Duques
+        { 8352, 60, 60 }, -- Cetro del Consejo
+        { 8361, 60, 60 }, -- Contactos Abisales
+        { 8362, 60, 60 }, -- Emblemas Abisales
+        { 8363, 60, 60 }, -- Sellos Abisales
+        { 8364, 60, 60 }, -- Cetros Abisales
         { 9416, 60, 1 }, -- Preséntate ante el general Kirika
         { 8286, 60, 60 }, -- Lo que nos depara el futuro
         { 8288, 60, 60 }, -- Solo uno puede alzarse
@@ -67,24 +76,12 @@ QR:RegisterZoneGuide({
         { 8731, 60, 60 }, -- Servicio de campo
         { 8800, 60, 60 }, -- Equipamiento de Cenarion
         { 9338, 60, 60 }, -- Lealtad al Círculo Cenarion
-        { 8318, 60, 57 }, -- Mensajes secretos
-        { 8319, 60, 57 }, -- Textos Crepusculares encriptados
-        { 8348, 60, 60 }, -- Sellos de los Duques
-        { 8352, 60, 60 }, -- Cetro del Consejo
-        { 8361, 60, 60 }, -- Contactos Abisales
-        { 8362, 60, 60 }, -- Emblemas Abisales
-        { 8363, 60, 60 }, -- Sellos Abisales
-        { 8364, 60, 60 }, -- Cetros Abisales
-        { 8320, 60, 60 }, -- Geoseñores Crepusculares
-        { 8321, 60, 60 }, -- Vyral el Vil
-        { 8331, 60, 60 }, -- Aurel Hojaurea
-        { 8343, 60, 60 }, -- El descubrimiento de Hojaurea
+        { 8304, 60, 58 }, -- Queridísima Natalia
+        { 8306, 60, 58 }, -- En las fauces de la locura
         { 8548, 60, 60 }, -- Equipamiento de Voluntario
         { 8572, 60, 60 }, -- Equipamiento de Veterano
         { 8573, 60, 60 }, -- Equipamiento de Campeón
         { 8574, 60, 60 }, -- Equipamiento de adepto
-        { 8304, 60, 58 }, -- Queridísima Natalia
-        { 8306, 60, 58 }, -- En las fauces de la locura
         { 8732, 60, 60 }, -- Documentación de instrucción de campo
         { 9422, 60, 1 }, -- Peinando el desierto
         { 8279, 60, 54 }, -- El Lexicón del Crepúsculo

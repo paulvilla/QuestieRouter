@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Teldrassil · niveles 1-10 · 69 misiones
+-- Alliance · Teldrassil · niveles 1-10 · 68 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_Teldrassil",
@@ -16,7 +16,7 @@ QR:RegisterZoneGuide({
         { 457, 3, 1 }, -- El equilibrio de la naturaleza
         { 459, 3, 1 }, -- La protectora de los bosques
         { 97977, 3, 1 }, -- La llamada de la naturaleza
-        { 916, 4, 3 }, -- Veneno de tejemadera
+        { 916, 4, 3 }, -- El veneno de la Tejemadera
         { 4495, 4, 2 }, -- Un buen amigo
         { 3519, 4, 2 }, -- Un amigo en apuros
         { 3521, 4, 2 }, -- En antídoto de Iverron
@@ -31,7 +31,7 @@ QR:RegisterZoneGuide({
         { 929, 5, 1 }, -- La corona de la Tierra
         { 97236, 5, 1 }, -- Colmillo de Githyiss
         { 475, 6, 4 }, -- Una brisa problemática
-        { 2438, 6, 1 }, -- El atrapasueños esmeralda
+        { 2438, 6, 1 }, -- EL cazasueños esmeralda
         { 476, 6, 4 }, -- Corrupción en Tuercepinos
         { 489, 7, 4 }, -- ¡Búsqueda de redención!
         { 87288, 7, 4 }, -- Los pelambres de sable de la noche suaves
@@ -42,7 +42,7 @@ QR:RegisterZoneGuide({
         { 2459, 8, 1 }, -- Ferocitas el Comesueños
         { 487, 8, 5 }, -- El camino a Darnassus
         { 2541, 8, 3 }, -- El druida durmiente
-        { 490, 8, 5 }, -- Bounty: Gnarlpine Furbolg
+        { 490, 8, 5 }, -- Recompensa: Fúrbolg Tuercepino
         { 99047, 9, 4 }, -- Aún con vida
         { 483, 9, 4 }, -- Las Reliquias del Despertar
         { 99046, 9, 4 }, -- La mensajera perdida
@@ -63,10 +63,9 @@ QR:RegisterZoneGuide({
         { 2519, 10, 5 }, -- El templo de la Luna
         { 6344, 10, 10 }, -- Nessa Cantosombrío
         { 6721, 10, 10 }, -- El camino del cazador  [clase]
-        { 934, 11, 1 }, -- Corona de la tierra
-        { 937, 11, 6 }, -- El claro encantado
-        { 7383, 11, 1 }, -- La corona de la Tierra
         { 935, 11, 1 }, -- La corona de la Tierra
+        { 7383, 11, 1 }, -- La corona de la Tierra
+        { 937, 11, 6 }, -- El claro encantado
         { 98046, 11, 1 }, -- La corona de la Tierra
         { 98065, 11, 1 }, -- La corona de la Tierra
         { 98067, 11, 1 }, -- Ojos de los centinelas
@@ -85,6 +84,8 @@ QR:RegisterZoneGuide({
     later = {
         { 1199, 25, 20 }, -- Cascada del Crepúsculo
         { 1038, 30, 25 }, -- Las pertenencias de Velinde
+        { 95511, 40, 40 }, -- Your First Feline Friend
+        { 97074, 40, 40 }, -- Learning to Ride
         { 2940, 47, 42 }, -- Feralas: una historia
         { 3661, 47, 42 }, -- ¿Creados por Elune?
         { 2941, 48, 42 }, -- El préstamo
@@ -102,16 +103,16 @@ QR:RegisterZoneGuide({
         { 1047, 55, 54 }, -- La nueva frontera
         { 3803, 55, 47 }, -- Mañagrana para Darnassus
         { 6761, 55, 54 }, -- La nueva frontera
+        { 92344, 55, 45 }, -- Get to the Roots of It
         { 5250, 56, 53 }, -- Estrella Fugaz
         { 979, 57, 52 }, -- Encuentra a Ranshalla
         { 4902, 57, 52 }, -- Lechúcico de Elune
-        { 7671, 60, 60 }, -- Sustitución de sable de hielo
-        { 7672, 60, 60 }, -- Sustitución de sable de la noche
         { 7792, 60, 12 }, -- Un donativo de lana
         { 7798, 60, 26 }, -- Un donativo de seda
         { 7799, 60, 40 }, -- Un donativo de paño mágico
         { 7800, 60, 50 }, -- Un donativo de paño rúnico
         { 7801, 60, 50 }, -- Un donativo extra de paño rúnico
         { 8734, 60, 60 }, -- Tyrande y Rémulos
+        { 99205, 60, 60 }, -- Swift as the Wind
     },
 })

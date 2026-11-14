@@ -6,4 +6,6 @@
     <Script file="frFR.lua"/>
     <Script file="deDE.lua"/>
     <Script file="ruRU.lua"/>
+    <Script file="Events.lua"/>
+    <Script file="Tools.lua"/>
 </Ui>

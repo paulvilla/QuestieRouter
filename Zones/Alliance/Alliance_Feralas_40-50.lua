@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Feralas · niveles 40-50 · 47 misiones
+-- Alliance · Feralas · niveles 40-50 · 48 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_Feralas",
@@ -12,6 +12,7 @@ QR:RegisterZoneGuide({
     -- { questId, nivelMision, nivelRequerido }
     quests = {
         { 2821, 46, 40 }, -- La marca de la calidad
+        { 92858, 43, 39 }, -- SE BUSCA: Ohk'zi
         { 4124, 43, 40 }, -- El mensajero desaparecido
         { 2866, 43, 40 }, -- Las Ruinas de Solarsal
         { 4125, 43, 40 }, -- El mensajero desaparecido
@@ -54,8 +55,8 @@ QR:RegisterZoneGuide({
         { 7725, 55, 45 }, -- Encoge más gigantes
         { 7726, 55, 45 }, -- Más combustible para el Ultra-reductor
         { 3792, 55, 47 }, -- Mañagrana a Bastión Plumaluna
-        { 7488, 57, 54 }, -- La Membrana de Lethtendris
         { 7494, 57, 54 }, -- Bastión Plumaluna
+        { 7488, 57, 54 }, -- La Membrana de Lethtendris
         { 7441, 58, 54 }, -- Pusillín y el ancestro Azj'Tordin
         { 7482, 60, 54 }, -- Leyendas élficas
     },

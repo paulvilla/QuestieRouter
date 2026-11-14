@@ -1,5 +1,5 @@
 -- Generado por tools/dungeon_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Lower Blackrock Spire · niveles 53-58 · 30 misiones
+-- Horde · Lower Blackrock Spire · niveles 53-58 · 31 misiones
 local _, QR = ...
 QR:RegisterDungeonGuide({
     key = "Horde_Dungeon_BlackrockSpire",
@@ -29,6 +29,7 @@ QR:RegisterDungeonGuide({
         { 4768, 60, 57 }, -- La tablilla de Rocanegra
         { 4903, 60, 55 }, -- La orden del Señor de la Guerra
         { 4941, 60, 55 }, -- La sabiduría de Eitrigg
+        { 98325, 60, 55 }, -- Blood and Thunder
         { 4769, 60, 57 }, -- Vivian Latumba y la tablilla de Rocanegra
         { 4867, 60, 55 }, -- Urok Aullasino
         { 4907, 60, 57 }, -- Tinkee Vaporino

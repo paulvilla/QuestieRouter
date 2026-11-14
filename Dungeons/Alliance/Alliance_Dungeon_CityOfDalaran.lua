@@ -12,10 +12,10 @@ QR:RegisterDungeonGuide({
     maxLevel = 33,
     -- { questId, nivelMision, nivelRequerido }
     quests = {
-        { 92432, 33, 30 }, -- An Alarming Request
-        { 92456, 33, 24 }, -- A Green Sample
-        { 92489, 33, 24 }, -- Power Overwhelming
-        { 92457, 33, 24 }, -- Starving Arcane
-        { 92458, 33, 24 }, -- Heart of Disruption
+        { 92432, 33, 30 }, -- Una petición alarmante
+        { 92456, 33, 24 }, -- Una muestra verde
+        { 92489, 33, 24 }, -- Poder sobrecogedor
+        { 92457, 33, 24 }, -- Arcana famélica
+        { 92458, 33, 24 }, -- El corazón de la perturbación
     },
 })

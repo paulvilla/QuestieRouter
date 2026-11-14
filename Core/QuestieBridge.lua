@@ -298,20 +298,29 @@ function Bridge:NearestSpawn(spawns, px, py, pinst)
     return best
 end
 
+--- Guias de evento: NPCs y objetos que la base de datos tiene en varias zonas pero que ahora solo estan en una
+--- (la Feria de la Luna Negra: Elwynn o Mulgore segun el mes). [id] = areaId; lo rellena Guide/Events.lua.
+Bridge.npcArea, Bridge.objectArea = {}, {}
+
+local function OnlyArea(spawns, areaId)
+    if areaId and spawns and spawns[areaId] then return { [areaId] = spawns[areaId] } end
+    return spawns
+end
+
 --- Punto mas cercano de quien da / recibe una mision (quest.Starts o quest.Finisher).
 function Bridge:NearestNpcOrObject(holder, px, py, pinst)
     local best
     for _, npcId in pairs(holder and holder.NPC or {}) do
         local npc = self.QuestieDB:GetNPC(npcId)
         if npc and npc.spawns and npc.friendly ~= false then
-            local p = self:NearestSpawn(npc.spawns, px, py, pinst)
+            local p = self:NearestSpawn(OnlyArea(npc.spawns, self.npcArea[npcId]), px, py, pinst)
             if p and (not best or p.dist < best.dist) then p.name = npc.name; p.npcId = npcId; best = p end
         end
     end
     for _, objId in pairs(holder and holder.GameObject or {}) do
         local obj = self.QuestieDB:GetObject(objId)
         if obj and obj.spawns then
-            local p = self:NearestSpawn(obj.spawns, px, py, pinst)
+            local p = self:NearestSpawn(OnlyArea(obj.spawns, self.objectArea[objId]), px, py, pinst)
             if p and (not best or p.dist < best.dist) then p.name = obj.name; best = p end
         end
     end

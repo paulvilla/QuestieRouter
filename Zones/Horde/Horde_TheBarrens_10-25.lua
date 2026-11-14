@@ -36,7 +36,7 @@ QR:RegisterZoneGuide({
         { 894, 14, 10 }, -- El churumbele
         { 892, 14, 9 }, -- El envío perdido
         { 924, 14, 9 }, -- La Semilla del Demonio
-        { 926, 14, 1 }, -- La piedra de energía con imperfecciones
+        { 926, 14, 1 }, -- La piedra de energía imperfecta
         { 900, 14, 10 }, -- El churumbele
         { 901, 14, 10 }, -- El churumbele
         { 848, 15, 10 }, -- Esporas de hongos
@@ -73,11 +73,11 @@ QR:RegisterZoneGuide({
         { 6401, 18, 12 }, -- Kaya está viva
         { 6548, 18, 12 }, -- Venga mi aldea
         { 6629, 18, 12 }, -- Mata a Grundig Nube Negra
-        { 95508, 18, 14 }, -- Huéspedes no deseados
-        { 95621, 18, 14 }, -- Problemas en el valle
         { 95494, 18, 14 }, -- Orgullo herido y pieles de león
-        { 95495, 18, 14 }, -- El peletero ermitaño
         { 95507, 18, 14 }, -- Las presas de Vrang
+        { 95495, 18, 14 }, -- El peletero ermitaño
+        { 95621, 18, 14 }, -- Problemas en el valle
+        { 95508, 18, 14 }, -- Huéspedes no deseados
         { 3923, 18, 10 }, -- Rilli Gapegajoso
         { 858, 18, 13 }, -- La llave de contacto
         { 863, 18, 13 }, -- La fuga
@@ -113,13 +113,13 @@ QR:RegisterZoneGuide({
         { 5044, 20, 14 }, -- La sabiduría de Agamaggan
         { 5045, 20, 14 }, -- Fortaleza de espíritu
         { 5046, 20, 14 }, -- Cerropiel
-        { 79007, 22, 14 }, -- ... and that note you found
+        { 79007, 22, 14 }, -- y la nota que has encontrado...
         { 868, 22, 17 }, -- ¡A cazar huevos!
         { 883, 22, 10 }, -- Lakota'mani
         { 1068, 23, 13 }, -- Las sierras XT:4 y XT:9
         { 97250, 23, 18 }, -- Culpa incorrecta, corregida
         { 843, 23, 17 }, -- La reclamación de Gann
-        { 79192, 24, 14 }, -- Stepping Stones
+        { 79192, 24, 14 }, -- Peldaños
         { 893, 24, 17 }, -- Una selección de armas
         { 822, 24, 11 }, -- El barril vacío de Chen
         { 884, 24, 10 }, -- Owatanka
@@ -150,7 +150,7 @@ QR:RegisterZoneGuide({
         { 1184, 35, 28 }, -- Pedazos del enjambre
         { 6626, 35, 28 }, -- Un anfitrión del mal
         { 1112, 36, 30 }, -- Las piezas de Kravel
-        { 1180, 37, 29 }, -- Patrocinio goblin
+        { 1180, 37, 29 }, -- Apoyo al goblin
         { 8427, 39, 30 }, -- La batalla por Garganta Grito de Guerra
         { 8432, 39, 30 }, -- La batalla por Garganta Grito de Guerra
         { 8436, 39, 30 }, -- La conquista de la Cuenca de Arathi
@@ -163,6 +163,7 @@ QR:RegisterZoneGuide({
         { 8433, 49, 40 }, -- La batalla por Garganta Grito de Guerra
         { 8437, 49, 40 }, -- La conquista de la Cuenca de Arathi
         { 8441, 49, 40 }, -- La conquista de la Cuenca de Arathi
+        { 98890, 49, 40 }, -- Conflict at Darkspear Islands
         { 4146, 52, 47 }, -- Combustible de irradior
         { 5159, 54, 48 }, -- El agua purificada vuelve a Frondavil
         { 4502, 55, 49 }, -- Actividad volcánica
@@ -180,13 +181,6 @@ QR:RegisterZoneGuide({
         { 8439, 60, 60 }, -- La conquista de la Cuenca de Arathi
         { 8443, 60, 60 }, -- La conquista de la Cuenca de Arathi
         { 9267, 60, 15 }, -- Curar viejas heridas
-        { 91899, 60, 1 }, -- Un cajón sellado
-        { 91900, 60, 1 }, -- A Sealed Crate
-        { 91901, 60, 1 }, -- A Sealed Crate
-        { 91904, 60, 1 }, -- A Sealed Crate
-        { 91905, 60, 1 }, -- A Sealed Crate
         { 95819, 60, 1 }, -- Sign Me Up!
-        { 96339, 60, 1 }, -- Legacy Reward: Replica Ironforge Air Rifle
-        { 96383, 60, 1 }, -- Legacy Reward: Spectral Bear Cub
     },
 })

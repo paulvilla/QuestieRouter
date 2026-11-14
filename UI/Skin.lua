@@ -427,7 +427,8 @@ Skin.ICON = {
     clock = ACTION .. "clock.tga", marker = ACTION .. "marker.tga",
     walk = ACTION .. "walk.tga",   -- pasos de viaje a pie (la forma del "Ojo", plateada)
     elite = MEDIA .. "Icons\\Elite_Skull.tga",            -- calavera de elite/jefe (de icons/Islands-AzeriteBoss.tga)
-    dungeon = "Interface\\MINIMAP\\Dungeon",             -- icono de mazmorra del propio juego (archivo del cliente)
+    dungeon = "Interface\\MINIMAP\\Dungeon",
+    coin = "Interface\\MoneyFrame\\UI-GoldIcon",          -- comprar (canjes de vales de la Feria)             -- icono de mazmorra del propio juego (archivo del cliente)
 }
 --- Tamaño de icono para el texto de una seccion ("active", "list", "footer"...): sigue a su texto
 --- Tamaño de icono de una seccion: el elegido en Opciones o, si no, el de su texto + 2

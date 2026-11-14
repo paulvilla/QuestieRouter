@@ -12,14 +12,14 @@ QR:RegisterZoneGuide({
     -- { questId, nivelMision, nivelRequerido }
     quests = {
         { 698, 40, 35 }, -- Falta de suministros
-        { 93663, 35, 30 }, -- Lost in Transit
+        { 93663, 35, 30 }, -- Perdido en tránsito
         { 1418, 35, 30 }, -- Neeka Marca de Sangre
-        { 93176, 35, 25 }, -- My Little Friends
+        { 93176, 35, 25 }, -- Amiguitos por doquier
+        { 93429, 35, 30 }, -- Sangre de mi sangre
         { 1389, 35, 30 }, -- Cristales draenetistas
-        { 93429, 35, 30 }, -- Blood of My Blood
-        { 93430, 35, 30 }, -- Taking the Bait Back
+        { 93430, 35, 30 }, -- Recuperar el cebo
+        { 93464, 38, 30 }, -- El mago visitante
         { 1393, 38, 30 }, -- La huida de Galen
-        { 93464, 38, 30 }, -- The Visiting Mage
         { 1392, 39, 29 }, -- Noboru el Garrote
         { 699, 42, 35 }, -- Falta de suministros
         { 1424, 43, 38 }, -- Charca de Lágrimas
@@ -40,6 +40,8 @@ QR:RegisterZoneGuide({
         { 2623, 55, 45 }, -- El Hablador del pantano
         { 3374, 55, 48 }, -- La esencia de Eranikus
         { 3512, 55, 48 }, -- Como diría  Eranikus…
+        { 93679, 55, 1 }, -- Visiones de otro
+        { 93684, 55, 1 }, -- El Encontrado
         { 2681, 57, 45 }, -- Las piedras que nos vinculan
         { 2701, 57, 45 }, -- Los héroes de los antiguos
         { 2702, 57, 45 }, -- Los héroes de los antiguos

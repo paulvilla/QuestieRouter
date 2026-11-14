@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Westfall · niveles 10-20 · 43 misiones
+-- Alliance · Westfall · niveles 10-20 · 42 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_Westfall",
@@ -33,7 +33,6 @@ QR:RegisterZoneGuide({
         { 92747, 15, 9 }, -- Espionaje en Arroyo de la Luna
         { 153, 15, 10 }, -- Pañuelos rojos de cuero
         { 117, 15, 10 }, -- Cebatruenos
-        { 93928, 15, 15 }, -- Of Mice and Milk
         { 103, 16, 10 }, -- Guardián de la Llama
         { 92748, 16, 9 }, -- Consultoría explosiva
         { 136, 16, 10 }, -- El tesoro escondido del capitán Sanders
@@ -45,7 +44,7 @@ QR:RegisterZoneGuide({
         { 65, 18, 14 }, -- La hermandad de los Defias
         { 135, 18, 14 }, -- La hermandad de los Defias
         { 92753, 18, 9 }, -- Destrucción en las Minas de la Muerte
-        { 92819, 18, 9 }, -- Destruction in Deadmines
+        { 92819, 18, 9 }, -- Destrucción en las Minas de la Muerte
         { 141, 18, 14 }, -- La hermandad de los Defias
         { 142, 18, 14 }, -- La hermandad de los Defias
         { 155, 18, 14 }, -- La hermandad de los Defias

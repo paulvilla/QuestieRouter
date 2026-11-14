@@ -7,6 +7,7 @@ local _, QR = ...
 QR.zoneGuides = {}      -- lista ordenada por nivel minimo
 QR.dungeonGuides = {}   -- guias de mazmorra (Dungeons/, tools/dungeon_guides.py)
 QR.zoneGuideByKey = {}  -- todas las guias (de zona y de mazmorra) por clave
+QR.eventGuides = {}     -- secciones de los eventos activos (Guide/Events.lua)
 
 -- Categorias de guias.
 -- name y desc son claves de traduccion: se muestran con L[cat.name] / L[cat.desc].
@@ -14,11 +15,16 @@ QR.guideCategories = {
     { key = "ZONES", name = "Zone completion guides", desc = "Every quest in each zone, in order", guides = QR.zoneGuides },
     { key = "DUNGEONS", name = "Dungeon guides", desc = "Dungeon quests and routes", guides = QR.dungeonGuides },
     { key = "PROFESSIONS", name = "Profession guides", desc = "Level up professions", guides = {} },
+    -- eventos del mundo (Guide/Events.lua): su menu lista los activos y, aparte, "Proximamente"
+    { key = "EVENTS", name = "Event guides", desc = "World events, as they arrive in the game", guides = QR.eventGuides,
+      menu = function() return QR.Events:MenuEntries() end },
     { key = "SPEEDRUN", name = "Speedrun guides", desc = "Level up as fast as possible", guides = {} },
 }
 
 --- Nombre visible de una guia de zona (nombre de la zona en el idioma del cliente)
 function QR.GuideLabel(g)
+    -- seccion de un evento: "Feria de la Luna Negra · Vales para todos los premios"
+    if g.event then return QR.L[g.eventName] .. " · " .. QR.L[g.titleKey] end
     -- mazmorra: nombre de la instancia en el idioma del cliente
     if g.instanceId then
         local n = GetRealZoneText and g.instanceId > 0 and GetRealZoneText(g.instanceId)

@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Western Plaguelands · niveles 51-58 · 71 misiones
+-- Alliance · Western Plaguelands · niveles 51-58 · 72 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_WesternPlaguelands",
@@ -30,6 +30,7 @@ QR:RegisterZoneGuide({
         { 5402, 55, 50 }, -- Piedras de la Plaga del esbirro
         { 5403, 55, 50 }, -- Piedras de la Plaga del invasor
         { 5404, 55, 50 }, -- Piedras de la Plaga del corruptor
+        { 92842, 55, 1 }, -- A Cousin Abroad
         { 5219, 55, 50 }, -- Objetivo: Llanto de Dalson
         { 5903, 55, 48 }, -- Una Peste en la Cruzada
         { 5904, 55, 48 }, -- Una Peste en la Cruzada

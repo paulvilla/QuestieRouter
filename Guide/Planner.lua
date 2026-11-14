@@ -114,6 +114,7 @@ end
 
 function Planner:BuildTasks(guide)
     local B = QR.Bridge
+    if guide.Prepare then guide:Prepare() end   -- guias de evento: p. ej. en que zona esta la Feria este mes
     local px, py, pinst = QR.HBD:GetPlayerWorldPosition()
     local level = UnitLevel("player")
     local guideMap = B:UiMapOf(guide.areaId)
@@ -135,10 +136,13 @@ function Planner:BuildTasks(guide)
                 if p and (inGuide or inCity or p.uiMapId == guideMap) then
                     local t = MakeTask("turnin", quest, p)
                     t.city = inCity or nil
+                    t.icon = guide.QuestIcon and guide:QuestIcon(questId) or nil
                     table.insert(tasks.turnin, t)
                 end
             else
-                local tooHigh = (quest.level or 0) > level + MAX_LEVEL_ABOVE
+                -- guias de evento: su propio nivel (Questie pone nivel 60 a las misiones de la Feria)
+                local qlevel = (guide.QuestLevel and guide:QuestLevel(questId)) or quest.level or 0
+                local tooHigh = qlevel > level + MAX_LEVEL_ABOVE
                 for idx, o in pairs(quest.Objectives or {}) do
                     if not ObjectiveDone(o) then
                         -- zona de spawns en la que estas o la mejor cercana; el area del juego solo como respaldo
@@ -176,6 +180,8 @@ function Planner:BuildTasks(guide)
         elseif status == "available" and Planner:NotOffered(questId) then
             -- el NPC no la ofrecio al hablar con el (falta algo de la cadena que Questie no sabe): no llevar alli
             tasks.notes[questId] = L["The NPC doesn't offer it yet (earlier quest of the chain missing)"]
+        elseif status == "available" and guide.CanPickup and not guide:CanPickup(questId) then
+            -- guia de evento: aun no (faltan los objetos o los vales)
         elseif status == "available" and not logFull then
             local quest = B:GetQuest(questId)
             local p = quest and B:NearestNpcOrObject(quest.Starts, px, py, pinst)
@@ -183,10 +189,22 @@ function Planner:BuildTasks(guide)
             if p then
                 local t = MakeTask("pickup", quest, p)
                 t.order = guide.order[questId]
+                t.icon = guide.QuestIcon and guide:QuestIcon(questId) or nil
                 table.insert(tasks.pickup, t)
             end
         elseif status == "lowlevel" then
             if not nextLevel or row[3] < nextLevel then nextLevel = row[3] end
+        end
+    end
+    -- Guias de evento: pasos que no son misiones (hablar con un NPC, comprarle algo). Van como "coger" para que
+    -- se agrupen y se ordenen igual; su id es negativo (no es una mision).
+    for i, v in ipairs(guide.Visits and guide:Visits() or {}) do
+        local p = B:NearestNpcOrObject({ NPC = { v.npc } }, px, py, pinst)
+        if p then
+            local t = MakeTask("pickup", { Id = -(v.npc * 10 + i), name = v.text }, p)
+            t.icon = "gossip"
+            t.order = 0
+            table.insert(tasks.pickup, t)
         end
     end
     tasks.logFull = logFull
@@ -289,6 +307,8 @@ function Planner:Update()
             self.plan.message = L["Quest log full: abandon or turn in some quests."]
         elseif tasks.nextLevel then
             self.plan.message = string.format(L["Nothing else at your level. Next quest at level %d."], tasks.nextLevel)
+        elseif guide.IdleMessage then
+            self.plan.message = guide:IdleMessage()
         else
             self.plan.message = L["Zone complete. Choose the next guide."]
         end

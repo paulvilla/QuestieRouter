@@ -5,7 +5,7 @@
 ## Notes-enUS: Zone guides on top of Questie: arrow and map lines that route you to pick up, complete and turn in every quest of a zone.
 ## Notes-esMX: Guias por zona y faccion sobre Questie: te lleva a coger, hacer y entregar las misiones de la zona en orden, con flecha y lineas en mapa/minimapa.
 ## Author: Lizerius
-## Version: 0.9.3
+## Version: 0.9.4
 ## Category: Quests
 ## IconTexture: Interface\AddOns\QuestieRouter\Media\Icons\QuestieRouter.tga
 ## AddonCompartmentFunc: QuestieRouter_OnAddonCompartmentClick
@@ -23,6 +23,7 @@ Core\QuestieBridge.lua
 UI\Skin.lua
 UI\Banner.lua
 Guide\ZoneGuides.lua
+Guide\Events.lua
 Zones\Zones.xml
 Dungeons\Dungeons.xml
 Guide\Planner.lua

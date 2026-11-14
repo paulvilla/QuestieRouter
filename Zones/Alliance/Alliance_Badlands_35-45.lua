@@ -33,7 +33,7 @@ QR:RegisterZoneGuide({
         { 724, 40, 35 }, -- Tener fe en el porvenir
         { 687, 40, 30 }, -- Theldurin, el perdido
         { 737, 40, 30 }, -- El saber prohibido
-        { 708, 40, 30 }, -- La caja negra
+        { 78823, 40, 26 }, -- El terror de los cielos del desierto
         { 692, 41, 30 }, -- Los fragmentos perdidos
         { 739, 42, 30 }, -- Murdaloc
         { 712, 42, 35 }, -- Estudio de los elementos: roca

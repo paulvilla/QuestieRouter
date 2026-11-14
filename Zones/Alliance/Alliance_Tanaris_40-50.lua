@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Tanaris · niveles 40-50 · 103 misiones
+-- Alliance · Tanaris · niveles 40-50 · 111 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_Tanaris",
@@ -12,6 +12,9 @@ QR:RegisterZoneGuide({
     -- { questId, nivelMision, nivelRequerido }
     quests = {
         { 1690, 43, 40 }, -- Justicia para bandidos
+        { 95144, 38, 36 }, -- Entrega de ultramar
+        { 95321, 40, 1 }, -- La deuda de Tazzik
+        { 95383, 40, 1 }, -- Envíos y portes
         { 1189, 41, 29 }, -- La seguridad primero
         { 1707, 44, 40 }, -- Cazador de bolsas de agua
         { 1878, 44, 40 }, -- Cazador de bolsas de agua
@@ -22,13 +25,16 @@ QR:RegisterZoneGuide({
         { 8366, 45, 40 }, -- Mamporros en el Mar del Sur
         { 2873, 45, 40 }, -- el Cargamento de Stoley
         { 2874, 45, 40 }, -- Un envío para MacKinley
+        { 97536, 45, 40 }, -- Basura gnómica
         { 2865, 45, 40 }, -- Caparazones de escarabajo
         { 3042, 45, 40 }, -- Temple trol
+        { 95753, 45, 1 }, -- Challenge of the Desert Wolf
         { 2876, 45, 40 }, -- El registro náutico
         { 2882, 45, 40 }, -- El oro de Cuergo
         { 992, 46, 38 }, -- Un estudio de agua de Gadgetzan
         { 2781, 46, 39 }, -- SE BUSCA: Caliph Escorpijón
         { 3527, 47, 40 }, -- La profecía de Mosh'aru
+        { 97530, 47, 40 }, -- Machacadunas deudores
         { 3022, 47, 42 }, -- Un envío frágil
         { 2768, 47, 40 }, -- Cetro Divinomático
         { 82, 47, 39 }, -- Investigación en la Guarida Ponzoñosa
@@ -49,6 +55,7 @@ QR:RegisterZoneGuide({
         { 3362, 50, 45 }, -- El Valle Cardizal
         { 4787, 50, 40 }, -- El huevo antiguo
         { 1560, 50, 40 }, -- La misión de Tooga
+        { 97540, 50, 1 }, -- Oasis
         { 2954, 50, 45 }, -- El guardapiedras
         { 2977, 50, 45 }, -- El regreso a Forjaz
         { 3444, 51, 46 }, -- El Círculo de Piedras
@@ -85,6 +92,7 @@ QR:RegisterZoneGuide({
         { 8925, 60, 58 }, -- Fuente de energía portátil
         { 8928, 60, 58 }, -- Un mercader sospechoso
         { 8977, 60, 58 }, -- Regresa junto a Deliana
+        { 96912, 60, 1 }, -- Field of Honor: Week 1
         { 8585, 60, 60 }, -- La Isla del Terror
         { 8586, 60, 60 }, -- Pinchos quimerok potentes de Dirge
         { 8587, 60, 60 }, -- Regresa junto a Narain

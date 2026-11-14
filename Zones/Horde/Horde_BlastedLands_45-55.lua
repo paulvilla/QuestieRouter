@@ -24,10 +24,16 @@ QR:RegisterZoneGuide({
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {
+        { 81917, 54, 45 }, -- Chains That Bind
+        { 81919, 54, 45 }, -- Brought to Heel
         { 2521, 55, 45 }, -- Al servicio de Kum'isha
         { 2522, 55, 45 }, -- Los esfuerzos de Kum'isha
         { 3501, 55, 45 }, -- Todo cuenta en grandes cantidades
         { 3502, 55, 45 }, -- Un trasto de Draenei…
+        { 87451, 55, 45 }, -- Memories of Rockard
+        { 91548, 55, 44 }, -- Vek'zol
+        { 91882, 55, 1 }, -- The Grand Alliance
+        { 93685, 55, 1 }, -- Al servicio de Kum'isha
         { 2743, 60, 45 }, -- La cubierta de la Oscuridad
     },
 })

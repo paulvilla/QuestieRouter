@@ -18,9 +18,9 @@ QR:RegisterZoneGuide({
         { 93, 20, 17 }, -- Las croquetas de cangrejo
         { 240, 20, 17 }, -- Entrega para Gato
         { 245, 21, 17 }, -- Las amenazas de ocho patas
-        { 95161, 22, 15 }, -- Remember That I Love You
+        { 95161, 22, 15 }, -- Recuerda el amor que te tengo
         { 164, 23, 17 }, -- Entrega a Sven
-        { 96139, 23, 18 }, -- The Valor Family
+        { 96139, 23, 18 }, -- La familia Valor
         { 56, 24, 18 }, -- Vigilancia nocturna
         { 148, 24, 20 }, -- Suministros de Villa Oscura
         { 149, 24, 20 }, -- Hilo de pelo de fantasma
@@ -71,7 +71,7 @@ QR:RegisterZoneGuide({
         { 1043, 30, 25 }, -- La Guadaña de Elune
         { 1044, 30, 25 }, -- La respuesta a las preguntas
         { 181, 30, 20 }, -- Mira las estrellas
-        { 96138, 30, 18 }, -- Merrick's Bow
+        { 96138, 30, 18 }, -- Arco de Merrick
         { 222, 31, 23 }, -- Ferocanis en el bosque
         { 223, 31, 23 }, -- Ferocanis en el bosque
         { 55, 32, 20 }, -- Morbent Vil
@@ -87,6 +87,6 @@ QR:RegisterZoneGuide({
     later = {
         { 1395, 45, 40 }, -- Suministros para Nethergarde
         { 1477, 45, 40 }, -- Suministros de vital importancia
-        { 99267, 60, 1 }, -- An Unfortunate End
+        { 98372, 60, 1 }, -- Un final desafortunado
     },
 })

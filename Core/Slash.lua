@@ -27,6 +27,7 @@ local HELP = {
     { "/qr road",          "paths inside a zone: add [x y] | rec | new | undo | list | clear" },
     { "/qr dungeon",       "route to a dungeon entrance: /qr dungeon <name> | stop" },
     { "/qr taxi",          "which flights QuestieRouter thinks you have learned (debug: what the game reports)" },
+    { "/qr perf",          "measure how long the map lines take for 10 s (open the world map and zoom)" },
     { "/qr taxi <name>",   "state of one flight master and where it came from (forget <name>: mark as not learned)" },
 }
 
@@ -237,6 +238,8 @@ SlashCmdList.QUESTIEROUTER = function(msg)
         RoadCommand(arg)
     elseif cmd == "dungeon" then
         DungeonCommand(arg)
+    elseif cmd == "perf" then
+        QR.MapLines:StartPerf(tonumber(arg) or 10)
     elseif cmd == "taxi" then
         local sub, rest = arg:match("^(%S*)%s*(.-)$")
         if sub == "debug" then QR.Router:TaxiDebug()

@@ -100,7 +100,7 @@ function Steps:FromTasks(tasks)
         end
         table.insert(s.questIds, t.questId)
         s.order = math.min(s.order, t.order or 1e9)
-        table.insert(s.lines, { icon = "accept", text = t.questName or ("#" .. t.questId) })
+        table.insert(s.lines, { icon = t.icon or "accept", text = t.questName or ("#" .. t.questId) })
     end
 
     -- Hacer: un paso por mision; posicion = objetivo pendiente mas cercano
@@ -135,7 +135,7 @@ function Steps:FromTasks(tasks)
             table.insert(steps, s)
         end
         table.insert(s.questIds, t.questId)
-        table.insert(s.lines, { icon = "turnin", text = t.questName or ("#" .. t.questId) })
+        table.insert(s.lines, { icon = t.icon or "turnin", text = t.questName or ("#" .. t.questId) })
     end
     return steps
 end

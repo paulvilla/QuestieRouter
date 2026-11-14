@@ -21,12 +21,12 @@ QR:RegisterZoneGuide({
         { 92465, 3, 2 }, -- Agitadores
         { 92469, 4, 3 }, -- Vuelve con Rorian
         { 93552, 4, 2 }, -- Cosecha de piedras de viento
-        { 92466, 4, 3 }, -- Call of Earth  [clase]
-        { 92467, 4, 3 }, -- Call of Earth  [clase]
+        { 92466, 4, 3 }, -- La llamada de la tierra  [clase]
+        { 92467, 4, 3 }, -- La llamada de la tierra  [clase]
         { 92471, 4, 4 }, -- Aetheen de los Vendavales
         { 92598, 4, 2 }, -- El don de la Visión cielonata
         { 92473, 4, 3 }, -- Invasión agresiva
-        { 92468, 4, 3 }, -- Call of Earth  [clase]
+        { 92468, 4, 3 }, -- La llamada de la tierra  [clase]
         { 92470, 5, 2 }, -- Matriarca funesta
         { 92472, 5, 3 }, -- El paso siguiente
         { 92544, 5, 2 }, -- Maleantes Al'Aketh
@@ -79,18 +79,18 @@ QR:RegisterZoneGuide({
         { 92881, 11, 6 }, -- La petición del sumo anciano
         { 92643, 11, 6 }, -- Cambiacapas
         { 92644, 11, 6 }, -- Malas noticias
-        { 94486, 11, 8 }, -- Vendas plumíferas
-        { 94487, 11, 8 }, -- Indeseados e indignos
         { 94568, 11, 6 }, -- Las verdaderas intenciones del culto
         { 92640, 11, 6 }, -- Tiempos desesperados
+        { 94486, 11, 8 }, -- Vendas plumíferas
+        { 94487, 11, 8 }, -- Indeseados e indignos
+        { 94485, 12, 8 }, -- Lágrimas de doncella
+        { 94488, 11, 8 }, -- Los lazos que nos unen
+        { 94489, 12, 8 }, -- Las heridas de la traición
         { 93065, 12, 7 }, -- Preparativos para la batalla
         { 92947, 12, 7 }, -- Es nuestro turno
         { 92708, 12, 7 }, -- Una gran aventura
         { 93958, 12, 7 }, -- El Sagrario Interior
         { 92646, 12, 7 }, -- La confrontación con Lorthuna
-        { 94485, 12, 8 }, -- Lágrimas de doncella
-        { 94488, 11, 8 }, -- Los lazos que nos unen
-        { 94489, 12, 8 }, -- Las heridas de la traición
         { 93836, 12, 7 }, -- El destino de Zephras
         { 94490, 12, 9 }, -- La misiva rasgada
         { 94491, 12, 8 }, -- El destino del cubil
@@ -104,5 +104,7 @@ QR:RegisterZoneGuide({
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {
+        { 96996, 40, 40 }, -- Your First Riding Galestrider
+        { 97205, 40, 40 }, -- Learning to Ride
     },
 })

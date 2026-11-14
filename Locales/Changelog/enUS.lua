@@ -4,6 +4,23 @@ local _, QR = ...
 QR.Changelogs = QR.Changelogs or {}
 QR.Changelogs.enUS = {
     {
+        version = "0.9.4", date = "2026-11-14",
+        title = "Event guides: Darkmoon Faire",
+        lines = {
+            "New \"Event guides\" category (between profession and speedrun guides). Darkmoon Faire is the first one; the rest of the world events are listed under \"Coming soon\".",
+            "Darkmoon Faire: sections for every ticket turn-in (Chronos, Kerri Hicks, Rinling, Yebb Neblegear), Sayge's fortune, card decks and pets, plus a \"Tickets for every prize\" route that buys the prizes from cheapest to most expensive.",
+            "The faire knows whether it's up and where (Elwynn Forest or Mulgore): the menu and the banner show the zone, or the date and place of the next one when it isn't up.",
+            "Faire NPCs that the database lists in both zones (Sayge, Flik, Professor Thaddeus Paleo, the fortune objects) now always point to the zone where the faire is.",
+            "Faire quests show the level they really require (the game lists all of them as level 60), and the menu shows each section's level range.",
+            "Ticket prize turn-ins use a coin icon, since they are only a purchase.",
+            "Fixed the error when choosing Sayge's fortune (Events.lua:126) and the ticket count on WoW Forever.",
+            "Zone and dungeon guides only include quests that exist on WoW Forever (no content from other expansions or above level 60). New guides: Mount Hyjal, Riverglades and Shen'dralas.",
+            "World map: no more stutter when zooming with a route (OpenMap). Lines and markers are only redrawn when something changes, and flight paths use fewer points.",
+            "New /qr perf command: measures for 10 seconds how long the map lines take.",
+            "The banner title no longer overlaps the clock: if it doesn't fit, it's cut with \"...\".",
+        },
+    },
+    {
         version = "0.9.3", date = "2026-11-13",
         title = "Route and flight fixes",
         lines = {

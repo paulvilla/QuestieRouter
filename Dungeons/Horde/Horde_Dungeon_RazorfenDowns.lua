@@ -1,5 +1,5 @@
 -- Generado por tools/dungeon_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Razorfen Downs · niveles 34-39 · 6 misiones
+-- Horde · Razorfen Downs · niveles 34-39 · 7 misiones
 local _, QR = ...
 QR:RegisterDungeonGuide({
     key = "Horde_Dungeon_RazorfenDowns",
@@ -17,6 +17,7 @@ QR:RegisterDungeonGuide({
         { 6521, 36, 28 }, -- Una alianza nefasta
         { 3523, 37, 32 }, -- La plaga de la Zahúrda
         { 3525, 37, 32 }, -- Extinguir el ídolo
+        { 97196, 41, 34 }, -- El ojo del Gélido
         { 3341, 42, 37 }, -- Acaba con la amenaza
     },
 })

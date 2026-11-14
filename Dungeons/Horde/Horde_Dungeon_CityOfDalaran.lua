@@ -12,13 +12,13 @@ QR:RegisterDungeonGuide({
     maxLevel = 33,
     -- { questId, nivelMision, nivelRequerido }
     quests = {
-        { 96984, 33, 24 }, -- Heart of Disruption
-        { 96986, 33, 24 }, -- The Grave Knight
-        { 97287, 33, 24 }, -- Shrewd Negotiations
-        { 96987, 33, 24 }, -- Opportunistic Education
-        { 96988, 33, 24 }, -- Source of Power
-        { 557, 34, 30 }, -- Brazales de vínculo
-        { 92434, 34, 30 }, -- Blood in the Streets
+        { 557, 33, 30 }, -- Brazales de vínculo
+        { 97287, 33, 24 }, -- Negociaciones astutas
+        { 96986, 33, 24 }, -- El Caballero de la Tumba
+        { 96987, 33, 24 }, -- Educación oportunista
+        { 96988, 33, 24 }, -- Fuente de poder
         { 545, 35, 30 }, -- Las patrullas de Dalaran
+        { 92434, 34, 30 }, -- Sangre en las calles
+        { 96984, 33, 24 }, -- El corazón de la perturbación
     },
 })

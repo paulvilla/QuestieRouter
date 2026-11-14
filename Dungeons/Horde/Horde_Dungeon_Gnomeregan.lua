@@ -1,5 +1,5 @@
 -- Generado por tools/dungeon_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Gnomeregan · niveles 25-30 · 16 misiones
+-- Horde · Gnomeregan · niveles 25-30 · 10 misiones
 local _, QR = ...
 QR:RegisterDungeonGuide({
     key = "Horde_Dungeon_Gnomeregan",
@@ -16,12 +16,6 @@ QR:RegisterDungeonGuide({
         { 2951, 30, 25 }, -- ¡El Destellamatic 5200!
         { 2952, 30, 25 }, -- ¡El Destellamatic 5200!
         { 2953, 30, 25 }, -- El Destellamatic en acción
-        { 4601, 30, 25 }, -- ¡El Destellamatic 5200!
-        { 4602, 30, 25 }, -- ¡El Destellamatic 5200!
-        { 4603, 30, 25 }, -- El Destellamatic en acción
-        { 4604, 30, 25 }, -- El Destellamatic en acción
-        { 4605, 30, 25 }, -- ¡El Destellamatic 5200!
-        { 4606, 30, 25 }, -- ¡El Destellamatic 5200!
         { 2945, 34, 28 }, -- Un anillo sucio
         { 2949, 34, 28 }, -- La devolución del anillo
         { 2841, 35, 25 }, -- Las guerras de la plataforma

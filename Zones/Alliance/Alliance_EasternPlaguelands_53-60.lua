@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Eastern Plaguelands · niveles 53-60 · 201 misiones
+-- Alliance · Eastern Plaguelands · niveles 53-60 · 202 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_EasternPlaguelands",
@@ -28,7 +28,9 @@ QR:RegisterZoneGuide({
         { 5152, 56, 50 }, -- Tía Marlene
         { 5241, 56, 50 }, -- Tío Carlin
         { 5181, 57, 50 }, -- Los villanos de Villa Darrow
+        { 97986, 57, 1 }, -- Argent Arbiter
         { 5247, 57, 53 }, -- Fragmentos del pasado
+        { 97987, 57, 53 }, -- Stormwind's High Order
         { 5781, 57, 52 }, -- De recuerdos olvidados
         { 5845, 58, 52 }, -- Del honor perdido
         { 5846, 58, 52 }, -- De amor y familia
@@ -211,7 +213,6 @@ QR:RegisterZoneGuide({
         { 9204, 60, 55 }, -- Libranza del artesano: anguila Escama Tormentosa
         { 9205, 60, 55 }, -- Libranza del artesano: pez coraza plateado
         { 9206, 60, 55 }, -- Libranza del artesano: anguila relámpago
-        { 9378, 60, 60 }, -- DND FLAG The Dread Citadel - Naxxramas
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {

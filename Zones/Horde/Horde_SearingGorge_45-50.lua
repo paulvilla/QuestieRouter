@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Searing Gorge · niveles 45-50 · 21 misiones
+-- Horde · Searing Gorge · niveles 45-50 · 20 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Horde_SearingGorge",
@@ -12,7 +12,6 @@ QR:RegisterZoneGuide({
     -- { questId, nivelMision, nivelRequerido }
     quests = {
         { 4449, 45, 43 }, -- Atrapado
-        { 81955, 45, 1 }, -- A Mind of Metal
         { 4450, 46, 43 }, -- El libro de contabilidad de Tanaris
         { 4451, 47, 43 }, -- La llave de la libertad
         { 3441, 48, 40 }, -- Castigo divino
@@ -29,9 +28,9 @@ QR:RegisterZoneGuide({
         { 3453, 50, 40 }, -- La Antorcha de Reprensión
         { 3454, 50, 40 }, -- La Antorcha de Reprensión
         { 3462, 50, 40 }, -- Escudero Maltrake
-        { 7704, 50, 45 }, -- ¡Mira el tamaño de esto!
         { 3463, 52, 40 }, -- ¡Préndelas fuego!
         { 3481, 50, 40 }, -- Abalarios...
+        { 81900, 54, 45 }, -- The Burning Beast
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {

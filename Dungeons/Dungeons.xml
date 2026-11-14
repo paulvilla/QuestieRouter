@@ -28,6 +28,7 @@
     <Script file="Horde\Horde_Dungeon_DireMaul.lua"/>
     <Script file="Horde\Horde_Dungeon_ExcavationSite.lua"/>
     <Script file="Horde\Horde_Dungeon_Gnomeregan.lua"/>
+    <Script file="Horde\Horde_Dungeon_HallOfThanes.lua"/>
     <Script file="Horde\Horde_Dungeon_Maraudon.lua"/>
     <Script file="Horde\Horde_Dungeon_RagefireChasm.lua"/>
     <Script file="Horde\Horde_Dungeon_RazorfenDowns.lua"/>

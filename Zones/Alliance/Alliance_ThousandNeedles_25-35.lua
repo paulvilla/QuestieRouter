@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Thousand Needles · niveles 25-35 · 17 misiones
+-- Alliance · Thousand Needles · niveles 25-35 · 15 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_ThousandNeedles",
@@ -16,13 +16,11 @@ QR:RegisterZoneGuide({
         { 1105, 30, 28 }, -- Caparazones endurecidos
         { 1176, 30, 29 }, -- Menos peso
         { 1179, 30, 28 }, -- Los hermanos Pernolatón
-        { 5762, 31, 28 }, -- Hemet Decautela
-        { 98156, 31, 27 }, -- Packaged Pristine Pelts
+        { 5762, 31, 28 }, -- Hemet Nesingwary
         { 1175, 33, 28 }, -- Un bache en la carretera
         { 1100, 34, 29 }, -- El diario de Henrig Soliceja
         { 1107, 35, 28 }, -- Aletas dorsales escamadas
         { 1106, 35, 26 }, -- Martek el Exiliado
-        { 79947, 35, 1 }, -- Geomancy: The Stone-Cold Truth
         { 1111, 36, 30 }, -- Maestro de los muelles Vertipeluca
         { 1114, 36, 30 }, -- Un envío para los gnomos
         { 1115, 36, 30 }, -- Rumores
@@ -45,5 +43,6 @@ QR:RegisterZoneGuide({
         { 3842, 47, 38 }, -- Una corta incubación
         { 3843, 47, 38 }, -- Un nuevo miembro en la familia
         { 2770, 50, 40 }, -- Gahz'rilla
+        { 92102, 58, 1 }, -- Praise
     },
 })

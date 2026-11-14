@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Dustwallow Marsh · niveles 35-45 · 24 misiones
+-- Alliance · Dustwallow Marsh · niveles 35-45 · 30 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_DustwallowMarsh",
@@ -16,6 +16,7 @@ QR:RegisterZoneGuide({
         { 1218, 35, 30 }, -- Especias calmantes
         { 1206, 35, 30 }, -- Jarl necesita ojos
         { 1203, 35, 30 }, -- Jarl necesita una espada
+        { 81570, 35, 30 }, -- Jarl Needs a Blade
         { 1219, 35, 30 }, -- El informe orco
         { 1220, 35, 30 }, -- Capitán Vimes
         { 1284, 35, 30 }, -- Huellas pezuñales sospechosas
@@ -35,11 +36,15 @@ QR:RegisterZoneGuide({
         { 1285, 38, 30 }, -- Los hombres de Daelin
         { 1286, 38, 30 }, -- Los desertores
         { 7070, 42, 39 }, -- Fragmentos Oscuros
+        { 98231, 44, 1 }, -- Ingrediente activo
+        { 98205, 44, 1 }, -- ¡Las crías son lo peor!
+        { 98215, 44, 1 }, -- Escamas de dragón y colas chamuscadas
+        { 2846, 46, 40 }, -- Tiara de la Profundidad
+        { 2861, 46, 40 }, -- La tarea de Tabetha
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {
-        { 2846, 46, 40 }, -- Tiara de la Profundidad
-        { 2861, 46, 40 }, -- La tarea de Tabetha
         { 626, 51, 35 }, -- El enigma de Cortello
+        { 95194, 53, 48 }, -- Our Man in Theramore
     },
 })

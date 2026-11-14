@@ -13,7 +13,7 @@ QR:RegisterDungeonGuide({
     -- { questId, nivelMision, nivelRequerido }
     quests = {
         { 1050, 38, 28 }, -- Mitología de los Titanes
-        { 96800, 38, 30 }, -- Past Due
+        { 96800, 38, 30 }, -- Fuera de plazo
         { 261, 39, 34 }, -- El sendero Escarlata
         { 1052, 40, 34 }, -- El sendero Escarlata
         { 1053, 40, 34 }, -- En el nombre de la Luz

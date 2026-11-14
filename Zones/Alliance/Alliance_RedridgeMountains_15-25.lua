@@ -48,8 +48,8 @@ QR:RegisterZoneGuide({
         { 19, 25, 18 }, -- Tharil'zun
         { 128, 25, 20 }, -- La recompensa de Roca Negra
         { 219, 25, 19 }, -- Desaparecido en combate
-        { 169, 26, 15 }, -- Se busca: Gath'Ilzogg
-        { 180, 26, 15 }, -- Se busca: teniente Fangore
+        { 169, 26, 15 }, -- SE BUSCA: Gath'Ilzogg
+        { 180, 26, 15 }, -- SE BUSCA: Teniente Fangore
         { 249, 27, 20 }, -- Morganth
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
@@ -58,12 +58,7 @@ QR:RegisterZoneGuide({
         { 4184, 54, 48 }, -- Los verdaderos maestros
         { 4186, 54, 48 }, -- Los verdaderos maestros
         { 4223, 54, 48 }, -- Los verdaderos maestros
-        { 91899, 60, 1 }, -- Un cajón sellado
-        { 91900, 60, 1 }, -- A Sealed Crate
-        { 91901, 60, 1 }, -- A Sealed Crate
-        { 91904, 60, 1 }, -- A Sealed Crate
-        { 91905, 60, 1 }, -- A Sealed Crate
         { 95816, 60, 1 }, -- Sign Me Up!
-        { 98247, 60, 10 }, -- Shipping Label
+        { 98247, 60, 10 }, -- Etiqueta de envíos
     },
 })

@@ -1,5 +1,5 @@
 -- Generado por tools/dungeon_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Dire Maul - East · niveles 54-59 · 36 misiones
+-- Alliance · Dire Maul - East · niveles 54-59 · 34 misiones
 local _, QR = ...
 QR:RegisterDungeonGuide({
     key = "Alliance_Dungeon_DireMaul",
@@ -12,12 +12,11 @@ QR:RegisterDungeonGuide({
     maxLevel = 59,
     -- { questId, nivelMision, nivelRequerido }
     quests = {
-        { 7488, 57, 54 }, -- La Membrana de Lethtendris
         { 7494, 57, 54 }, -- Bastión Plumaluna
+        { 7488, 57, 54 }, -- La Membrana de Lethtendris
         { 7441, 58, 54 }, -- Pusillín y el ancestro Azj'Tordin
         { 7482, 60, 54 }, -- Leyendas élficas
         { 1193, 60, 56 }, -- Una trampa rota
-        { 1318, 60, 56 }, -- Asunto Gordok sin finiquitar
         { 5518, 60, 56 }, -- El traje de orgo Gordok
         { 5519, 60, 56 }, -- El disfraz de ogro Gordok
         { 5525, 60, 57 }, -- ¡Libera a Knot!
@@ -25,7 +24,6 @@ QR:RegisterDungeonGuide({
         { 5528, 60, 57 }, -- La cata de los Gordok
         { 7429, 60, 57 }, -- ¡Libera a Knot!
         { 7461, 60, 56 }, -- Locura interior
-        { 7462, 60, 56 }, -- El tesoro de los Shen'dralar
         { 7463, 60, 60 }, -- El refresco arcano  [clase]
         { 7483, 60, 58 }, -- El Tratado de Prontitud
         { 7484, 60, 58 }, -- El Tratado de Concentración

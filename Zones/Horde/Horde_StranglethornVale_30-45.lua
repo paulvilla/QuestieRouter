@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Stranglethorn Vale · niveles 30-45 · 167 misiones
+-- Horde · Stranglethorn Vale · niveles 30-45 · 178 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Horde_StranglethornVale",
@@ -16,19 +16,17 @@ QR:RegisterZoneGuide({
         { 185, 31, 28 }, -- Domina el tigre
         { 190, 31, 28 }, -- Domina la pantera
         { 201, 32, 28 }, -- Investiga el campamento
-        { 186, 33, 28 }, -- Maestría en tigres
+        { 186, 33, 28 }, -- Domina el tigre
         { 191, 33, 28 }, -- Domina la pantera
         { 194, 34, 28 }, -- Domina el raptor
         { 581, 34, 30 }, -- Caza para Yenniku
-        { 97328, 35, 30 }, -- Anything of Value
+        { 97328, 35, 30 }, -- Cualquier objeto de valor
         { 187, 35, 28 }, -- Domina el tigre
-        { 79535, 35, 1 }, -- Basilisks: Should Petrification be Feared?
+        { 97331, 35, 30 }, -- La gran evasión de Zimmix
         { 189, 35, 30 }, -- Orejas de Sangrapellejo
         { 605, 35, 30 }, -- Fragmentos de cristales canto azules
         { 2842, 35, 20 }, -- Scooty, ingeniero jefe
         { 2843, 35, 20 }, -- ¡Gnomer-yaaaaa!
-        { 97329, 35, 30 }, -- Where's the Key?
-        { 97331, 35, 30 }, -- Zimmix's Great Escape
         { 213, 36, 31 }, -- OPA hostil
         { 1116, 36, 30 }, -- Polvo de sueño en el pantano
         { 1117, 36, 30 }, -- Rumores para Kravel
@@ -41,30 +39,43 @@ QR:RegisterZoneGuide({
         { 582, 37, 30 }, -- Caza cabezas
         { 638, 37, 32 }, -- Aterratrols
         { 569, 37, 33 }, -- La defensa de Grom'gol
-        { 1181, 37, 29 }, -- Patrocinio goblin
+        { 1181, 37, 29 }, -- Apoyo al goblin
         { 1182, 37, 29 }, -- Apoyo al goblin
         { 1183, 37, 29 }, -- Apoyo al goblin
-        { 95773, 37, 30 }, -- Enemies in the Water
         { 628, 38, 31 }, -- Borceguí
         { 570, 38, 33 }, -- El encantamiento de Mok'thardin
+        { 95141, 38, 36 }, -- Informar en Rog'mar
         { 192, 38, 28 }, -- Domina la pantera
-        { 97047, 38, 30 }, -- The Cook in the Cage
-        { 97048, 38, 30 }, -- Returning to Port
-        { 193, 40, 28 }, -- Domina la pantera
+        { 97048, 38, 30 }, -- Vuelta al puerto
         { 338, 40, 30 }, -- Las verdes colinas de Tuercespina
         { 339, 40, 30 }, -- Capítulo I
         { 340, 40, 30 }, -- Capítulo II
         { 341, 40, 30 }, -- Capítulo III
         { 342, 40, 30 }, -- Capítulo IV
+        { 193, 40, 28 }, -- Domina la pantera
+        { 78830, 40, 26 }, -- El terror de los cielos del desierto  [clase]
         { 1261, 40, 30 }, -- Las declaraciones de Marg
+        { 95748, 40, 30 }, -- Las leyendas ancestrales de los Gurubashi
+        { 95773, 37, 30 }, -- Enemigos en el agua
+        { 95770, 40, 30 }, -- Localizar la ciudad perdida
+        { 95776, 38, 30 }, -- El único Escamasalada bueno...
+        { 95775, 40, 30 }, -- La Ciudad Sumergida
+        { 96078, 40, 30 }, -- Un relato junto al fuego
+        { 95322, 40, 1 }, -- Conseguir la mercancía
+        { 95325, 40, 1 }, -- ¡Nos han robado!
+        { 95326, 39, 1 }, -- The Big Payback
+        { 95327, 40, 1 }, -- All's Well That Ends Well
         { 670, 40, 35 }, -- El tesoro sumergido
-        { 95384, 40, 32 }, -- Partial Mystical Notes
-        { 95748, 40, 30 }, -- The Gurubashi Legends of Old
-        { 95770, 40, 30 }, -- Locating the Lost City
+        { 95789, 40, 34 }, -- Videntesal sospechosos
+        { 95791, 40, 34 }, -- El capitán Videntesal
+        { 79236, 40, 30 }, -- Una jarra y te lo cuento
+        { 79242, 40, 30 }, -- No hay honor entre ladrones
+        { 95384, 40, 32 }, -- Las notas místicas parciales
         { 600, 41, 30 }, -- La minería de Ventura y Cía.
         { 606, 41, 30 }, -- Asusta a Trémulo
         { 595, 41, 37 }, -- Bucaneros Velasangre
         { 607, 41, 30 }, -- Vuelve con MacKinley
+        { 97332, 41, 36 }, -- Tropezar dos veces con la misma piedra
         { 597, 41, 37 }, -- Bucaneros Velasangre
         { 599, 41, 37 }, -- Bucaneros Velasangre
         { 587, 41, 37 }, -- Tabaco rapé
@@ -82,12 +93,12 @@ QR:RegisterZoneGuide({
         { 197, 43, 28 }, -- Domina el raptor
         { 208, 43, 28 }, -- Caza mayor
         { 624, 43, 35 }, -- El enigma de Cortello
+        { 97386, 44, 38 }, -- La ofensa de Grom'gol
         { 573, 44, 33 }, -- El encantamiento de Mok'thardin
         { 609, 44, 30 }, -- El vudú debido
         { 613, 44, 30 }, -- El pie roto de Maury
         { 621, 44, 35 }, -- El secreto de Zanzil
         { 1119, 44, 35 }, -- La mezcla y cerveza de tontos de Zanzil
-        { 1127, 44, 36 }, -- Cerveza de tontos
         { 2864, 45, 40 }, -- Tran'rek
         { 608, 45, 37 }, -- Bucaneros Velasangre
         { 348, 45, 40 }, -- La fiebre de Tuercespina
@@ -100,14 +111,12 @@ QR:RegisterZoneGuide({
         { 591, 46, 30 }, -- El Ojo de la Mente
         { 592, 46, 30 }, -- Salvar a Yenniku
         { 8551, 47, 35 }, -- El cofre del capitán
+        { 8554, 50, 40 }, -- Enfréntate a Negolash
         { 3721, 50, 45 }, -- Tu propio OOX
         { 580, 50, 40 }, -- El grog de Whiskey Slim
-        { 618, 50, 40 }, -- Enfréntate a Negolash
         { 8552, 50, 40 }, -- La banda con monograma
         { 8553, 50, 40 }, -- El aflanje del capitán
-        { 8554, 50, 40 }, -- Enfréntate a Negolash
         { 630, 51, 45 }, -- Mensaje en una botella
-        { 615, 51, 35 }, -- El aflanje del capitán
         { 619, 52, 35 }, -- La tentación de Negolash
         { 7810, 55, 1 }, -- El maestro de la arena
         { 7838, 55, 1 }, -- El maestro mayor de la arena
@@ -178,11 +187,10 @@ QR:RegisterZoneGuide({
         { 8147, 60, 60 }, -- Zarcillo de La Vorágine  [clase]
         { 8148, 60, 60 }, -- Cólera de La Vorágine  [clase]
         { 9259, 60, 30 }, -- Un traidor de Velasangre
+        { 83934, 60, 55 }, -- Show Me the Money!
+        { 96076, 60, 1 }, -- In Demand - Ancient Elven Curiosities
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {
-        { 8053, 61, 60 }, -- Dechados de Poder: los Guardabrazos de librepensador
-        { 8054, 61, 60 }, -- Dechados de Poder: el Cinturón de librepensador
-        { 8055, 61, 60 }, -- Dechados de Poder: el Peto de librepensador
     },
 })

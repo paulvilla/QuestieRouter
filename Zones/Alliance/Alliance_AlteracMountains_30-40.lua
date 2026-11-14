@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Alterac Mountains · niveles 30-40 · 26 misiones
+-- Alliance · Alterac Mountains · niveles 30-40 · 30 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_AlteracMountains",
@@ -32,8 +32,12 @@ QR:RegisterZoneGuide({
         { 7081, 60, 51 }, -- Los cementerios del Valle de Alterac
         { 7102, 60, 51 }, -- Las torres y los búnkeres
         { 7122, 60, 51 }, -- Conquistar una mina
-        { 99191, 60, 12 }, -- A Donation of Wool
-        { 99192, 60, 26 }, -- A Donation of Silk
+        { 96603, 60, 48 }, -- Unstable Magic
+        { 99191, 60, 12 }, -- Un donativo de lana
+        { 99192, 60, 26 }, -- Un donativo de seda
+        { 99193, 60, 40 }, -- A Donation of Mageweave
+        { 99194, 60, 50 }, -- A Donation of Runecloth
+        { 99195, 60, 50 }, -- Additional Runecloth
         { 7261, 60, 51 }, -- El imperativo soberano
         { 8371, 60, 51 }, -- Esfuerzos concertados
         { 8385, 60, 51 }, -- Esfuerzos concertados

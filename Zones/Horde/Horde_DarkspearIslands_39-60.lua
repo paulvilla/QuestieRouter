@@ -12,13 +12,13 @@ QR:RegisterZoneGuide({
     entry = { quest = 98887, areaId = 17, x = 46.71, y = 8.68 },
     -- { questId, nivelMision, nivelRequerido }
     quests = {
-        { 98887, 39, 30 }, -- Conflict at Darkspear Islands
+        { 98887, 39, 30 }, -- Conflicto en las Islas Lanza Negra
         { 98888, 39, 30 }, -- Conflict at Darkspear Islands
-        { 98906, 39, 30 }, -- The Battle for Darkspear Islands!
+        { 98906, 39, 30 }, -- ¡La batalla por las Islas Lanza Negra!
         { 98910, 39, 30 }, -- Darkspear's Basic Care Package
         { 98913, 39, 30 }, -- Theramore Basic Care Package
-        { 98889, 49, 40 }, -- Conflict at Darkspear Islands
         { 98907, 49, 40 }, -- The Battle for Darkspear Islands!
+        { 98889, 49, 40 }, -- Conflict at Darkspear Islands
         { 98891, 59, 50 }, -- Conflict at Darkspear Islands
         { 98893, 60, 60 }, -- Conflict at Darkspear Islands
         { 98908, 60, 50 }, -- The Battle for Darkspear Islands!

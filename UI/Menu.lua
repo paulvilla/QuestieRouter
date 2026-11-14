@@ -282,7 +282,10 @@ end
 function Menu:Main()
     local entries = { { text = L["Available guides"], header = true } }
     for _, cat in ipairs(QR.guideCategories) do
-        entries[#entries + 1] = { text = L[cat.name], icon = "Guides", menu = function() return Menu:GuideEntries(cat) end }
+        entries[#entries + 1] = { text = L[cat.name], icon = "Guides", menu = function()
+            if cat.menu then return cat.menu() end
+            return Menu:GuideEntries(cat)
+        end }
     end
     entries[#entries + 1] = spacer
     local guide = QR.Planner:GetGuide()

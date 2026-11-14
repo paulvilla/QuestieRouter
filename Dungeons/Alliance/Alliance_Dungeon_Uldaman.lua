@@ -22,8 +22,8 @@ QR:RegisterDungeonGuide({
         { 722, 40, 35 }, -- El amuleto de los secretos
         { 723, 40, 35 }, -- Tener fe en el porvenir
         { 724, 40, 35 }, -- Tener fe en el porvenir
-        { 725, 40, 35 }, -- Advertir de la amenaza
-        { 726, 40, 35 }, -- Advertir de la amenaza
+        { 725, 40, 35 }, -- Avertir de la amenaza
+        { 726, 40, 35 }, -- Avertir de la amenaza
         { 2398, 40, 35 }, -- Los enanos desaparecidos
         { 2240, 40, 35 }, -- La cámara oculta
         { 2198, 41, 37 }, -- El collar hecho añicos

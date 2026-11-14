@@ -136,6 +136,11 @@ function Banner:Create(parent, opts)
         b.title:SetPoint("TOPLEFT", b.eyebrow, "BOTTOMLEFT", 0, -1)
         b.title:SetPoint("RIGHT", b, "RIGHT", -50, 0)
         b.title:SetJustifyH("LEFT")
+        -- una sola linea: si no cabe antes del reloj se corta con "..." (ver Banner:FitTexts)
+        b.title:SetWordWrap(false)
+        b.eyebrow:SetPoint("RIGHT", b, "RIGHT", -50, 0)
+        b.eyebrow:SetJustifyH("LEFT")
+        b.eyebrow:SetWordWrap(false)
         b.subtitle = b:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
         b.subtitle:SetPoint("TOPLEFT", b.title, "BOTTOMLEFT", 0, -1)
         b.subtitle:SetJustifyH("LEFT")
@@ -158,6 +163,7 @@ function Banner:Create(parent, opts)
     b.SetZone = Banner.SetZone
     b.Paint = Banner.Paint
     b.SetTexts = Banner.SetTexts
+    b.FitTexts = Banner.FitTexts
     b.StyleTexts = Banner.StyleTexts
     if not opts.thumb then b:StyleTexts() end
     return b
@@ -176,6 +182,21 @@ function Banner:SetTexts(eyebrow, title, subtitle)
     self.eyebrow:SetText(eyebrow or "")
     self.title:SetText(title or "")
     self.subtitle:SetText(subtitle or "")
+    self:FitTexts()
+end
+
+--- El nombre de la zona / guia y la linea de arriba terminan antes del reloj (con un reloj grande se pisaban)
+function Banner:FitTexts()
+    if not self.title then return end
+    local inset = 10
+    if self.clock:IsShown() then
+        local w = self.clock:GetStringWidth() or 0
+        if w > 0 then inset = math.floor(w + 18) end
+    end
+    if inset == self.textInset then return end
+    self.textInset = inset
+    self.title:SetPoint("RIGHT", self, "RIGHT", -inset, 0)
+    self.eyebrow:SetPoint("RIGHT", self, "RIGHT", -inset, 0)
 end
 
 --- key: zona actual; oldKey/fraction: fundido desde la zona anterior (fraction 0..1)
@@ -367,8 +388,10 @@ function Banner:Paint()
             self.clock:SetText(string.format("%02d:%02d", hour, math.floor(minute)))
             self.clock:SetTextColor(1, 1, 1, 0.8)
             self.clock:Show()
+            self:FitTexts()
         else
             self.clock:Hide()
+            self:FitTexts()
         end
     end
 end

@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Hillsbrad Foothills · niveles 20-30 · 48 misiones
+-- Horde · Hillsbrad Foothills · niveles 20-30 · 49 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Horde_HillsbradFoothills",
@@ -19,12 +19,13 @@ QR:RegisterZoneGuide({
         { 498, 22, 17 }, -- El rescate
         { 1066, 23, 13 }, -- Sangre de inocentes
         { 1067, 23, 13 }, -- Vuelve a Cima del Trueno
-        { 501, 24, 21 }, -- Elixir de dolor
+        { 501, 24, 21 }, -- Elixir del dolor
         { 502, 24, 21 }, -- Elixir del dolor
         { 527, 24, 19 }, -- La batalla de Trabalomas
         { 528, 25, 19 }, -- La batalla de Trabalomas
-        { 98094, 25, 19 }, -- Scout Support
-        { 546, 25, 20 }, -- Recuerdos de muerte
+        { 98094, 25, 19 }, -- Asistencia a los exploradores
+        { 546, 25, 20 }, -- Recuerdes de muerte
+        { 98095, 25, 19 }, -- Ventajas valiosas
         { 529, 26, 19 }, -- La batalla de Trabalomas
         { 532, 26, 19 }, -- La batalla de Trabalomas
         { 539, 28, 19 }, -- La batalla de Trabalomas
@@ -38,17 +39,17 @@ QR:RegisterZoneGuide({
         { 524, 30, 24 }, -- Elixir de agonía
         { 676, 32, 30 }, -- La Sentencia
         { 550, 32, 19 }, -- La batalla de Trabalomas
-        { 556, 32, 30 }, -- Muestras de piedra
-        { 93680, 33, 30 }, -- Key to the City
-        { 97287, 33, 24 }, -- Shrewd Negotiations
-        { 96986, 33, 24 }, -- The Grave Knight
+        { 96986, 33, 24 }, -- El Caballero de la Tumba
+        { 544, 33, 30 }, -- Colarse en la cárcel
+        { 93680, 33, 30 }, -- La llave de la ciudad
+        { 97287, 33, 24 }, -- Negociaciones astutas
+        { 556, 33, 30 }, -- Muestras de piedra
+        { 557, 33, 30 }, -- Brazales de vínculo
         { 552, 33, 29 }, -- La venganza de Helcular
         { 553, 33, 29 }, -- La venganza de Helcular
         { 533, 34, 29 }, -- Infiltración
-        { 544, 34, 30 }, -- Colarse en la cárcel
-        { 92434, 34, 30 }, -- Blood in the Streets
-        { 557, 34, 30 }, -- Brazales de vínculo
         { 545, 35, 30 }, -- Las patrullas de Dalaran
+        { 92434, 34, 30 }, -- Sangre en las calles
         { 503, 36, 29 }, -- Gol'dir
         { 518, 39, 34 }, -- Corona de la Voluntad
         { 495, 39, 34 }, -- La Corona de la Voluntad

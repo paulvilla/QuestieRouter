@@ -79,7 +79,7 @@ QR:RegisterZoneGuide({
     later = {
         { 1073, 21, 17 }, -- Ineptitud + Productos químicos = Diversión
         { 466, 22, 20 }, -- Búsqueda de incendicita
-        { 971, 23, 10 }, -- El conocimiento de las profundidades
+        { 971, 23, 18 }, -- El conocimiento de las profundidades
         { 2922, 26, 20 }, -- ¡Salva el cerebro de Techrobot!
         { 2923, 26, 20 }, -- Maestro manitas Sobrechispa
         { 2926, 27, 20 }, -- Gnogaine
@@ -95,8 +95,12 @@ QR:RegisterZoneGuide({
         { 700, 31, 25 }, -- Un homenaje real
         { 2948, 35, 28 }, -- Mejora gnómica
         { 1050, 38, 28 }, -- Mitología de los Titanes
-        { 725, 40, 35 }, -- Advertir de la amenaza
-        { 726, 40, 35 }, -- Advertir de la amenaza
+        { 725, 40, 35 }, -- Avertir de la amenaza
+        { 726, 40, 35 }, -- Avertir de la amenaza
+        { 97017, 40, 40 }, -- Tu primer carnero de montar
+        { 97018, 40, 40 }, -- Lecciones de monta
+        { 97046, 40, 40 }, -- Your First Mechanostrider
+        { 97188, 40, 40 }, -- Learning to Ride
         { 2199, 41, 37 }, -- Esa información tiene un precio
         { 3375, 42, 37 }, -- Otra ampolla
         { 1360, 43, 33 }, -- Los tesoros reclamados
@@ -117,10 +121,6 @@ QR:RegisterZoneGuide({
         { 4513, 54, 48 }, -- Un largo camino para unas babosas
         { 4126, 55, 50 }, -- Hurley Negrálito
         { 7342, 60, 52 }, -- Las flechas no valen para nada
-        { 7673, 60, 60 }, -- Intercambio de carnero de escarcha
-        { 7674, 60, 60 }, -- Intercambio de carnero negro
-        { 7675, 60, 60 }, -- Sustitución de mecazancudo azul hielo
-        { 7676, 60, 60 }, -- Sustitución de mecazancudo blanco
         { 7802, 60, 12 }, -- Un donativo de lana
         { 7803, 60, 26 }, -- Un donativo de seda
         { 7804, 60, 40 }, -- Un donativo de paño mágico
@@ -155,6 +155,16 @@ QR:RegisterZoneGuide({
         { 9004, 60, 58 }, -- Guardar lo mejor para el final
         { 9005, 60, 58 }, -- Guardar lo mejor para el final
         { 9006, 60, 58 }, -- Guardar lo mejor para el final
+        { 84147, 60, 58 }, -- An Earnest Proposition
+        { 84148, 60, 58 }, -- An Earnest Proposition
+        { 84149, 60, 58 }, -- An Earnest Proposition
+        { 84150, 60, 58 }, -- An Earnest Proposition
+        { 84154, 60, 58 }, -- An Earnest Proposition
         { 95817, 60, 1 }, -- Rotgath Stonebeard
+        { 95924, 60, 55 }, -- Panic at the Digsite
+        { 95925, 60, 55 }, -- Mapping the Way Forward
+        { 97447, 60, 58 }, -- An Earnest Proposition
+        { 99207, 60, 60 }, -- Swift as the Wind
+        { 99209, 60, 60 }, -- Swift as the Wind
     },
 })

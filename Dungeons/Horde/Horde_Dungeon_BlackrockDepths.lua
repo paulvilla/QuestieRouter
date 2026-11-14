@@ -1,5 +1,5 @@
 -- Generado por tools/dungeon_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Blackrock Depths · niveles 48-53 · 31 misiones
+-- Horde · Blackrock Depths · niveles 48-53 · 32 misiones
 local _, QR = ...
 QR:RegisterDungeonGuide({
     key = "Horde_Dungeon_BlackrockDepths",
@@ -32,6 +32,7 @@ QR:RegisterDungeonGuide({
         { 4134, 55, 50 }, -- La receta perdida de Cebatruenos
         { 4123, 55, 50 }, -- El Corazón de la Montaña
         { 4133, 55, 50 }, -- Vivian Latumba
+        { 97197, 55, 46 }, -- Fragment of the Firelands
         { 3907, 56, 48 }, -- La discordia de las llamas
         { 4122, 58, 52 }, -- Grark Lorkrub
         { 4063, 58, 52 }, -- La revuelta de las máquinas

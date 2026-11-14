@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Winterspring · niveles 55-60 · 54 misiones
+-- Alliance · Winterspring · niveles 55-60 · 59 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_Winterspring",
@@ -18,8 +18,10 @@ QR:RegisterZoneGuide({
         { 4809, 54, 50 }, -- Cuernos de quimera venfresco
         { 4810, 54, 50 }, -- Vuelve con Tinkee
         { 5601, 55, 50 }, -- Pamela, mi hermana
+        { 93406, 56, 1 }, -- Unfrozen Deliveries
         { 6603, 56, 52 }, -- Problemas en Cuna del Invierno
         { 3783, 56, 52 }, -- Yeti... ¿ya hemos llegado?
+        { 92009, 56, 1 }, -- Crate Expectations
         { 5244, 56, 53 }, -- Las ruinas de Kel'Theril
         { 5245, 56, 53 }, -- Espíritus condenados de Kel'Theril
         { 4842, 56, 51 }, -- Fuentes extrañas
@@ -32,6 +34,7 @@ QR:RegisterZoneGuide({
         { 8464, 58, 45 }, -- Actividad de los Nevada
         { 8469, 56, 50 }, -- Cuentas para Salfa
         { 5252, 58, 53 }, -- Altonato arrepentido
+        { 93269, 58, 1 }, -- Top of the Post
         { 977, 58, 52 }, -- Yeti... ¿ya hemos llegado?
         { 5163, 58, 52 }, -- Yeti... ¿ya hemos llegado?
         { 5253, 58, 53 }, -- El cristal de Zin-Malor
@@ -49,7 +52,6 @@ QR:RegisterZoneGuide({
         { 5063, 60, 57 }, -- Almete del Sabio Escarlata
         { 5067, 60, 57 }, -- Leotardos de Arcana
         { 5068, 60, 57 }, -- Coraza Sed de Sangre
-        { 6606, 60, 55 }, -- Un poco de suerte
         { 4907, 60, 57 }, -- Tinkee Vaporino
         { 969, 60, 55 }, -- Que la suerte sea contigo
         { 975, 60, 55 }, -- Alijo de Mau'ari
@@ -60,6 +62,9 @@ QR:RegisterZoneGuide({
         { 4805, 60, 55 }, -- E'ko de los Cardo Nevado
         { 4806, 60, 55 }, -- E'ko de los Machacahielo
         { 4807, 60, 55 }, -- E'ko de lechúcico salvaje
+        { 97490, 60, 1 }, -- Halt the Hail
+        { 92859, 60, 1 }, -- Shroud of the Winter Wilds
+        { 98462, 60, 1 }, -- Shroud of the Winter Wilds
         { 4970, 60, 58 }, -- Provisiones Sable de hielo
         { 5201, 60, 58 }, -- Intrusión Nevada
         { 5981, 60, 58 }, -- Gigantes arrasadores

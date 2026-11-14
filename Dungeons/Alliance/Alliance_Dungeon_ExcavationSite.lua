@@ -16,14 +16,14 @@ QR:RegisterDungeonGuide({
         { 484, 22, 18 }, -- Piel de crocolisco joven
         { 277, 23, 20 }, -- No al fuego
         { 275, 26, 20 }, -- Ampollas en la tierra
-        { 98815, 28, 24 }, -- Highland Hides
-        { 95647, 31, 24 }, -- Lost in the Thicket Things
-        { 98824, 31, 24 }, -- Prehistoric Prism
-        { 95646, 31, 24 }, -- Horrors in the Highland
-        { 95737, 31, 24 }, -- Seeking Caitlin
+        { 98815, 28, 24 }, -- Pellejos de las Tierras Altas
+        { 95647, 31, 24 }, -- Perdido en la espesura
+        { 95646, 31, 24 }, -- Horrores en las Tierras Altas
+        { 95737, 31, 24 }, -- En busca de Caitlin
         { 95772, 31, 24 }, -- En busca de Filosón
-        { 95795, 31, 24 }, -- Fallen in the Fen
-        { 95809, 31, 24 }, -- Heartwoven
-        { 95810, 31, 24 }, -- Lost Relic Carry
+        { 95795, 31, 24 }, -- Muerte en el pantano
+        { 95809, 31, 24 }, -- Tejido en el corazón
+        { 95810, 31, 24 }, -- Transporte de reliquia perdida
+        { 98824, 31, 24 }, -- Prisma prehistórico
     },
 })

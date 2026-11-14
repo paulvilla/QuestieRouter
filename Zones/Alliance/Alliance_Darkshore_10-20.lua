@@ -49,11 +49,11 @@ QR:RegisterZoneGuide({
         { 947, 17, 12 }, -- La cueva de los champiñones
         { 948, 17, 12 }, -- Onus
         { 1138, 17, 15 }, -- Rico marisco
-        { 944, 17, 12 }, -- El Glaive del Maestro
-        { 98042, 17, 12 }, -- It's All Fun and Games Until...
+        { 944, 17, 12 }, -- La Espada del Maestro
         { 949, 17, 12 }, -- El campamento del Azote del Ocaso
         { 950, 17, 12 }, -- Vuelve con Onus
-        { 952, 17, 6 }, -- El Páramo de los Ancestros
+        { 98042, 17, 12 }, -- Todo son risas hasta que...
+        { 952, 17, 6 }, -- El Páramo de los Ancianos
         { 97894, 17, 13 }, -- Asuntos en Auberdine
         { 97926, 17, 13 }, -- A duras penas
         { 945, 18, 10 }, -- La fuga de Therylune
@@ -63,13 +63,14 @@ QR:RegisterZoneGuide({
         { 4763, 18, 15 }, -- La corrupción de los Bosque Negro
         { 966, 18, 13 }, -- La torre de Althalaxx
         { 967, 18, 13 }, -- La torre de Althalaxx
+        { 968, 18, 10 }, -- Los Poderes Subyacentes
         { 4731, 19, 13 }, -- Tortuga marina varada
         { 4732, 19, 13 }, -- Tortuga marina varada
         { 4733, 19, 13 }, -- Criatura marina varada
         { 951, 20, 12 }, -- Las reliquias de Mathystra
-        { 98013, 20, 12 }, -- Swelling Forces
+        { 98013, 20, 12 }, -- Fuerzas henchidas
         { 5321, 20, 17 }, -- El despertar
-        { 87760, 20, 15 }, -- Holy Diver
+        { 87760, 20, 15 }, -- Buceador sagrado
         { 986, 20, 10 }, -- El maestro perdido
         { 993, 20, 10 }, -- El maestro perdido
         { 729, 20, 15 }, -- El prospector despistado
@@ -78,9 +79,8 @@ QR:RegisterZoneGuide({
         { 995, 20, 10 }, -- Escaparse furtivamente
         { 731, 20, 15 }, -- El prospector despistado
         { 741, 20, 15 }, -- El prospector despistado
-        { 968, 20, 10 }, -- Los Poderes Subyacentes
         { 98461, 21, 18 }, -- Amor no correspondido
-        { 98028, 21, 17 }, -- Baron Marinous
+        { 98028, 21, 17 }, -- Barón Marinous
         { 994, 22, 10 }, -- Escaparse por la fuerza
         { 990, 19, 15 }, -- El camino de Vallefresno
         { 1275, 24, 18 }, -- Investigaciones acerca de la corrupción

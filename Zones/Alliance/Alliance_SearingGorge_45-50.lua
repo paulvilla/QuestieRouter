@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Searing Gorge · niveles 45-50 · 29 misiones
+-- Alliance · Searing Gorge · niveles 45-50 · 28 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_SearingGorge",
@@ -12,7 +12,6 @@ QR:RegisterZoneGuide({
     -- { questId, nivelMision, nivelRequerido }
     quests = {
         { 7722, 50, 45 }, -- La receta del fluido ardiente
-        { 81955, 45, 1 }, -- A Mind of Metal
         { 4449, 45, 43 }, -- Atrapado
         { 4450, 46, 43 }, -- El libro de contabilidad de Tanaris
         { 4451, 47, 43 }, -- La llave de la libertad
@@ -34,9 +33,9 @@ QR:RegisterZoneGuide({
         { 3453, 50, 40 }, -- La Antorcha de Reprensión
         { 3454, 50, 40 }, -- La Antorcha de Reprensión
         { 3462, 50, 40 }, -- Escudero Maltrake
-        { 7704, 50, 45 }, -- ¡Mira el tamaño de esto!
         { 3463, 52, 40 }, -- ¡Préndelas fuego!
         { 3481, 50, 40 }, -- Abalarios...
+        { 81900, 54, 45 }, -- The Burning Beast
         { 3371, 55, 40 }, -- La justicia de los enanos
         { 3372, 52, 40 }, -- Libéralos
         { 3566, 52, 45 }, -- ¡Arriba, Obsidion!

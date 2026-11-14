@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Stranglethorn Vale · niveles 30-45 · 167 misiones
+-- Alliance · Stranglethorn Vale · niveles 30-45 · 178 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_StranglethornVale",
@@ -19,31 +19,32 @@ QR:RegisterZoneGuide({
         { 190, 31, 28 }, -- Domina la pantera
         { 198, 32, 30 }, -- Suministros para el soldado Thorsen
         { 201, 32, 28 }, -- Investiga el campamento
-        { 186, 33, 28 }, -- Maestría en tigres
+        { 186, 33, 28 }, -- Domina el tigre
         { 191, 33, 28 }, -- Domina la pantera
         { 203, 33, 30 }, -- La segunda rebelión
         { 204, 34, 30 }, -- Mala medicina
         { 194, 34, 28 }, -- Domina el raptor
         { 187, 35, 28 }, -- Domina el tigre
+        { 97328, 35, 30 }, -- Cualquier objeto de valor
+        { 97329, 35, 30 }, -- ¿Dónde está la llave?
+        { 97331, 35, 30 }, -- La gran evasión de Zimmix
         { 200, 35, 30 }, -- Bookie Herod
-        { 79535, 35, 1 }, -- Basilisks: Should Petrification be Feared?
         { 189, 35, 30 }, -- Orejas de Sangrapellejo
         { 605, 35, 30 }, -- Fragmentos de cristales canto azules
-        { 97329, 35, 30 }, -- Where's the Key?
-        { 97331, 35, 30 }, -- Zimmix's Great Escape
         { 213, 36, 31 }, -- OPA hostil
         { 1116, 36, 30 }, -- Polvo de sueño en el pantano
         { 1117, 36, 30 }, -- Rumores para Kravel
         { 577, 36, 31 }, -- Hay que ensamblar
+        { 97420, 36, 31 }, -- Reduce, reutiliza, reconcilia
         { 195, 36, 28 }, -- Domina el raptor
-        { 97420, 36, 31 }, -- Reduce, Reuse, Reconcile
-        { 188, 37, 28 }, -- Domina el tigre
+        { 93443, 36, 36 }, -- El cajón de transporte perdido
         { 210, 37, 32 }, -- La cocina de Krazek
+        { 188, 37, 28 }, -- Domina el tigre
         { 328, 37, 30 }, -- La llave oculta
         { 329, 37, 30 }, -- ¡Espía descubierto!
         { 330, 37, 30 }, -- Horarios de patrulla
         { 331, 37, 30 }, -- Informa a Doren
-        { 1181, 37, 29 }, -- Patrocinio goblin
+        { 1181, 37, 29 }, -- Apoyo al goblin
         { 1182, 37, 29 }, -- Apoyo al goblin
         { 1183, 37, 29 }, -- Apoyo al goblin
         { 616, 37, 32 }, -- La isla fantasma
@@ -56,21 +57,31 @@ QR:RegisterZoneGuide({
         { 192, 38, 28 }, -- Domina la pantera
         { 207, 38, 30 }, -- El misterio de Kurzen
         { 574, 38, 30 }, -- Fuerzas especiales
-        { 97047, 38, 30 }, -- The Cook in the Cage
-        { 97048, 38, 30 }, -- Returning to Port
+        { 97047, 38, 30 }, -- Cocinero entre rejas
+        { 97048, 38, 30 }, -- Vuelta al puerto
         { 610, 39, 32 }, -- "El Guapo" Duncan"
         { 611, 40, 32 }, -- La maldición de las mareas
+        { 79236, 40, 30 }, -- Una jarra y te lo cuento
+        { 79242, 40, 30 }, -- No hay honor entre ladrones
+        { 95789, 40, 34 }, -- Videntesal sospechosos
+        { 95791, 40, 34 }, -- El capitán Videntesal
         { 670, 40, 35 }, -- El tesoro sumergido
-        { 193, 40, 28 }, -- Domina la pantera
+        { 95322, 40, 1 }, -- Conseguir la mercancía
+        { 95325, 40, 1 }, -- ¡Nos han robado!
+        { 95326, 39, 1 }, -- The Big Payback
+        { 78830, 40, 26 }, -- El terror de los cielos del desierto  [clase]
         { 338, 40, 30 }, -- Las verdes colinas de Tuercespina
         { 339, 40, 30 }, -- Capítulo I
         { 340, 40, 30 }, -- Capítulo II
         { 341, 40, 30 }, -- Capítulo III
         { 342, 40, 30 }, -- Capítulo IV
+        { 193, 40, 28 }, -- Domina la pantera
         { 205, 40, 30 }, -- Brujería trol
+        { 95786, 40, 30 }, -- Alguien conocido en Costasur
         { 202, 40, 30 }, -- Coronel Kurzen
-        { 95384, 40, 32 }, -- Partial Mystical Notes
-        { 196, 41, 28 }, -- Domina el raptor
+        { 95327, 40, 1 }, -- All's Well That Ends Well
+        { 95384, 40, 32 }, -- Las notas místicas parciales
+        { 97332, 41, 36 }, -- Tropezar dos veces con la misma piedra
         { 595, 41, 37 }, -- Bucaneros Velasangre
         { 606, 41, 30 }, -- Asusta a Trémulo
         { 600, 41, 30 }, -- La minería de Ventura y Cía.
@@ -78,19 +89,20 @@ QR:RegisterZoneGuide({
         { 597, 41, 37 }, -- Bucaneros Velasangre
         { 599, 41, 37 }, -- Bucaneros Velasangre
         { 587, 41, 37 }, -- Tabaco rapé
-        { 209, 42, 37 }, -- Colmillos de Machacacráneos
+        { 196, 41, 28 }, -- Domina el raptor
         { 576, 42, 37 }, -- ¡Ojo!
+        { 209, 42, 37 }, -- Colmillos de Machacacráneos
         { 604, 43, 37 }, -- Bucaneros Velasangre
         { 617, 43, 38 }, -- Tallos de juncos akiris
         { 623, 43, 38 }, -- Tallos de juncos akiris
         { 197, 43, 28 }, -- Domina el raptor
         { 208, 43, 28 }, -- Caza mayor
         { 624, 43, 35 }, -- El enigma de Cortello
+        { 97405, 44, 38 }, -- Quejas por ruidos
         { 609, 44, 30 }, -- El vudú debido
         { 613, 44, 30 }, -- El pie roto de Maury
         { 621, 44, 35 }, -- El secreto de Zanzil
         { 1119, 44, 35 }, -- La mezcla y cerveza de tontos de Zanzil
-        { 1127, 44, 36 }, -- Cerveza de tontos
         { 2864, 45, 40 }, -- Tran'rek
         { 608, 45, 37 }, -- Bucaneros Velasangre
         { 348, 45, 40 }, -- La fiebre de Tuercespina
@@ -99,15 +111,12 @@ QR:RegisterZoneGuide({
         { 594, 45, 45 }, -- Mensaje en una botella
         { 206, 46, 30 }, -- Mai'Zoth
         { 8551, 47, 35 }, -- El cofre del capitán
+        { 8554, 50, 40 }, -- Enfréntate a Negolash
         { 3721, 50, 45 }, -- Tu propio OOX
         { 580, 50, 40 }, -- El grog de Whiskey Slim
-        { 618, 50, 40 }, -- Enfréntate a Negolash
         { 8552, 50, 40 }, -- La banda con monograma
         { 8553, 50, 40 }, -- El aflanje del capitán
-        { 8554, 50, 40 }, -- Enfréntate a Negolash
         { 630, 51, 45 }, -- Mensaje en una botella
-        { 614, 51, 35 }, -- El cofre del capitán
-        { 615, 51, 35 }, -- El aflanje del capitán
         { 619, 52, 35 }, -- La tentación de Negolash
         { 7810, 55, 1 }, -- El maestro de la arena
         { 7838, 55, 1 }, -- El maestro mayor de la arena
@@ -178,11 +187,10 @@ QR:RegisterZoneGuide({
         { 8147, 60, 60 }, -- Zarcillo de La Vorágine  [clase]
         { 8148, 60, 60 }, -- Cólera de La Vorágine  [clase]
         { 9259, 60, 30 }, -- Un traidor de Velasangre
+        { 83934, 60, 55 }, -- Show Me the Money!
+        { 96076, 60, 1 }, -- In Demand - Ancient Elven Curiosities
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {
-        { 8053, 61, 60 }, -- Dechados de Poder: los Guardabrazos de librepensador
-        { 8054, 61, 60 }, -- Dechados de Poder: el Cinturón de librepensador
-        { 8055, 61, 60 }, -- Dechados de Poder: el Peto de librepensador
     },
 })

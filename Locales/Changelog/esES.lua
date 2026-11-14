@@ -4,6 +4,23 @@ local _, QR = ...
 QR.Changelogs = QR.Changelogs or {}
 QR.Changelogs.esES = {
     {
+        version = "0.9.4", date = "2026-11-14",
+        title = "Guías de eventos: Feria de la Luna Negra",
+        lines = {
+            "Nueva categoría \"Guías de eventos\" (entre las de profesiones y las de speedrun). La primera es la Feria de la Luna Negra; el resto de eventos del mundo salen en \"Próximamente\".",
+            "Feria de la Luna Negra: secciones para cada entrega de vales (Chronos, Kerri Hicks, Rinling, Yebb Neblegear), la fortuna de Sayge, las barajas y las mascotas, y una ruta \"Vales para todos los premios\" que compra los premios del más barato al más caro.",
+            "La Feria sabe si está montada y dónde (Bosque de Elwynn o Mulgore): el menú y el banner muestran la zona, o la fecha y el sitio de la próxima si no está.",
+            "Los NPCs de la Feria que la base de datos tiene en las dos zonas (Sayge, Flik, el profesor Thaddeus Paleo, los objetos de la fortuna) llevan siempre a la zona donde está montada.",
+            "Las misiones de la Feria muestran el nivel que piden de verdad (el juego las pone todas de nivel 60) y el menú muestra el rango de niveles de cada sección.",
+            "Los canjes de premios con vales llevan el icono de monedas, porque solo son una compra.",
+            "Arreglado el error al elegir la fortuna de Sayge (Events.lua:126) y el contador de vales en WoW Forever.",
+            "Las guías de zonas y mazmorras solo incluyen misiones que existen en WoW Forever (nada de otras expansiones ni por encima del nivel 60). Guías nuevas: Monte Hyjal, Riverglades y Shen'dralas.",
+            "Mapa del mundo: sin tirones al hacer zoom con una ruta (OpenMap). Las líneas y los marcadores solo se redibujan cuando algo cambia, y los vuelos usan menos puntos.",
+            "Nuevo comando /qr perf: mide durante 10 segundos lo que tardan las líneas del mapa.",
+            "El título del banner ya no se pisa con la hora: si no cabe, se corta con \"...\".",
+        },
+    },
+    {
         version = "0.9.3", date = "2026-11-13",
         title = "Arreglo de rutas y vuelos",
         lines = {

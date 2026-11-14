@@ -74,20 +74,20 @@ QR:RegisterZoneGuide({
         { 92643, 11, 6 }, -- Cambiacapas
         { 98512, 11, 6 }, -- Asesinos Al'Aketh
         { 92644, 11, 6 }, -- Malas noticias
+        { 94568, 11, 6 }, -- Las verdaderas intenciones del culto
+        { 92640, 11, 6 }, -- Tiempos desesperados
         { 94486, 11, 8 }, -- Vendas plumíferas
         { 94487, 11, 8 }, -- Indeseados e indignos
         { 94493, 11, 8 }, -- A Sacrifice in Vain
-        { 94568, 11, 6 }, -- Las verdaderas intenciones del culto
-        { 92640, 11, 6 }, -- Tiempos desesperados
+        { 94485, 12, 8 }, -- Lágrimas de doncella
+        { 94488, 11, 8 }, -- Los lazos que nos unen
+        { 94489, 12, 8 }, -- Las heridas de la traición
         { 93065, 12, 7 }, -- Preparativos para la batalla
         { 92709, 12, 7 }, -- Una gran aventura
         { 92860, 12, 6 }, -- Al servicio de Zephras
         { 92947, 12, 7 }, -- Es nuestro turno
         { 93958, 12, 7 }, -- El Sagrario Interior
         { 93835, 12, 7 }, -- La confrontación con Lorthuna
-        { 94485, 12, 8 }, -- Lágrimas de doncella
-        { 94488, 11, 8 }, -- Los lazos que nos unen
-        { 94489, 12, 8 }, -- Las heridas de la traición
         { 94369, 12, 7 }, -- El destino de Zephras
         { 94490, 12, 9 }, -- La misiva rasgada
         { 94491, 12, 8 }, -- El destino del cubil
@@ -102,5 +102,7 @@ QR:RegisterZoneGuide({
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {
+        { 96996, 40, 40 }, -- Your First Riding Galestrider
+        { 97205, 40, 40 }, -- Learning to Ride
     },
 })

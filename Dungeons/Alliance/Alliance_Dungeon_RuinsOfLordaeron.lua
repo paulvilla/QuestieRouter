@@ -12,9 +12,9 @@ QR:RegisterDungeonGuide({
     maxLevel = 20,
     -- { questId, nivelMision, nivelRequerido }
     quests = {
-        { 95250, 21, 15 }, -- Abominable Creatures
+        { 95250, 21, 15 }, -- Criaturas abominables
         { 92415, 22, 15 }, -- Recuerda el amor que te tengo
-        { 95161, 22, 15 }, -- Remember That I Love You
+        { 95161, 22, 15 }, -- Recuerda el amor que te tengo
         { 95189, 22, 15 }, -- El blasón de Lordaeron
         { 95195, 22, 15 }, -- La insignia ensangrentada
     },

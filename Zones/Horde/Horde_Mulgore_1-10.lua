@@ -44,13 +44,13 @@ QR:RegisterZoneGuide({
         { 99081, 9, 4 }, -- Noticias aciagas
         { 99101, 9, 4 }, -- Nuestro viejo enemigo
         { 861, 10, 10 }, -- Los hábitos del cazador
-        { 759, 10, 4 }, -- El tótem Ferocrín
+        { 759, 10, 4 }, -- El tótem de Bravacrín
         { 760, 10, 4 }, -- La purificación de Bravacrín
         { 98435, 10, 4 }, -- Informe de Astatrueno
         { 764, 10, 5 }, -- Los Ventura y Cía.
         { 773, 10, 3 }, -- Rito de la Sabiduría
         { 833, 10, 7 }, -- Cementerio sagrado
-        { 775, 10, 3 }, -- Viaje a Cima del Trueno
+        { 775, 10, 3 }, -- Viaja a Cima del Trueno
         { 6363, 10, 10 }, -- Tal, maestro de jinetes del viento
         { 97485, 10, 3 }, -- Tradiciones de la cima
         { 76156, 10, 4 }, -- Al acecho con la Madre Tierra
@@ -67,28 +67,31 @@ QR:RegisterZoneGuide({
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {
-        { 776, 14, 3 }, -- Los ritos de la Madre Tierra
+        { 776, 14, 3 }, -- Ritos de la Madre Tierra
         { 264, 15, 12 }, -- Hasta que la muerte nos separe
         { 1490, 16, 12 }, -- Nara Bravacrín
         { 962, 18, 14 }, -- Repitilia
         { 1064, 18, 13 }, -- La ayuda de los Renegados
         { 914, 22, 11 }, -- Líderes del Colmillo
         { 1195, 25, 20 }, -- La llama Sagrada
-        { 97538, 26, 20 }, -- Pigments for Paints
+        { 97538, 26, 20 }, -- Pigmentos para pinturas
+        { 96241, 29, 23 }, -- Un veneno extraordinario
+        { 96259, 29, 23 }, -- Defender a los muertos
+        { 96260, 29, 23 }, -- Más fuerte que el acero
         { 1131, 30, 20 }, -- Metaleador
-        { 96241, 30, 23 }, -- Talkin' bout Toxins, Mon
-        { 96259, 30, 23 }, -- Defending the Dead
-        { 96260, 30, 23 }, -- Stronger than Steel
-        { 96294, 30, 23 }, -- A Darker Truth
-        { 96261, 31, 23 }, -- The Broodmother
-        { 98823, 31, 24 }, -- Earthen Echo
+        { 96261, 30, 23 }, -- La madre de linaje
+        { 96294, 30, 23 }, -- Una verdad más oscura
+        { 98823, 31, 24 }, -- Eco terráneo
         { 1102, 34, 29 }, -- Un destino vengador
         { 1136, 37, 26 }, -- Faucehielo
         { 1049, 38, 28 }, -- El Compendio de los Caídos
-        { 96774, 40, 30 }, -- Ancient Gurubashi Idol
+        { 96774, 40, 30 }, -- Un antiguo ídolo Gurubashi
+        { 96982, 40, 40 }, -- Your First Riding Kodo
+        { 97204, 40, 40 }, -- Learning to Ride
+        { 97196, 41, 34 }, -- El ojo del Gélido
         { 1205, 45, 35 }, -- Lodomuerto
+        { 96775, 46, 42 }, -- Zum'rah's Head
         { 2440, 47, 40 }, -- Los discos de platino
-        { 936, 50, 47 }, -- Ayuda al archidruida Runatótem
         { 2965, 50, 45 }, -- Presagios de Uldum
         { 2966, 50, 45 }, -- A ver qué pasa
         { 2968, 50, 45 }, -- Una tarea futura
@@ -97,18 +100,24 @@ QR:RegisterZoneGuide({
         { 3782, 50, 47 }, -- Investigar la mañagrana
         { 3784, 50, 47 }, -- Ayuda al archidruida Runatótem
         { 3786, 50, 47 }, -- Investigar la mañagrana
+        { 97378, 50, 1 }, -- Mirrorscale
+        { 96776, 51, 43 }, -- An'she's Radiance
         { 1000, 55, 54 }, -- La nueva frontera
         { 1004, 55, 54 }, -- La nueva frontera
         { 1018, 55, 54 }, -- La nueva frontera
         { 3804, 55, 47 }, -- Mañagrana para Cima del Trueno
-        { 7662, 60, 60 }, -- Nuevo kodo: cerceta
-        { 7663, 60, 60 }, -- Nuevo kodo: verde
+        { 92343, 55, 45 }, -- Get to the Roots of It
+        { 97197, 55, 46 }, -- Fragment of the Firelands
+        { 97198, 59, 52 }, -- Blackmaw Magic
         { 7820, 60, 12 }, -- Un donativo de lana
         { 7821, 60, 26 }, -- Un donativo de seda
         { 7822, 60, 40 }, -- Un donativo de tejido mágico
         { 7823, 60, 50 }, -- Un donativo de paño rúnico
         { 7825, 60, 50 }, -- Un donativo extra de paño rúnico
+        { 95928, 60, 55 }, -- Crystalline Elements
+        { 98477, 60, 48 }, -- Unstable Magic
         { 99196, 60, 12 }, -- Un donativo de lana
-        { 99197, 60, 26 }, -- A Donation of Silk
+        { 99197, 60, 26 }, -- Un donativo de seda
+        { 99198, 60, 40 }, -- A Donation of Mageweave
     },
 })

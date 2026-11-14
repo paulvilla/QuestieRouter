@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Badlands · niveles 35-45 · 28 misiones
+-- Horde · Badlands · niveles 35-45 · 30 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Horde_Badlands",
@@ -22,12 +22,14 @@ QR:RegisterZoneGuide({
         { 1108, 39, 28 }, -- Indurio
         { 1137, 38, 28 }, -- Noticias para Fizzle
         { 2258, 39, 36 }, -- Componentes de Tierras Inhóspitas
+        { 97663, 40, 1 }, -- Suministros y estudios
         { 1419, 40, 30 }, -- Ladrones coyote
         { 1420, 40, 30 }, -- Un informe para Helgrum
         { 703, 40, 33 }, -- Alas de águila ratonera a la parrilla
         { 709, 40, 30 }, -- La solución a la maldición
         { 728, 40, 30 }, -- Ir a Entrañas a buscar el "Compendio" de Yagyin
         { 737, 40, 30 }, -- El saber prohibido
+        { 78823, 40, 26 }, -- El terror de los cielos del desierto
         { 692, 41, 30 }, -- Los fragmentos perdidos
         { 712, 42, 35 }, -- Estudio de los elementos: roca
         { 734, 42, 35 }, -- Lo tienes crudo
@@ -65,5 +67,6 @@ QR:RegisterZoneGuide({
         { 4769, 60, 57 }, -- Vivian Latumba y la tablilla de Rocanegra
         { 4903, 60, 55 }, -- La orden del Señor de la Guerra
         { 4941, 60, 55 }, -- La sabiduría de Eitrigg
+        { 98325, 60, 55 }, -- Blood and Thunder
     },
 })

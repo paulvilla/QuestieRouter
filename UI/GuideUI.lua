@@ -1016,7 +1016,11 @@ function UI:FillQuests()
         local eliteTag = r.elite and (Skin():IconTag("elite", Skin():IconSize("quests"), Skin():SectionTextSize("quests", 0.85)) .. " ") or ""
         -- mision de mazmorra: el icono de mazmorra del juego (despues del de elite si tambien lo es)
         if r.dungeon then eliteTag = eliteTag .. Skin():IconTag("dungeon", Skin():IconSize("quests"), Skin():SectionTextSize("quests", 0.85)) .. " " end
-        row.text:SetText(string.format("%s %s%s[%d] %s|r%s", Skin():IconTag(st[1], Skin():IconSize("quests"), Skin():SectionTextSize("quests", 0.85)), eliteTag, st[2], r.level, r.name, extra))
+        -- guias de evento: los canjes de vales llevan el icono de monedas
+        local guideNow = QR.Planner:GetGuide()
+        local statusIcon = (guideNow and guideNow.QuestIcon and status ~= "done" and status ~= "skipped"
+            and guideNow:QuestIcon(r.questId)) or st[1]
+        row.text:SetText(string.format("%s %s%s[%d] %s|r%s", Skin():IconTag(statusIcon, Skin():IconSize("quests"), Skin():SectionTextSize("quests", 0.85)), eliteTag, st[2], r.level, r.name, extra))
         row.questId = r.questId
         row.tipTitle = r.name
         local tip = string.format(L["ID %d · level %d (requires %d)%s"], r.questId, r.level, r.reqLevel, r.note and ("\n" .. r.note) or "")
@@ -1054,7 +1058,9 @@ function UI:Refresh()
     local h = QR.Steps.History(false)
 
     -- Banner: nombre de la zona de la guia (localizado) y su rango de niveles
-    if guide then
+    if guide and guide.BannerTexts then
+        f.banner:SetTexts(guide:BannerTexts())
+    elseif guide then
         local map = QR.Bridge:UiMapOf(guide.areaId)
         local info = map and C_Map.GetMapInfo and C_Map.GetMapInfo(map)
         local done, total = 0, #guide.quests

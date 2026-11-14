@@ -20,8 +20,11 @@
     <Script file="Alliance\Alliance_HillsbradFoothills_20-30.lua"/>
     <Script file="Alliance\Alliance_LochModan_10-20.lua"/>
     <Script file="Alliance\Alliance_Moonglade_55-60.lua"/>
+    <Script file="Alliance\Alliance_MountHyjal_55-60.lua"/>
     <Script file="Alliance\Alliance_RedridgeMountains_15-25.lua"/>
+    <Script file="Alliance\Alliance_Riverglades_35-45.lua"/>
     <Script file="Alliance\Alliance_SearingGorge_45-50.lua"/>
+    <Script file="Alliance\Alliance_ShenDralas_41-45.lua"/>
     <Script file="Alliance\Alliance_Silithus_55-60.lua"/>
     <Script file="Alliance\Alliance_StonetalonMountains_15-27.lua"/>
     <Script file="Alliance\Alliance_StranglethornVale_30-45.lua"/>
@@ -53,8 +56,11 @@
     <Script file="Horde\Horde_Feralas_40-50.lua"/>
     <Script file="Horde\Horde_HillsbradFoothills_20-30.lua"/>
     <Script file="Horde\Horde_Moonglade_55-60.lua"/>
+    <Script file="Horde\Horde_MountHyjal_56-60.lua"/>
     <Script file="Horde\Horde_Mulgore_1-10.lua"/>
+    <Script file="Horde\Horde_Riverglades_35-45.lua"/>
     <Script file="Horde\Horde_SearingGorge_45-50.lua"/>
+    <Script file="Horde\Horde_ShenDralas_41-45.lua"/>
     <Script file="Horde\Horde_Silithus_55-60.lua"/>
     <Script file="Horde\Horde_SilverpineForest_10-20.lua"/>
     <Script file="Horde\Horde_StonetalonMountains_15-27.lua"/>

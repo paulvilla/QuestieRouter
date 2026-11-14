@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Un'Goro Crater · niveles 48-55 · 40 misiones
+-- Alliance · Un'Goro Crater · niveles 48-55 · 42 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_UnGoroCrater",
@@ -43,12 +43,14 @@ QR:RegisterZoneGuide({
         { 3942, 54, 47 }, -- Recuerdos de Linken
         { 3961, 54, 47 }, -- La aventura de Linken
         { 5150, 55, 47 }, -- ¡Dadanga tiene hambre!
+        { 92020, 55, 1 }, -- Hol'anyee's Big Book of Big Lizards
         { 4501, 55, 49 }, -- Cuidado con los pterrordáctilos
         { 4492, 55, 50 }, -- ¡Perdido!
         { 4491, 55, 50 }, -- Un poco de ayuda de mis amigos
         { 974, 55, 51 }, -- Busca la fuente
         { 980, 55, 51 }, -- Nuevos manantiales
         { 4301, 55, 50 }, -- El poderoso U'cha
+        { 87492, 55, 50 }, -- Uncanny Crystal
         { 4292, 56, 48 }, -- El cebo para Lar'korwi
         { 3962, 56, 47 }, -- Ir solo es peligroso
     },

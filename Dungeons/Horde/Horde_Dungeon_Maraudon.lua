@@ -1,5 +1,5 @@
 -- Generado por tools/dungeon_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Maraudon · niveles 42-47 · 8 misiones
+-- Horde · Maraudon · niveles 42-47 · 9 misiones
 local _, QR = ...
 QR:RegisterDungeonGuide({
     key = "Horde_Dungeon_Maraudon",
@@ -20,5 +20,6 @@ QR:RegisterDungeonGuide({
         { 7046, 49, 41 }, -- El cetro de Celebras
         { 7064, 51, 45 }, -- Corrupción de la tierra y de la semilla
         { 7066, 51, 45 }, -- La semilla de la vida
+        { 96776, 51, 43 }, -- An'she's Radiance
     },
 })

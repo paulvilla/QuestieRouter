@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Eastern Plaguelands · niveles 53-60 · 208 misiones
+-- Horde · Eastern Plaguelands · niveles 53-60 · 209 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Horde_EasternPlaguelands",
@@ -28,7 +28,9 @@ QR:RegisterZoneGuide({
         { 5742, 56, 52 }, -- Redención
         { 5961, 56, 54 }, -- Campeón de la Reina alma en pena
         { 5181, 57, 50 }, -- Los villanos de Villa Darrow
+        { 97986, 57, 1 }, -- Argent Arbiter
         { 5781, 57, 52 }, -- De recuerdos olvidados
+        { 97988, 57, 53 }, -- Orgrimmar's Windshapers
         { 5845, 58, 52 }, -- Del honor perdido
         { 5846, 58, 52 }, -- De amor y familia
         { 6022, 58, 54 }, -- Matar con un propósito
@@ -218,7 +220,6 @@ QR:RegisterZoneGuide({
         { 9204, 60, 55 }, -- Libranza del artesano: anguila Escama Tormentosa
         { 9205, 60, 55 }, -- Libranza del artesano: pez coraza plateado
         { 9206, 60, 55 }, -- Libranza del artesano: anguila relámpago
-        { 9378, 60, 60 }, -- DND FLAG The Dread Citadel - Naxxramas
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {

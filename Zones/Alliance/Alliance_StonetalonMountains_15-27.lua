@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Stonetalon Mountains · niveles 15-27 · 23 misiones
+-- Alliance · Stonetalon Mountains · niveles 15-27 · 22 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_StonetalonMountains",
@@ -24,9 +24,8 @@ QR:RegisterZoneGuide({
         { 1091, 22, 17 }, -- Noticias para Kaela
         { 1090, 22, 17 }, -- Órdenes de Gerenzo
         { 1092, 22, 17 }, -- Órdenes de Gerenzo
-        { 78270, 23, 1 }, -- Goblin Lockpicks
-        { 86574, 24, 20 }, -- Stonetalon Supply Run
-        { 79980, 24, 14 }, -- Scramble
+        { 86574, 24, 20 }, -- Reparto de suministros al Espolón
+        { 79980, 24, 14 }, -- Revolver
         { 1083, 26, 20 }, -- Los espíritus enfurecidos
         { 1096, 27, 16 }, -- Gerenzo Silbillave
         { 1057, 27, 20 }, -- La reconquista de La Vega Carbonizada
@@ -37,6 +36,6 @@ QR:RegisterZoneGuide({
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {
-        { 79974, 32, 14 }, -- Wet Job
+        { 79974, 32, 14 }, -- Un trabajo sucio
     },
 })

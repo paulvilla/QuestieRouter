@@ -12,7 +12,7 @@ QR:RegisterZoneGuide({
     entry = { quest = 98895, areaId = 36, x = 39.29, y = 82.33 },
     -- { questId, nivelMision, nivelRequerido }
     quests = {
-        { 98895, 39, 30 }, -- Darkspear Islands Clash
+        { 98895, 39, 30 }, -- Enfrentamiento en las Islas Lanza Negra
         { 98896, 39, 30 }, -- Darkspear Islands Clash
         { 98903, 39, 30 }, -- The Battle for Darkspear Islands!
         { 98910, 39, 30 }, -- Darkspear's Basic Care Package

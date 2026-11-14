@@ -5,7 +5,7 @@ local ADDON_NAME, QR = ...
 _G.QuestieRouter = QR
 
 QR.name = ADDON_NAME
-QR.version = "0.9.3"
+QR.version = "0.9.4"
 
 ---------------------------------------------------------------------------
 -- Ajustes

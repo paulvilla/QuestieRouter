@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Arathi Highlands · niveles 30-40 · 46 misiones
+-- Horde · Arathi Highlands · niveles 30-40 · 47 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Horde_ArathiHighlands",
@@ -8,11 +8,11 @@ QR:RegisterZoneGuide({
     areaId = 45,
     minLevel = 30,
     maxLevel = 40,
-    entry = { quest = 79976, areaId = 45, x = 22.48, y = 24.18 },
+    entry = { quest = 79976, areaId = 45, x = 22.48, y = 24.14 },
     -- { questId, nivelMision, nivelRequerido }
     quests = {
-        { 79976, 32, 14 }, -- This Must Be The Place
-        { 95663, 31, 24 }, -- Dragonmaw Rumors
+        { 79976, 32, 14 }, -- Este debe de ser el lugar
+        { 95663, 31, 24 }, -- Rumores de los Faucedraco
         { 677, 32, 30 }, -- Un llamamiento a las armas
         { 671, 33, 30 }, -- Magia demoníaca
         { 92707, 33, 30 }, -- The Giant in the Den
@@ -24,17 +24,16 @@ QR:RegisterZoneGuide({
         { 8170, 35, 30 }, -- La batalla por la Cuenca de Arathi
         { 663, 35, 35 }, -- ¡Tierra a vista!
         { 635, 35, 30 }, -- Cristal en las montañas
-        { 636, 35, 30 }, -- Legends of the Earth
-        { 97539, 36, 30 }, -- Silky Sutures
-        { 92519, 36, 30 }, -- Ward Restocking
+        { 97539, 36, 30 }, -- Suturas sedosas
+        { 92519, 36, 30 }, -- Suministros para la enfermería
         { 701, 37, 29 }, -- La astucia del raptor
         { 702, 37, 29 }, -- La astucia del raptor
         { 639, 37, 32 }, -- El sigilo de Strom
         { 847, 37, 29 }, -- La astucia del raptor
         { 642, 37, 30 }, -- La princesa secuestrada
         { 678, 38, 30 }, -- Un llamamiento a las armas
+        { 95143, 38, 36 }, -- La búsqueda de Tan'jani
         { 651, 38, 30 }, -- Piedras de vínculo
-        { 92867, 39, 32 }, -- Ground to Keep
         { 680, 40, 30 }, -- Una auténtica amenaza
         { 679, 40, 30 }, -- Un llamamiento a las armas
         { 640, 40, 32 }, -- El sigilo roto
@@ -47,7 +46,9 @@ QR:RegisterZoneGuide({
         { 664, 40, 35 }, -- Ahogar las penas
         { 662, 40, 35 }, -- Rescate en alta mar
         { 669, 40, 35 }, -- El tesoro sumergido
-        { 79624, 40, 32 }, -- Anyone Can Cook
+        { 79624, 40, 32 }, -- Cualquiera puede cocinar
+        { 79677, 40, 26 }, -- Una compra rápida
+        { 79678, 40, 26 }, -- La cata
         { 643, 41, 32 }, -- El sigilo de Arathor
         { 644, 42, 32 }, -- El sigilo de Aterratrols
         { 645, 42, 32 }, -- Trol'kalar

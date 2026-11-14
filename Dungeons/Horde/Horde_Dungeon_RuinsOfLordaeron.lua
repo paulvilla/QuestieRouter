@@ -12,15 +12,15 @@ QR:RegisterDungeonGuide({
     maxLevel = 20,
     -- { questId, nivelMision, nivelRequerido }
     quests = {
-        { 97288, 21, 15 }, -- Unending Torment
-        { 97289, 21, 15 }, -- Unending Torment
-        { 97290, 21, 15 }, -- Unending Torment
-        { 97291, 21, 15 }, -- Unending Torment
-        { 97292, 21, 15 }, -- Unending Torment
-        { 95216, 22, 15 }, -- The New Plague
+        { 97288, 21, 15 }, -- Tormento interminable
+        { 97289, 21, 15 }, -- Tormento interminable
+        { 97290, 21, 15 }, -- Tormento interminable
+        { 97291, 21, 15 }, -- Tormento interminable
+        { 97292, 21, 15 }, -- Tormento interminable
+        { 95216, 22, 15 }, -- La nueva peste
         { 92421, 22, 15 }, -- Justicia de la Luz
         { 92401, 22, 15 }, -- Una petición aterradora
         { 92422, 22, 15 }, -- La cólera de Rath'mael
-        { 95204, 22, 15 }, -- Crest of Lordaeron
+        { 95204, 22, 15 }, -- El blasón de Lordaeron
     },
 })

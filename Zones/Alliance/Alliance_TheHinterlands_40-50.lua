@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · The Hinterlands · niveles 40-50 · 17 misiones
+-- Alliance · The Hinterlands · niveles 40-50 · 19 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_TheHinterlands",
@@ -21,12 +21,14 @@ QR:RegisterZoneGuide({
         { 2988, 45, 40 }, -- Las jaulas de Secacorteza
         { 4297, 47, 38 }, -- Comida para el bebé
         { 4298, 48, 37 }, -- El amor parental
+        { 86616, 48, 45 }, -- Repurposed Totems
         { 2877, 48, 40 }, -- La limpieza de Roca Oculta
         { 2989, 48, 40 }, -- El Altar de Zul
         { 2990, 47, 40 }, -- Thadius Sombramacabra
         { 485, 48, 43 }, -- ¡Encuentra a OOX-09/HL!
         { 836, 48, 43 }, -- ¡Rescata a OOX-09/HL!
         { 2994, 51, 40 }, -- Salvar a Picoafilado
+        { 86620, 51, 1 }, -- Fledgling Rescue
         { 1446, 53, 38 }, -- El profeta Jammal'an
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)

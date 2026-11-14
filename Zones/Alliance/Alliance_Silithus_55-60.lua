@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Alliance · Silithus · niveles 55-60 · 128 misiones
+-- Alliance · Silithus · niveles 55-60 · 125 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Alliance_Silithus",
@@ -55,9 +55,18 @@ QR:RegisterZoneGuide({
         { 8710, 60, 60 }, -- El kris de los nombres prohibidos  [clase]
         { 8711, 60, 60 }, -- La espada de justicia eterna  [clase]
         { 8712, 60, 60 }, -- La guadaña de la Senda Oculta  [clase]
-        { 8858, 60, 51 }, -- Los secretos de los Colosos: Regal
-        { 8859, 60, 51 }, -- Los secretos de los Colosos: Zora
-        { 8857, 60, 51 }, -- Los secretos de los Colosos: Ashi
+        { 8320, 60, 60 }, -- Geoseñores Crepusculares
+        { 8321, 60, 60 }, -- Vyral el Vil
+        { 8331, 60, 60 }, -- Aurel Hojaurea
+        { 8343, 60, 60 }, -- El descubrimiento de Hojaurea
+        { 8318, 60, 57 }, -- Mensajes secretos
+        { 8319, 60, 57 }, -- Textos Crepusculares encriptados
+        { 8348, 60, 60 }, -- Sellos de los Duques
+        { 8352, 60, 60 }, -- Cetro del Consejo
+        { 8361, 60, 60 }, -- Contactos Abisales
+        { 8362, 60, 60 }, -- Emblemas Abisales
+        { 8363, 60, 60 }, -- Sellos Abisales
+        { 8364, 60, 60 }, -- Cetros Abisales
         { 8286, 60, 60 }, -- Lo que nos depara el futuro
         { 8288, 60, 60 }, -- Solo uno puede alzarse
         { 8301, 60, 60 }, -- El buen camino
@@ -69,18 +78,6 @@ QR:RegisterZoneGuide({
         { 9415, 60, 1 }, -- Preséntate ante el alguacil Murazul
         { 8304, 60, 58 }, -- Queridísima Natalia
         { 8306, 60, 58 }, -- En las fauces de la locura
-        { 8318, 60, 57 }, -- Mensajes secretos
-        { 8319, 60, 57 }, -- Textos Crepusculares encriptados
-        { 8348, 60, 60 }, -- Sellos de los Duques
-        { 8352, 60, 60 }, -- Cetro del Consejo
-        { 8361, 60, 60 }, -- Contactos Abisales
-        { 8362, 60, 60 }, -- Emblemas Abisales
-        { 8363, 60, 60 }, -- Sellos Abisales
-        { 8364, 60, 60 }, -- Cetros Abisales
-        { 8320, 60, 60 }, -- Geoseñores Crepusculares
-        { 8321, 60, 60 }, -- Vyral el Vil
-        { 8331, 60, 60 }, -- Aurel Hojaurea
-        { 8343, 60, 60 }, -- El descubrimiento de Hojaurea
         { 8548, 60, 60 }, -- Equipamiento de Voluntario
         { 8572, 60, 60 }, -- Equipamiento de Veterano
         { 8573, 60, 60 }, -- Equipamiento de Campeón

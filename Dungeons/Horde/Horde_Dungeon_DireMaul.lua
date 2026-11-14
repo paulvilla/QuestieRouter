@@ -1,5 +1,5 @@
 -- Generado por tools/dungeon_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Dire Maul - East · niveles 54-59 · 35 misiones
+-- Horde · Dire Maul - East · niveles 54-59 · 34 misiones
 local _, QR = ...
 QR:RegisterDungeonGuide({
     key = "Horde_Dungeon_DireMaul",
@@ -17,7 +17,6 @@ QR:RegisterDungeonGuide({
         { 7441, 58, 54 }, -- Pusillín y el ancestro Azj'Tordin
         { 7481, 60, 54 }, -- Leyendas élficas
         { 1193, 60, 56 }, -- Una trampa rota
-        { 1318, 60, 56 }, -- Asunto Gordok sin finiquitar
         { 5518, 60, 56 }, -- El traje de orgo Gordok
         { 5519, 60, 56 }, -- El disfraz de ogro Gordok
         { 5525, 60, 57 }, -- ¡Libera a Knot!

@@ -25,7 +25,7 @@ QR:RegisterZoneGuide({
         { 92124, 2, 1 }, -- Inventario de libros
         { 91743, 2, 1 }, -- Roedores traviesos
         { 91745, 3, 1 }, -- Asesores de minería
-        { 15, 3, 1 }, -- Investiga la Mina del Eco
+        { 15, 3, 1 }, -- Investigar la Mina del Eco
         { 91752, 3, 1 }, -- La situación en su conjunto
         { 91758, 4, 1 }, -- ¡Sigue a ese kóbold!
         { 18, 4, 2 }, -- Hermandad de ladrones
@@ -47,7 +47,7 @@ QR:RegisterZoneGuide({
         { 47, 7, 4 }, -- Intercambio de polvo de oro
         { 62, 7, 4 }, -- La Mina Abisal
         { 91777, 7, 1 }, -- Rarezas del bibliófilo
-        { 60, 7, 3 }, -- Las velas de los kóbolds
+        { 60, 7, 3 }, -- Las velas de los kobolds
         { 61, 7, 3 }, -- Un envío para Ventormenta
         { 112, 7, 5 }, -- La recolección de Kelp
         { 114, 7, 5 }, -- La fuga
@@ -57,11 +57,11 @@ QR:RegisterZoneGuide({
         { 99143, 7, 4 }, -- Botellas y baratijas
         { 99130, 7, 4 }, -- Una oferta tentadora
         { 99131, 7, 4 }, -- El cebo del éxito
-        { 91732, 7, 7 }, -- Acero del bueno
+        { 91732, 7, 6 }, -- Acero del bueno
         { 91723, 8, 7 }, -- Instrumental delicado
         { 87, 8, 5 }, -- Dientes de oro
         { 88, 9, 6 }, -- ¡Princesa debe morir!
-        { 83, 9, 4 }, -- Artículos rojos de lino
+        { 83, 9, 4 }, -- Pañuelos de lino rojo
         { 5545, 9, 5 }, -- El cumplimiento del plazo
         { 91733, 10, 7 }, -- Aguas abajo
         { 52, 10, 7 }, -- Proteger la frontera
@@ -71,7 +71,7 @@ QR:RegisterZoneGuide({
         { 35, 10, 7 }, -- Más preocupaciones
         { 76, 10, 4 }, -- La Cantera de Jaspe
         { 109, 10, 9 }, -- Habla con Gryan Mantorrecio
-        { 239, 10, 6 }, -- El Cuartel de Arroyoeste necesita ayuda
+        { 239, 10, 6 }, -- El Cuartel Arroyoeste necesita ayuda
         { 91738, 10, 7 }, -- Ambrosía amanzanada
         { 11, 10, 6 }, -- Recompensas por los gnolls Zarparrío
         { 37, 10, 7 }, -- Encuentra a los guardias perdidos
@@ -83,7 +83,7 @@ QR:RegisterZoneGuide({
         { 123, 10, 7 }, -- El Coleccionista
         { 147, 10, 7 }, -- La persecución
         { 6261, 10, 10 }, -- Dungar Tragolargo
-        { 176, 11, 5 }, -- Se busca: Hogger
+        { 176, 11, 5 }, -- SE BUSCA: Hogger
         { 91740, 11, 7 }, -- Cabeza de Croador
         { 91746, 12, 7 }, -- La cabeza de Zarpaolmo
         { 95065, 12, 7 }, -- Jornada de pesca
@@ -101,7 +101,7 @@ QR:RegisterZoneGuide({
         { 168, 18, 14 }, -- La recolección de Tarjetas del Sindicato Minero
         { 97234, 18, 13 }, -- Sala de lectura
         { 97237, 18, 13 }, -- Estanterías a tu disposición
-        { 167, 20, 15 }, -- Oh hermano. . .
+        { 167, 20, 15 }, -- Oh, hermano...
         { 2040, 20, 15 }, -- Asalto subterráneo
         { 94, 21, 20 }, -- Un ojo vigilante
         { 1076, 21, 17 }, -- Demonios en Páramos de Poniente
@@ -111,7 +111,7 @@ QR:RegisterZoneGuide({
         { 344, 24, 20 }, -- Hermano Paxton
         { 345, 24, 20 }, -- Suministros de tinta
         { 346, 24, 20 }, -- Vuelve con Kristoff
-        { 98191, 25, 20 }, -- A Friend of the Family
+        { 98191, 25, 20 }, -- Un amigo de la familia
         { 388, 26, 22 }, -- El color de la sangre
         { 1078, 26, 17 }, -- Escamas cristalizadas para Mauren
         { 70, 28, 22 }, -- La leyenda de Stalvan
@@ -138,14 +138,14 @@ QR:RegisterZoneGuide({
         { 1447, 31, 28 }, -- El diplomático desaparecido
         { 2745, 31, 16 }, -- Infíltrate en el castillo
         { 2746, 31, 16 }, -- Objetos importantes
-        { 92456, 33, 24 }, -- A Green Sample
-        { 92489, 33, 24 }, -- Power Overwhelming
+        { 92456, 33, 24 }, -- Una muestra verde
         { 1271, 37, 30 }, -- ¡Una fiesta en tu honor!
         { 212, 40, 35 }, -- Un plato bien frío
         { 543, 40, 30 }, -- La Tiara Perenolde
+        { 97045, 40, 40 }, -- Tu primer caballo
+        { 97170, 40, 40 }, -- Lecciones de monta
         { 1363, 41, 37 }, -- La orden de Mazen
         { 1448, 43, 38 }, -- En búsqueda del templo
-        { 81951, 45, 1 }, -- The Liminal and the Arcane
         { 1475, 50, 41 }, -- En El Templo de Atal'Hakkar
         { 5048, 52, 50 }, -- El buen carácter de Emma
         { 4185, 54, 48 }, -- Los verdaderos maestros
@@ -154,8 +154,6 @@ QR:RegisterZoneGuide({
         { 6403, 60, 50 }, -- La gran farsa
         { 7495, 60, 60 }, -- Victoria para la Alianza
         { 7496, 60, 60 }, -- Celebrar los buenos momentos
-        { 7677, 60, 60 }, -- Intercambio de semental blanco
-        { 7678, 60, 60 }, -- Intercambio de palomino
         { 7781, 60, 60 }, -- Señor de Roca Negra
         { 7782, 60, 60 }, -- Señor de Roca Negra
         { 7791, 60, 12 }, -- Un donativo de lana
@@ -163,14 +161,5 @@ QR:RegisterZoneGuide({
         { 7794, 60, 40 }, -- Un donativo de paño mágico
         { 7795, 60, 50 }, -- Un donativo de paño rúnico
         { 7796, 60, 50 }, -- Un donativo extra de paño rúnico
-        { 7905, 60, 6 }, -- La Feria de la Luna Negra
-        { 84395, 60, 1 }, -- Undead Potatoes
-        { 84396, 60, 1 }, -- Magma or Lava?
-        { 84397, 60, 1 }, -- Northern Kalimdor - A Comprehensive Guide
-        { 84398, 60, 1 }, -- A Study of the Light
-        { 84399, 60, 1 }, -- Ka-Boom!
-        { 84400, 60, 1 }, -- The Knight and the Lady
-        { 84401, 60, 1 }, -- Scourge: Undead Menace or Misunderstood?
-        { 84402, 60, 1 }, -- Necromancy 101
     },
 })

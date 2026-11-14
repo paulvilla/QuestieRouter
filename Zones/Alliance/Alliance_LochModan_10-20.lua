@@ -21,7 +21,7 @@ QR:RegisterZoneGuide({
         { 267, 12, 10 }, -- La amenaza trogg
         { 224, 12, 10 }, -- En defensa de las tierras del rey
         { 1338, 14, 9 }, -- Un pedido de Pico Tormenta
-        { 1339, 15, 9 }, -- La tarea del montaraz Pico Tormenta
+        { 1339, 15, 9 }, -- El montaraz de Picos Tormenta
         { 237, 15, 10 }, -- En defensa de las tierras del rey
         { 263, 15, 10 }, -- En defensa de las tierras del rey
         { 298, 15, 10 }, -- Un informe sobre el avance de la excavación
@@ -59,8 +59,7 @@ QR:RegisterZoneGuide({
     },
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {
-        { 86776, 30, 15 }, -- Ingredientes para la forja
-        { 79975, 32, 14 }, -- Eagle's Fist
+        { 79975, 32, 14 }, -- El puño del águila
         { 707, 37, 30 }, -- ¡Vetaferro te necesita!
         { 704, 38, 30 }, -- El sino de Agmond
         { 738, 38, 30 }, -- Encontrar a Agmond

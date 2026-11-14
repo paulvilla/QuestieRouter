@@ -50,6 +50,13 @@ function QR:RegisterLocale(code, strings)
     if code == self.locale then active = strings end
 end
 
+--- Añade textos a un idioma ya registrado (archivos de textos por modulo, p. ej. Locales/Events.lua)
+function QR:ExtendLocale(code, strings)
+    local t = self.locales[code]
+    if not t then return self:RegisterLocale(code, strings) end
+    for k, v in pairs(strings) do t[k] = v end
+end
+
 local callbacks = {}
 
 --- fn(L) se llama ahora y cada vez que cambia el idioma (para tablas que se rellenan al cargar)

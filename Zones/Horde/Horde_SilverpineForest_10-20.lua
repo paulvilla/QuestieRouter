@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Silverpine Forest · niveles 10-20 · 52 misiones
+-- Horde · Silverpine Forest · niveles 10-20 · 51 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Horde_SilverpineForest",
@@ -17,8 +17,8 @@ QR:RegisterZoneGuide({
         { 6324, 10, 10 }, -- Vuelve con Podrig
         { 429, 11, 10 }, -- Corazones salvajes
         { 449, 11, 10 }, -- El informe de los Mortacechadores
-        { 91920, 11, 10 }, -- Ojos salvajes
         { 430, 11, 10 }, -- Vuelve con Quinn
+        { 91920, 11, 10 }, -- Ojos salvajes
         { 91921, 11, 10 }, -- Vuelve con Quinn (de nuevo)
         { 447, 12, 9 }, -- Una fórmula mortal
         { 428, 12, 10 }, -- Los Mortacechadores desaparecidos
@@ -39,7 +39,7 @@ QR:RegisterZoneGuide({
         { 450, 15, 9 }, -- Una fórmula mortal
         { 438, 16, 10 }, -- El Viejo Embarcadero
         { 479, 16, 10 }, -- Las investigaciones de Molino Ámbar
-        { 98298, 16, 9 }, -- Arugal's Folly
+        { 98298, 16, 9 }, -- La locura de Arugal
         { 439, 16, 10 }, -- Pistas de Putrepellejos
         { 440, 16, 10 }, -- El anillo grabado
         { 443, 17, 10 }, -- Icor de Putrepellejo
@@ -50,16 +50,15 @@ QR:RegisterZoneGuide({
         { 451, 18, 9 }, -- Una fórmula mortal
         { 461, 18, 12 }, -- El nicho oculto
         { 491, 18, 12 }, -- Una varita para Bethor
-        { 98299, 20, 9 }, -- Stop the Spread
+        { 98299, 20, 9 }, -- Detener la propagación
         { 95981, 20, 10 }, -- Vigilar los caminos
         { 493, 20, 19 }, -- Viaja a Laderas de Trabalomas
         { 516, 21, 16 }, -- El Desafío de Beren
         { 480, 22, 10 }, -- El Tejedor
         { 92401, 22, 15 }, -- Una petición aterradora
-        { 78261, 23, 1 }, -- The Horn of Xelthos
-        { 95883, 23, 20 }, -- The Tortured Soul
-        { 95885, 23, 20 }, -- The Offering of Blood
-        { 95884, 23, 20 }, -- The Offering Stone
+        { 95884, 23, 20 }, -- La piedra de ofrendas
+        { 95883, 23, 20 }, -- El alma torturada
+        { 95885, 23, 20 }, -- La ofrenda de sangre
         { 442, 24, 10 }, -- Asalto a la Isla de Fenris
         { 1098, 25, 18 }, -- Mortacechadores en Colmillo Oscuro
         { 1014, 27, 18 }, -- Arugal debe morir

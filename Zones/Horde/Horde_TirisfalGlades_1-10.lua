@@ -13,14 +13,14 @@ QR:RegisterZoneGuide({
     quests = {
         { 96895, 12, 10 }, -- El emisario Argenta
         { 363, 1, 1 }, -- Desvelo brutal
-        { 364, 2, 1 }, -- Los autómatas
+        { 364, 2, 1 }, -- Los Autómatas
         { 376, 2, 2 }, -- Los Malditos
         { 3901, 3, 1 }, -- Sacudir esqueletos
         { 3902, 3, 2 }, -- Hurgar en Camposanto
         { 380, 4, 2 }, -- Hoya Nocturácnidas
         { 381, 4, 2 }, -- La Cruzada Escarlata
         { 98389, 4, 2 }, -- Una luz en la oscuridad
-        { 6395, 5, 3 }, -- El último deseo de Marla
+        { 6395, 5, 3 }, -- El útimo deseo de Marla
         { 382, 5, 2 }, -- El mensajero rojo
         { 383, 5, 2 }, -- Información decisiva
         { 8, 5, 1 }, -- Un trato de pícaro
@@ -47,10 +47,10 @@ QR:RegisterZoneGuide({
         { 359, 9, 6 }, -- Las obligaciones de los Renegados
         { 370, 9, 5 }, -- En guerra con la Cruzada Escarlata
         { 368, 9, 6 }, -- Una nueva Peste
-        { 360, 9, 6 }, -- Regresa junto al magistrado
+        { 360, 9, 6 }, -- Vuelve con el magistrado
         { 362, 10, 7 }, -- Los molinos fantasma
         { 371, 10, 5 }, -- En guerra con la Cruzada Escarlata
-        { 398, 10, 6 }, -- Se busca: Ojo de gusano
+        { 398, 10, 6 }, -- SE BUSCA: Ojo de gusano
         { 95314, 10, 7 }, -- El elixir verde de Sombravalle
         { 445, 10, 9 }, -- Entrega a Bosque de Argénteos
         { 410, 10, 5 }, -- Sombra durmiente
@@ -71,8 +71,8 @@ QR:RegisterZoneGuide({
         { 411, 12, 5 }, -- El regreso del exánime pródigo
         { 96896, 12, 10 }, -- Una causa justa
         { 98545, 12, 10 }, -- La carta de Leonid
-        { 99152, 12, 7 }, -- Arriba y abajo
-        { 99153, 12, 7 }, -- No lo dejes escapar
+        { 99152, 12, 10 }, -- Arriba y abajo
+        { 99153, 12, 10 }, -- No lo dejes escapar
         { 408, 13, 7 }, -- La Cripta de la Familia
         { 99156, 13, 6 }, -- Patrulla de la retaguardia
         { 95328, 13, 7 }, -- Residuo de horror susurrante
@@ -83,52 +83,30 @@ QR:RegisterZoneGuide({
     -- Misiones que se cogen aquí pero muy por encima del rango (se hacen en otra visita)
     later = {
         { 530, 20, 10 }, -- La venganza de un esposo
-        { 78124, 20, 1 }, -- Nar'thalas Almanac
-        { 78127, 20, 1 }, -- The Dalaran Digest
-        { 78142, 20, 1 }, -- Encantamientos y embelesamientos
-        { 78143, 20, 1 }, -- Secrets of the Dreamers
-        { 78145, 20, 1 }, -- Arcanic Systems Manual
-        { 78146, 20, 1 }, -- Goaz Scrolls
-        { 78147, 20, 1 }, -- Crimes Against Anatomy
-        { 78149, 20, 1 }, -- Fury of the Land
-        { 78150, 20, 1 }, -- Friend of the Library
-        { 79091, 20, 1 }, -- Archimago Antonidas: Autobiografía completa
-        { 79093, 20, 1 }, -- Rumi de Gnomeregan: Obras completas
-        { 79094, 20, 1 }, -- The Lessons of Ta'zo
-        { 79096, 20, 1 }, -- Ataeric: sobre curiosidades Arcanas
-        { 79097, 20, 1 }, -- Baxtan: Sobre la magia destructiva
-        { 97289, 21, 15 }, -- Unending Torment
-        { 97290, 21, 15 }, -- Unending Torment
-        { 97291, 21, 15 }, -- Unending Torment
-        { 97292, 21, 15 }, -- Unending Torment
+        { 97289, 21, 15 }, -- Tormento interminable
+        { 97290, 21, 15 }, -- Tormento interminable
+        { 97291, 21, 15 }, -- Tormento interminable
+        { 97292, 21, 15 }, -- Tormento interminable
         { 92421, 22, 15 }, -- Justicia de la Luz
         { 92422, 22, 15 }, -- La cólera de Rath'mael
-        { 95216, 22, 15 }, -- The New Plague
+        { 95216, 22, 15 }, -- La nueva peste
         { 1013, 26, 16 }, -- El Libro de Ur
         { 6628, 30, 25 }, -- Prueba de conocimiento
         { 1109, 33, 30 }, -- Guano del Horado
         { 1113, 33, 30 }, -- Corazones de fervor
-        { 96988, 33, 24 }, -- Source of Power
-        { 97985, 33, 25 }, -- Thundering Hearts
-        { 79949, 35, 1 }, -- A Web of Lies: Debunking Myths and Legends
-        { 79950, 35, 1 }, -- Demons and You
-        { 79951, 35, 1 }, -- Mummies: A Guide to the Unsavory Undead
-        { 79952, 35, 1 }, -- RwlRwlRwlRwl!
-        { 79953, 35, 1 }, -- A Ludite's Guide to Caring for Your Demonic Pet
+        { 96988, 33, 24 }, -- Fuente de poder
+        { 97985, 33, 25 }, -- Corazones atronadores
         { 1160, 36, 25 }, -- Prueba de conocimiento
         { 1164, 36, 27 }, -- Robar a un ladrón…
         { 6521, 36, 28 }, -- Una alianza nefasta
+        { 96997, 40, 40 }, -- Un corcel en la muerte como lo fue en vida
+        { 97203, 40, 40 }, -- Lecciones de monta
+        { 97884, 40, 36 }, -- El arsenal de Clarosol
         { 3341, 42, 37 }, -- Acaba con la amenaza
         { 2342, 43, 33 }, -- Los tesoros reclamados
         { 736, 44, 30 }, -- La Estrella, la Mano y el Corazón
         { 232, 45, 38 }, -- Una recado para la boticaria Zinge
         { 238, 45, 38 }, -- Una recado para la boticaria Zinge
-        { 81947, 45, 1 }, -- Sanguine Sorcery
-        { 81949, 45, 1 }, -- Legends of the Tidesages
-        { 81951, 45, 1 }, -- The Liminal and the Arcane
-        { 81952, 45, 1 }, -- Everyday Etiquette
-        { 81953, 45, 1 }, -- Stonewrought Design
-        { 81954, 45, 1 }, -- Venomous Journeys
         { 8273, 47, 42 }, -- La gratitud Oran
         { 5093, 50, 50 }, -- Un llamamiento a las armas: las Tierras de la Peste
         { 5094, 50, 50 }, -- Un llamamiento a las armas: las Tierras de la Peste
@@ -153,12 +131,14 @@ QR:RegisterZoneGuide({
         { 5408, 55, 50 }, -- Piedras de la Plaga del esbirro
         { 5901, 55, 48 }, -- Una Peste en la Cruzada
         { 5902, 55, 48 }, -- Una Peste en la Cruzada
+        { 97319, 55, 55 }, -- A Cousin Abroad
         { 4294, 56, 48 }, -- ... y unos mocos
         { 5098, 56, 50 }, -- Todas las atalayas
         { 964, 57, 55 }, -- Fragmentos esqueléticos
         { 5514, 57, 55 }, -- Molde rima con... ¿oro?
         { 5235, 58, 50 }, -- Objetivo: Gangrena de Gahrron
         { 5238, 58, 50 }, -- ¡Misión cumplida!
+        { 93030, 58, 50 }, -- The Knight of Mourning
         { 105, 60, 50 }, -- Ah, Andorhal
         { 5341, 60, 52 }, -- La fortuna de la familia Barov
         { 5342, 60, 52 }, -- El último de los Barov
@@ -171,5 +151,8 @@ QR:RegisterZoneGuide({
         { 7817, 60, 40 }, -- Un donativo de tejido mágico
         { 7818, 60, 50 }, -- Un donativo de paño rúnico
         { 7819, 60, 50 }, -- Un donativo extra de paño rúnico
+        { 95926, 60, 55 }, -- The Dark Crystal
+        { 97049, 60, 55 }, -- Essence of Seeping Slimes
+        { 99208, 60, 60 }, -- Swift as the Wind
     },
 })

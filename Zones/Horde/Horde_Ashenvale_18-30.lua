@@ -1,5 +1,5 @@
 -- Generado por tools/zone_guides.py. No editar a mano: vuelve a ejecutar el script.
--- Horde · Ashenvale · niveles 18-30 · 33 misiones
+-- Horde · Ashenvale · niveles 18-30 · 30 misiones
 local _, QR = ...
 QR:RegisterZoneGuide({
     key = "Horde_Ashenvale",
@@ -20,8 +20,8 @@ QR:RegisterZoneGuide({
         { 6547, 21, 17 }, -- Novedades del explorador Grito de Guerra
         { 6563, 22, 17 }, -- La esencia de Aku'Mai
         { 6641, 23, 20 }, -- Vorsha la Azotadora
-        { 98251, 23, 18 }, -- Never Coming Back
-        { 98252, 23, 18 }, -- A Void Path
+        { 98251, 23, 18 }, -- No pienso volver
+        { 98252, 23, 18 }, -- Un camino vacío
         { 6482, 24, 19 }, -- Liberar a Ruul
         { 216, 24, 21 }, -- Entre una roca y un Piel de Cardo
         { 6462, 24, 19 }, -- Los talismanes trols
@@ -29,9 +29,6 @@ QR:RegisterZoneGuide({
         { 23, 24, 20 }, -- La zarpa de Ursangous
         { 25, 25, 23 }, -- Paso del Espolón bloqueado
         { 6546, 25, 17 }, -- Novedades del escolta Grito de Guerra
-        { 78132, 25, 15 }, -- Dragonslayer's Helm
-        { 78133, 25, 15 }, -- Dragonslayer's Shield
-        { 78134, 25, 15 }, -- Dragonslayer's Lance
         { 6441, 26, 21 }, -- Los cuernos de sátiro
         { 6621, 26, 21 }, -- El rey de los Corrupto
         { 6565, 26, 17 }, -- Lealtad a los dioses antiguos
