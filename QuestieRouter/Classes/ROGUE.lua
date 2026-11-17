@@ -16,7 +16,7 @@ QR:RegisterClassGuide({
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
-        { "rep", 349, 500 },
+        { "rep", 349, 800 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
@@ -26,6 +26,8 @@ QR:RegisterClassGuide({
         { 96782, 36, 24, 4294967373 }, -- Extracción encubierta
         { 96783, 36, 24 }, -- La entrada
         { 96784, 36, 24 }, -- Master of Disguise
+        { 96785, 36, 24 }, -- Ain't No Telling
+        { 96786, 36, 24 }, -- The Syndicate Sting
         { 6701, 60, 24 }, -- Emblemas de la Hermandad
     },
 })
@@ -44,33 +46,6 @@ QR:RegisterClassGuide({
     quests = {
         { 80526, 50, 45 }, -- Fool Me Twice
         { 80411, 50, 45 }, -- The Talisman of Kazdor
-    },
-})
-
-QR:RegisterClassGuide({
-    key = "Alliance_Class_ROGUE_2242",
-    faction = "Alliance",
-    class = "ROGUE",
-    titleQuest = 2242,
-    minLevel = 10,
-    maxLevel = 10,
-    areaId = 1,
-    zone = "Dun Morogh",
-    focus = { 36.4, 48.5 },   -- punto medio de la cadena en el mapa de la zona
-    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
-    --   o puntos de reputacion }; la primera que no es reputacion es la principal
-    rewards = {
-        { "item", 7298, 2242 },
-    },
-    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
-    quests = {
-        { 2205, 10, 10, 4294967373 }, -- Busca el SI: 7
-        { 2206, 10, 10, 4294967373 }, -- El robo
-        { 2218, 10, 10, 4294967373 }, -- El camino hacia la salvación
-        { 2238, 10, 10, 4294967373 }, -- Un simple subterfugio
-        { 2239, 10, 10, 4294967373 }, -- El informe de Onin
-        { 2241, 10, 10, 4294967373 }, -- Cuando cae la manzana
-        { 2242, 10, 10, 4294967373 }, -- La llamada del destino
     },
 })
 
@@ -121,18 +96,72 @@ QR:RegisterClassGuide({
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 2360, 20, 20, 4294967373 }, -- Mathias y los Defias
-        { 2359, 24, 20, 4294967373 }, -- La torre de Klaven
-        { 2607, 20, 20, 4294967373 }, -- Toque de Zanzil
-        { 2608, 20, 20, 4294967373 }, -- Toque de Zanzil
-        { 2609, 20, 20, 4294967373 }, -- Toque de Zanzil
+        { 2359, 24, 20, 19807040628566084398385987661 }, -- La torre de Klaven
+        { 2607, 20, 20, 77 }, -- Toque de Zanzil
+        { 2608, 20, 20, 77 }, -- Toque de Zanzil
+        { 2609, 20, 20, 77 }, -- Toque de Zanzil
     },
 })
 
 QR:RegisterClassGuide({
-    key = "Alliance_Class_ROGUE_78676",
+    key = "Alliance_Class_ROGUE_2242",
     faction = "Alliance",
     class = "ROGUE",
-    titleQuest = 78676,
+    titleQuest = 2242,
+    minLevel = 10,
+    maxLevel = 10,
+    areaId = 1,
+    zone = "Dun Morogh",
+    focus = { 36.4, 48.5 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "item", 7298, 2242 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 2205, 10, 10, 4294967373 }, -- Busca el SI: 7
+        { 2206, 10, 10, 4294967373 }, -- El robo
+        { 2218, 10, 10, 4294967373 }, -- El camino hacia la salvación
+        { 2238, 10, 10, 4294967373 }, -- Un simple subterfugio
+        { 2239, 10, 10, 4294967373 }, -- El informe de Onin
+        { 2241, 10, 10, 4294967373 }, -- Cuando cae la manzana
+        { 2242, 10, 10, 4294967373 }, -- La llamada del destino
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Alliance_Class_ROGUE_2282",
+    faction = "Alliance",
+    class = "ROGUE",
+    titleQuest = 2282,
+    minLevel = 16,
+    maxLevel = 20,
+    areaId = 141,
+    zone = "Teldrassil",
+    focus = { 56.4, 60.1 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "item", 7907, 2282 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 2259, 16, 16, 4294967373 }, -- Erion Sombrusurro
+        { 2260, 16, 16, 4294967373 }, -- La orden de Erion
+        { 2281, 16, 16, 4294967373 }, -- Cita en Crestagrana
+        { 2298, 16, 16, 4294967373 }, -- Una regia sacudida
+        { 2299, 16, 16, 4294967373 }, -- ¡Ve a hablar con Hulfdan!
+        { 2300, 16, 16, 4294967373 }, -- SI:7
+        { 2282, 20, 16, 4294967373 }, -- Molino de Alther
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Alliance_Class_ROGUE_78699",
+    faction = "Alliance",
+    class = "ROGUE",
+    titleQuest = 78699,
     minLevel = 23,
     maxLevel = 35,
     areaId = 130,
@@ -141,7 +170,7 @@ QR:RegisterClassGuide({
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
-        { "item", 277246, 0 },
+        { "item", 277246, 78699 },
         { "item", 277210, 78307 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
@@ -149,6 +178,29 @@ QR:RegisterClassGuide({
         { 78261, 23, 1 }, -- El Cuerno de Xelthos
         { 78307, 23, 1 }, -- El Cuerno de Xelthos
         { 78676, 35, 25 }, -- El ojo de Bhossca
+        { 78699, 35, 25 }, -- The Eye of Bhossca
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Alliance_Class_ROGUE_78270",
+    faction = "Alliance",
+    class = "ROGUE",
+    titleQuest = 78270,
+    minLevel = 23,
+    maxLevel = 23,
+    areaId = 406,
+    zone = "Stonetalon Mountains",
+    focus = { 58.2, 51.7 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "item", 277210, 0 },
+        { "item", 210186, 78270 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 78270, 23, 1 }, -- Las ganzúas goblin
     },
 })
 
@@ -177,28 +229,6 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
-    key = "Alliance_Class_ROGUE_2282",
-    faction = "Alliance",
-    class = "ROGUE",
-    titleQuest = 2282,
-    minLevel = 16,
-    maxLevel = 20,
-    areaId = 1519,
-    zone = "Stormwind City",
-    focus = { 78.3, 71.1 },   -- punto medio de la cadena en el mapa de la zona
-    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
-    --   o puntos de reputacion }; la primera que no es reputacion es la principal
-    rewards = {
-        { "item", 7907, 2282 },
-    },
-    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
-    quests = {
-        { 2281, 16, 16, 4294967373 }, -- Cita en Crestagrana
-        { 2282, 20, 16, 4294967373 }, -- Molino de Alther
-    },
-})
-
-QR:RegisterClassGuide({
     key = "Alliance_Class_ROGUE_Misc",
     faction = "Alliance",
     class = "ROGUE",
@@ -213,10 +243,9 @@ QR:RegisterClassGuide({
     rewards = {
         { "item", 20703, 8378 },
         { "item", 20715, 8378 },
-        { "item", 277246, 78699 },
-        { "item", 210186, 78270 },
         { "rep", 529, 1600 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
         { "rep", 609, 400 },
         { "rep", 809, 200 },
         { "rep", 72, 50 },
@@ -233,18 +262,17 @@ QR:RegisterClassGuide({
         { 3113, 1, 1, 64 }, -- Memorándum encriptado
         { 3118, 1, 1, 8 }, -- El sigilo cifrado
         { 92483, 2, 2 }, -- Un hogar entre las sombras
-        { 2259, 16, 16, 4294967373 }, -- Erion Sombrusurro
-        { 2260, 16, 16, 4294967373 }, -- La orden de Erion
-        { 2298, 16, 16, 4294967373 }, -- Una regia sacudida
-        { 2299, 16, 16, 4294967373 }, -- ¡Ve a hablar con Hulfdan!
-        { 2300, 16, 16, 4294967373 }, -- SI:7
-        { 78270, 23, 1 }, -- Las ganzúas goblin
-        { 78699, 35, 25 }, -- The Eye of Bhossca
         { 7498, 60, 54 }, -- Garona: un estudio acerca de la discreción y la traición
         { 8063, 60, 60 }, -- Dechados de Poder: los Brazales de sinconcierto
         { 8072, 60, 60 }, -- Dechados de Poder: el Manto de sinconcierto
         { 8073, 60, 60 }, -- Dechados de Poder: la guerrera de sinconcierto
+        { 8186, 60, 58 }, -- Abrazo de la Muerte
         { 8378, 60, 58 }, -- Armamentos de guerra
+        { 8637, 60, 60 }, -- Las botas de mortífero
+        { 8638, 60, 60 }, -- El jubón de mortífero
+        { 8639, 60, 60 }, -- El casco de mortífero
+        { 8640, 60, 60 }, -- Los leotardos de mortífero
+        { 8641, 60, 60 }, -- Las hombreras de mortífero
         { 8693, 60, 60 }, -- La capa de las sombras ocultas
         { 8701, 60, 60 }, -- La sortija de las sombras ocultas
         { 8709, 60, 60 }, -- La daga de las sombras ocultas
@@ -279,7 +307,7 @@ QR:RegisterClassGuide({
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
-        { "rep", 349, 400 },
+        { "rep", 349, 700 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
@@ -288,6 +316,8 @@ QR:RegisterClassGuide({
         { 96781, 36, 24 }, -- Despejando incógnitas
         { 96783, 36, 24 }, -- La entrada
         { 96784, 36, 24 }, -- Master of Disguise
+        { 96785, 36, 24 }, -- Ain't No Telling
+        { 96786, 36, 24 }, -- The Syndicate Sting
         { 6701, 60, 24 }, -- Emblemas de la Hermandad
     },
 })
@@ -306,33 +336,6 @@ QR:RegisterClassGuide({
     quests = {
         { 80526, 50, 45 }, -- Fool Me Twice
         { 80411, 50, 45 }, -- The Talisman of Kazdor
-    },
-})
-
-QR:RegisterClassGuide({
-    key = "Horde_Class_ROGUE_2480",
-    faction = "Horde",
-    class = "ROGUE",
-    titleQuest = 2480,
-    minLevel = 20,
-    maxLevel = 26,
-    areaId = 1637,
-    zone = "Orgrimmar",
-    focus = { 43.0, 53.7 },   -- punto medio de la cadena en el mapa de la zona
-    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
-    --   o puntos de reputacion }; la primera que no es reputacion es la principal
-    rewards = {
-        { "spell", 2842, 0 },
-        { "item", 18160, 0 },
-        { "item", 8066, 2458 },
-        { "item", 8095, 2480 },
-    },
-    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
-    quests = {
-        { 2460, 20, 20, 8589934770 }, -- El saludo de los Mano Destrozada
-        { 2458, 20, 20, 8589934770 }, -- Agente encubierto
-        { 2479, 26, 20, 8589934770 }, -- La ayuda de Hinott
-        { 2480, 20, 20, 8589934770 }, -- La ayuda de Hinott
     },
 })
 
@@ -368,7 +371,7 @@ QR:RegisterClassGuide({
     faction = "Horde",
     class = "ROGUE",
     titleQuest = 1978,
-    minLevel = 13,
+    minLevel = 10,
     maxLevel = 13,
     areaId = 1497,
     zone = "Undercity",
@@ -380,36 +383,14 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1859, 10, 10, 2 }, -- Therzok
+        { 1885, 10, 10, 16 }, -- Mennet Carkad
         { 1886, 13, 10, 16 }, -- Los Mortacechadores
         { 1898, 13, 10, 16 }, -- Los Mortacechadores
         { 1899, 13, 10, 16 }, -- Los Mortacechadores
         { 1963, 13, 10, 130 }, -- Mano Destrozada
         { 1858, 13, 10, 130 }, -- Mano Destrozada
         { 1978, 13, 10, 16 }, -- Los Mortacechadores
-    },
-})
-
-QR:RegisterClassGuide({
-    key = "Horde_Class_ROGUE_78676",
-    faction = "Horde",
-    class = "ROGUE",
-    titleQuest = 78676,
-    minLevel = 23,
-    maxLevel = 35,
-    areaId = 130,
-    zone = "Silverpine Forest",
-    focus = { 47.1, 71.0 },   -- punto medio de la cadena en el mapa de la zona
-    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
-    --   o puntos de reputacion }; la primera que no es reputacion es la principal
-    rewards = {
-        { "item", 277246, 0 },
-        { "item", 277210, 78307 },
-    },
-    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
-    quests = {
-        { 78261, 23, 1 }, -- El Cuerno de Xelthos
-        { 78307, 23, 1 }, -- El Cuerno de Xelthos
-        { 78676, 35, 25 }, -- El ojo de Bhossca
     },
 })
 
@@ -431,10 +412,87 @@ QR:RegisterClassGuide({
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 1998, 16, 16, 16 }, -- Fenwick Thatros
+        { 2378, 16, 16, 8589934770 }, -- Encuentra a los Mano Destrozada
         { 2379, 16, 16, 8589934770 }, -- Zando'zan
+        { 2380, 16, 16, 8589934770 }, -- Ve a Orgrimmar
         { 2382, 16, 16, 8589934770 }, -- Desdio de Trinquete
         { 2381, 18, 16, 8589934770 }, -- Saquear a los saqueadores
         { 1999, 20, 16, 16 }, -- Herramientas de comercio
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Horde_Class_ROGUE_78699",
+    faction = "Horde",
+    class = "ROGUE",
+    titleQuest = 78699,
+    minLevel = 23,
+    maxLevel = 35,
+    areaId = 130,
+    zone = "Silverpine Forest",
+    focus = { 47.1, 71.0 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "item", 277246, 78699 },
+        { "item", 277210, 78307 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 78261, 23, 1 }, -- El Cuerno de Xelthos
+        { 78307, 23, 1 }, -- El Cuerno de Xelthos
+        { 78676, 35, 25 }, -- El ojo de Bhossca
+        { 78699, 35, 25 }, -- The Eye of Bhossca
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Horde_Class_ROGUE_2480",
+    faction = "Horde",
+    class = "ROGUE",
+    titleQuest = 2480,
+    minLevel = 20,
+    maxLevel = 26,
+    areaId = 1637,
+    zone = "Orgrimmar",
+    focus = { 43.0, 53.7 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "spell", 2842, 0 },
+        { "item", 18160, 2478 },
+        { "item", 8066, 2458 },
+        { "item", 8095, 2480 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 2460, 20, 20, 8589934770 }, -- El saludo de los Mano Destrozada
+        { 2458, 20, 20, 8589934770 }, -- Agente encubierto
+        { 2478, 24, 20, 8589934770 }, -- Misión: posible, pero no probable
+        { 2479, 26, 20, 8589934770 }, -- La ayuda de Hinott
+        { 2480, 20, 20, 146 }, -- La ayuda de Hinott
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Horde_Class_ROGUE_78270",
+    faction = "Horde",
+    class = "ROGUE",
+    titleQuest = 78270,
+    minLevel = 23,
+    maxLevel = 23,
+    areaId = 406,
+    zone = "Stonetalon Mountains",
+    focus = { 58.2, 51.7 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "item", 277210, 0 },
+        { "item", 210186, 78270 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 78270, 23, 1 }, -- Las ganzúas goblin
     },
 })
 
@@ -477,10 +535,9 @@ QR:RegisterClassGuide({
     rewards = {
         { "item", 20703, 8378 },
         { "item", 20715, 8378 },
-        { "item", 277246, 78699 },
-        { "item", 210186, 78270 },
         { "rep", 529, 1600 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
         { "rep", 609, 400 },
         { "rep", 530, 200 },
         { "rep", 76, 200 },
@@ -496,17 +553,17 @@ QR:RegisterClassGuide({
         { 3096, 1, 1, 16 }, -- Un pergamino encriptado
         { 92483, 2, 2 }, -- Un hogar entre las sombras
         { 792, 4, 2, 8589934770 }, -- Familiares viles
-        { 1859, 10, 10, 2 }, -- Therzok
-        { 1885, 10, 10, 16 }, -- Mennet Carkad
-        { 2378, 16, 16, 8589934770 }, -- Encuentra a los Mano Destrozada
-        { 2380, 16, 16, 8589934770 }, -- Ve a Orgrimmar
-        { 78270, 23, 1 }, -- Las ganzúas goblin
-        { 78699, 35, 25 }, -- The Eye of Bhossca
         { 7498, 60, 54 }, -- Garona: un estudio acerca de la discreción y la traición
         { 8063, 60, 60 }, -- Dechados de Poder: los Brazales de sinconcierto
         { 8072, 60, 60 }, -- Dechados de Poder: el Manto de sinconcierto
         { 8073, 60, 60 }, -- Dechados de Poder: la guerrera de sinconcierto
+        { 8186, 60, 58 }, -- Abrazo de la Muerte
         { 8378, 60, 58 }, -- Armamentos de guerra
+        { 8637, 60, 60 }, -- Las botas de mortífero
+        { 8638, 60, 60 }, -- El jubón de mortífero
+        { 8639, 60, 60 }, -- El casco de mortífero
+        { 8640, 60, 60 }, -- Los leotardos de mortífero
+        { 8641, 60, 60 }, -- Las hombreras de mortífero
         { 8693, 60, 60 }, -- La capa de las sombras ocultas
         { 8701, 60, 60 }, -- La sortija de las sombras ocultas
         { 8709, 60, 60 }, -- La daga de las sombras ocultas

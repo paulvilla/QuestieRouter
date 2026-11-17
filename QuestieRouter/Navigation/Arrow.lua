@@ -329,13 +329,31 @@ function Arrow:InfoLines(t)
     if t.kind == "corpse" then
         return { T.done .. L["Recover your body to continue the guide"] .. "|r" }, "corpse"
     end
+    if t.kind == "manualpoint" then   -- punto añadido a mano (Mayus / Alt + clic en el mapa)
+        local n = QR.Waypoints and #QR.Waypoints:All() or 1
+        local out = { T.friendly .. (t.name or "") .. "|r" }
+        if n > 1 then out[#out + 1] = T.done .. string.format(L["%d more manual waypoints after this one"], n - 1) .. "|r" end
+        local f = t.via and t.via.final
+        if f then   -- punto de paso: la guia sigue desde el ultimo punto
+            out[#out + 1] = T.done .. L["Then the guide continues from here"] .. ": " .. (f.name or f.questName or "") .. "|r"
+        else
+            out[#out + 1] = T.done .. L["Then the guide continues"] .. "|r"
+        end
+        return out, "manualpoint"
+    end
     if t.manual then   -- ruta elegida a mano (clic derecho en una mision de la lista)
         return { string.format(L["%sRoute to|r %s%s|r"], T.warn, T.friendly, t.name or "?"), T.done .. (t.questName or "") .. "|r" }, "manual"
     end
     local step = QR.Planner and QR.Planner:IsActive() and QR.Planner.plan and QR.Planner.plan.currentStep
     local kind = t.kind or (t.isTurnIn and "turnin" or "objective")
     if step and step.kind ~= "objective" then
-        local fmt = step.kind == "pickup" and L["%sPick up|r from %s%s|r"] or L["%sTurn in|r to %s%s|r"]
+        local fmt = L["%sTurn in|r to %s%s|r"]
+        if step.kind == "pickup" then
+            -- "Coger misiones de Takar" / "Coger mision de Takar" segun cuantas sean; en los idiomas que aun no
+            -- tienen esos textos, el de siempre (L devuelve la clave si no hay traduccion)
+            local key = #(step.lines or {}) > 1 and "%sPick up quests|r from %s%s|r" or "%sPick up the quest|r from %s%s|r"
+            fmt = (L[key] ~= key or QR.locale == "enUS") and L[key] or L["%sPick up|r from %s%s|r"]
+        end
         lines[1] = string.format(fmt, T.warn, T.friendly, step.npc or t.name or "")
         for i, l in ipairs(step.lines) do
             if i > 3 then lines[#lines + 1] = string.format(L["%s+%d more|r"], T.done, #step.lines - 3) break end
@@ -362,6 +380,9 @@ function Arrow:InfoLines(t)
         end
     end
     if shown == 0 and t.name then lines[1] = T.enemy .. t.name .. "|r" end
+    -- nota propia de lo que hay que hacer (Data/QuestNotes.lua)
+    local note = QR.QuestNote and QR.QuestNote(t.questId)
+    if note then lines[#lines + 1] = T.warn .. note .. "|r" end
     -- aviso: otra mision tiene algo que recoger muy cerca (no cambia el paso, solo avisa)
     local near = QR.Planner and QR.Planner.plan and QR.Planner.plan.nearby
     if near then lines[#lines + 1] = string.format(L["%sWatch out:|r pick up %s"], T.warn, near.text) end

@@ -843,7 +843,7 @@ end
 
 local KIND_TAKE = { boat = "Take the boat", zeppelin = "Take the zeppelin", airship = "Take the airship" }
 local KIND_ICON = { walk = "walk", border = "walk", flight = "Gryphon", boat = "Boat", zeppelin = "Boat", airship = "Boat",
-                    tram = "arrow", portal = "arrow", door = "arrow" }
+                    tram = "Tram", portal = "arrow", door = "arrow" }
 -- texto de cada tipo de cruce (frase entera: cada idioma la construye a su manera)
 local CROSS_TEXT = {
     tunnel = "%sGo through the tunnel to|r %s", bridge = "%sCross the bridge to|r %s",
@@ -1090,6 +1090,46 @@ function Router:WrapFrom(target, px, py, pinst, szone)
     }
     self.lastTravel = travel
     return travel
+end
+
+--- Ruta completa (para dibujar) de (px, py, pinst) a target sin ser tu posicion: p. ej. desde un punto de paso (Alt +
+--- clic en el mapa) al destino de la guia. Mismos ajustes que la ruta del jugador (vuelos, barcos, pasos entre zonas);
+--- si no hace falta viajar, un tramo a pie (Walk:RefineRoute lo cambia por el camino del motor). Ningun tramo va
+--- marcado como "desde el jugador": se dibujan todos. Se guarda por origen, destino y ajustes (no se recalcula en
+--- cada refresco: asi tampoco se pierde el camino ya refinado).
+local fromCache, fromOrder = {}, {}
+
+function Router:RouteFrom(target, px, py, pinst)
+    if not (target and target.wx and px) then return nil end
+    local key = string.format("%s:%.0f:%.0f>%s:%.0f:%.0f:%s", tostring(pinst), px, py, tostring(target.instance),
+        target.wx, target.wy, tostring(target.questId))
+    local hit = fromCache[key]
+    if hit then return hit end
+    local route
+    if QR.db.travel.enabled then
+        -- (WrapFrom guarda su resultado como "ultimo viaje" del jugador: aqui no lo es)
+        local last = self.lastTravel
+        local ok, res = pcall(self.WrapFrom, self, target, px, py, pinst, ZoneAt(pinst, px, py))
+        self.lastTravel = last
+        if ok and res and res.kind == "travel" and res.route then
+            route = res.route
+            for _, seg in ipairs(route.segments) do seg.fromPlayer = nil end
+        end
+    end
+    if not route then
+        route = { key = "walk", steps = {}, segments = { { kind = "walk",
+            points = { { pinst, px, py }, { target.instance, target.wx, target.wy } } } } }
+    end
+    fromCache[key] = route
+    fromOrder[#fromOrder + 1] = key
+    if #fromOrder > 16 then fromCache[table.remove(fromOrder, 1)] = nil end
+    return route
+end
+
+--- con otros ajustes (vuelos, barcos, estilo de ruta...) las rutas guardadas ya no valen
+function Router:ClearRouteFrom()
+    wipe(fromCache)
+    wipe(fromOrder)
 end
 
 ---------------------------------------------------------------------------

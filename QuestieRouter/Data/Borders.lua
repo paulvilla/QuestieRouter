@@ -66,7 +66,7 @@ QR.BorderData = {
     -- tranvia y portales: { mapA, xA, yA, mapB, xB, yB, tipo, faccion, solo ida }
     links = {
         { 1438, 0.5591, 0.8964, 1457, 0.3006, 0.4144, "portal", "A", false }, -- Teldrassil / Darnassus
-        { 1453, 0.6036, 0.1247, 1455, 0.7290, 0.5027, "tram", "A", false }, -- Stormwind City / Ironforge
+        { 1453, 0.692, 0.306, 1455, 0.7290, 0.5027, "tram", "A", false }, -- Stormwind City (puerta del Tranvia, Distrito de los Enanos) / Ironforge
         { 1416, 0.1521, 0.5600, 1416, 0.1463, 0.5782, "portal", nil, false }, -- Alterac Mountains / Alterac Mountains
         { 1416, 0.1808, 0.7187, 1416, 0.1806, 0.7203, "door", nil, false }, -- Alterac Mountains / Alterac Mountains
     },

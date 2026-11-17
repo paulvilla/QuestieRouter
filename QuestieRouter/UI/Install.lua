@@ -3,11 +3,13 @@
 -- boton "Asistente de instalacion" de Ajustes > AddOns > QuestieRouter. Mismo estilo que las ventanas de LizeUI
 -- (PortraitFrameTemplate con borde HeldBagLayout y botones SharedButtonTemplate).
 --   1. Bienvenida: informacion del addon sobre el fondo "ali-horda"
---   2. Tamaño de los textos: tres ajustes ya hechos
---   3. Tarjeta de arriba (paso actual): que se muestra (Opciones > Tarjeta de arriba > Mostrar)
---   4. Lista de pasos: que se muestra en cada paso (Opciones > Lista de pasos > Mostrar)
---   5. Rutas de vuelo: la API de WoW falla hasta abrir el mapa de un maestro de vuelo
---   6. Fin: lamina de cierre (version en español para esES/esMX, en ingles para el resto)
+--   2. Rutas a pie: rapida, equilibrada o solo caminos
+--   3. Iconos de las misiones en Questie: Questie, Blizzard o pfQuest (recomendado, preseleccionado)
+--   4. Tamaño de los textos: tres ajustes ya hechos
+--   5. Tarjeta de arriba (paso actual): que se muestra (Opciones > Tarjeta de arriba > Mostrar)
+--   6. Lista de pasos: que se muestra en cada paso (Opciones > Lista de pasos > Mostrar)
+--   7. Rutas de vuelo: la API de WoW falla hasta abrir el mapa de un maestro de vuelo
+--   8. Fin: lamina de cierre (version en español para esES/esMX, en ingles para el resto)
 -- Botones: abajo a la izquierda "Atras" y abajo a la derecha "Siguiente"; la primera pagina solo tiene
 -- "Siguiente" y la ultima solo "Finalizar", en el centro. Los ajustes se aplican al pulsar cada opcion
 -- (la ventana de la guia cambia detras para verlo).
@@ -344,6 +346,108 @@ local function RoutePage(page)
     end)
 end
 table.insert(pages, 2, RoutePage)
+
+-- 3 (nueva). Iconos de las misiones en Questie (Opciones de Questie > Iconos > Tema de iconos de objetivos): Questie,
+-- Blizzard o pfQuest. Se aplica con la propia funcion de Questie (QuestieOptionsUtils.ExecuteTheme), igual que su
+-- desplegable. pfQuest va preseleccionado (se aplica la primera vez que se ve la pagina). Cada tarjeta enseña la
+-- imagen de ejemplo de Questie (o, si no esta, un mapita dibujado con sus iconos).
+local QUESTIE_ICONS = "Interface\\Addons\\Questie\\Icons\\"
+local QUESTIE_TUTORIAL = "Interface\\Addons\\Questie\\Modules\\Tutorial\\"
+local TUTORIAL_IMAGE = { questie = "onlyQuestie.blp", blizzard = "onlyBlizzard.blp", pfquest = "pfQuest.blp" }
+local ICON_PRESETS = {
+    { key = "questie", name = "Questie", desc = "A different icon for each kind of objective: kill, loot, talk..." },
+    { key = "blizzard", name = "Blizzard", desc = "The game's own quest areas and markers. Questie does not draw objectives." },
+    { key = "pfquest", name = "pfQuest (Recommended)", desc = "Small dots with one color per quest: clean, and easy to tell which quest each one is for." },
+}
+
+local function QuestieOptionsUtils()
+    local mods = QuestieLoader and QuestieLoader._modules
+    local m = mods and mods.QuestieOptionsUtils
+    if type(m) == "table" and type(m.ExecuteTheme) == "function" then return m end
+end
+
+local function ApplyIconTheme(key)
+    local U = QuestieOptionsUtils()
+    if not (U and Questie and Questie.db and Questie.db.profile) then return end
+    local ok, err = pcall(U.ExecuteTheme, nil, key)
+    if not ok and QR.db.debug then QR:Print("Questie icon theme: " .. tostring(err)) end
+end
+
+local function CurrentIconTheme()
+    local p = Questie and Questie.db and Questie.db.profile
+    return p and p.iconTheme
+end
+
+-- posiciones de los iconos en el mapita (coordenadas de la tarjeta)
+local ICON_SPOTS = { { 50, 110 }, { 82, 92 }, { 70, 140 }, { 110, 126 }, { 98, 168 }, { 140, 100 },
+                     { 150, 150 }, { 128, 196 }, { 172, 182 }, { 60, 196 } }
+
+local function IconsPage(page)
+    Heading(page, L["Questie quest icons"],
+        L["Choose how Questie shows quest objectives on the map and the minimap. You can change it later in Questie's options (Icons)."])
+    -- pfQuest preseleccionado: se aplica la primera vez (luego se respeta lo que elijas)
+    if not QR.db.questieIconsSet then
+        QR.db.questieIconsSet = true
+        if CurrentIconTheme() ~= "pfquest" then ApplyIconTheme("pfquest") end
+    end
+    local current = CurrentIconTheme()
+    if current ~= "questie" and current ~= "blizzard" then current = "pfquest" end
+    Choices(page, ICON_PRESETS, current, function(p)
+        ApplyIconTheme(p.key)
+    end, function(c, p)
+        -- las imagenes de ejemplo de Questie (las de su ventana "elige el tipo de objetivos"); si no estan, el dibujo
+        local shot = c:CreateTexture(nil, "ARTWORK")
+        shot:SetSize(186, 186)
+        shot:SetPoint("TOP", c, "TOP", 0, -56)
+        if shot:SetTexture(QUESTIE_TUTORIAL .. TUTORIAL_IMAGE[p.key]) ~= false then
+            local frame = CreateFrame("Frame", nil, c)
+            frame:SetAllPoints(shot)
+            Border(frame)
+            frame:SetBorderColor(0, 0, 0, 0.8)
+            return
+        end
+        shot:Hide()
+        local map = c:CreateTexture(nil, "BORDER")
+        map:SetPoint("TOPLEFT", 14, -48)
+        map:SetPoint("TOPRIGHT", -14, -48)
+        map:SetHeight(200)
+        map:SetColorTexture(0.32, 0.27, 0.18, 0.55)
+        local function Icon(tex, x, y, size, r, g, b, a, layer)
+            local t = c:CreateTexture(nil, layer or "ARTWORK")
+            t:SetSize(size, size)
+            t:SetPoint("CENTER", c, "TOPLEFT", x, -y)
+            t:SetTexture(tex)
+            if r then t:SetVertexColor(r, g, b, a or 1) end
+            return t
+        end
+        if p.key == "questie" then
+            local kinds = { "slay.blp", "slay.blp", "loot.blp", "slay.blp", "loot.blp", "chatbubblegossipicon.blp",
+                            "slay.blp", "loot.blp", "object.blp", "slay.blp" }
+            for i, s in ipairs(ICON_SPOTS) do Icon(QUESTIE_ICONS .. kinds[i], s[1], s[2], 18) end
+        elseif p.key == "pfquest" then
+            -- una mision en amarillo y otra en azul, como con los colores por mision de pfQuest
+            for i, s in ipairs(ICON_SPOTS) do
+                if i % 3 == 0 then Icon(QUESTIE_ICONS .. "node.tga", s[1], s[2], 11, 0.35, 0.7, 1)
+                else Icon(QUESTIE_ICONS .. "node.tga", s[1], s[2], 11, 1, 0.82, 0.25) end
+            end
+        else
+            -- areas de mision del juego (manchas) con su marcador
+            Icon(MEDIA .. "Textures\\SoftPanelCircle.tga", 92, 130, 110, 1, 0.82, 0.2, 0.22, "BORDER")
+            Icon(MEDIA .. "Textures\\SoftPanelCircle.tga", 150, 180, 64, 1, 0.82, 0.2, 0.22, "BORDER")
+            local poi = Icon("Interface\\buttons\\adventureguidemicrobuttonalert.blp", 92, 130, 26)
+            poi:SetTexCoord(2 / 32, 28 / 32, 2 / 32, 28 / 32)
+            local poi2 = Icon("Interface\\buttons\\adventureguidemicrobuttonalert.blp", 150, 180, 22)
+            poi2:SetTexCoord(2 / 32, 28 / 32, 2 / 32, 28 / 32)
+        end
+    end)
+    -- sin Questie (o una version sin esa opcion): avisarlo
+    if not QuestieOptionsUtils() then
+        local warn = page:CreateFontString(nil, "OVERLAY", "GameFontRedSmall")
+        warn:SetPoint("TOP", page, "TOP", 0, -87)
+        warn:SetText(L["Questie's icon options were not found: this step does nothing."])
+    end
+end
+table.insert(pages, 3, IconsPage)
 
 ---------------------------------------------------------------------------
 -- Ventana

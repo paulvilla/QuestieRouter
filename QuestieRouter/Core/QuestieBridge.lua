@@ -307,21 +307,98 @@ local function OnlyArea(spawns, areaId)
     return spawns
 end
 
---- Punto mas cercano de quien da / recibe una mision (quest.Starts o quest.Finisher).
+---------------------------------------------------------------------------
+-- Dentro de una mazmorra o banda no hay coordenadas del mundo: el punto pasa a ser su entrada (como hacen las guias
+-- de mazmorra). Sin esto, una mision de clase que se coge o entrega dentro (el corcel del paladin en Scholomance, el
+-- terrorecus del brujo en La Masacre, las del Templo de Ahn'Qiraj...) dejaba la guia parada o la flecha en "Otro
+-- continente".
+---------------------------------------------------------------------------
+-- areaId de Questie de cada instancia -> instanceID (el de Data/Dungeons.lua), por si su mapa no da coordenadas
+local AREA_INSTANCE = {
+    [1581] = 36, [717] = 34, [209] = 33, [718] = 43, [491] = 47, [719] = 48, [1337] = 70, [721] = 90, [1477] = 109,
+    [722] = 129, [796] = 189, [1176] = 209, [2100] = 349, [2437] = 389, [1583] = 229, [1585] = 230, [2017] = 329,
+    [2057] = 289, [2557] = 429, [10022] = 429, [10023] = 429, [10024] = 429, [10025] = 429, [2717] = 409,
+    [2677] = 469, [2159] = 249, [1977] = 309, [3429] = 509, [3428] = 531, [3456] = 533,
+    -- Montaña Roca Negra (Questie la tiene como zona propia, sin coordenadas del mundo): la entrada de la Cumbre de
+    -- Roca Negra, que esta en la misma montaña (Bodley: Regreso al principio, conjunto de mazmorra 2)
+    [10074] = 229,
+}
+local entranceByInst = {}
+
+--- Entrada de una instancia (por instanceID): { wx, wy, instance (0 o 1), uiMapId, x, y, name } o nil
+function Bridge:InstanceEntrance(instId)
+    if not instId then return nil end
+    local e = entranceByInst[instId]
+    if e ~= nil then return e or nil end
+    e = false
+    for _, row in ipairs(QR.DungeonData or {}) do
+        for _, d in ipairs(row[5]) do
+            if d[1] == instId and not e then
+                local wx, wy, inst
+                if row[1] then
+                    -- (yardas en el orden de las tablas del juego: el mismo cambio de ejes que Router)
+                    if QR.db and QR.db.travel and QR.db.travel.axisSwap == false then wx, wy = row[2], row[3]
+                    else wx, wy = row[3], row[2] end
+                    inst = row[1]
+                else
+                    wx, wy, inst = self.HBD:GetWorldCoordinatesFromZone(row[2], row[3], row[4])
+                end
+                if wx then
+                    local cont = ({ [0] = 1415, [1] = 1414 })[inst]
+                    local x, y
+                    if cont then x, y = self.HBD:GetZoneCoordinatesFromWorld(wx, wy, cont, true) end
+                    local name = GetRealZoneText and d[1] > 0 and GetRealZoneText(d[1])
+                    e = { wx = wx, wy = wy, instance = inst, uiMapId = cont, x = x, y = y,
+                          name = (type(name) == "string" and name ~= "") and name or d[2] }
+                end
+            end
+        end
+    end
+    entranceByInst[instId] = e
+    return e or nil
+end
+
+--- Si el punto esta dentro de una instancia, lo cambia por su entrada (conservando el nombre de quien era y
+--- diciendo en que mazmorra esta: p.inDungeon). Sin entrada conocida, nil.
+function Bridge:OutsidePoint(p, px, py, pinst)
+    if not p or p.instance == 0 or p.instance == 1 then return p end
+    local e = self:InstanceEntrance(p.instance or AREA_INSTANCE[p.areaId])
+    if not e then return nil end
+    local d = (px and pinst == e.instance) and (self.HBD:GetWorldDistance(pinst, px, py, e.wx, e.wy) or FAR) or FAR
+    return { wx = e.wx, wy = e.wy, instance = e.instance, uiMapId = e.uiMapId, x = e.x, y = e.y, dist = d,
+             areaId = p.areaId, name = p.name, npcId = p.npcId, inDungeon = e.name }
+end
+
+--- Spawns de una instancia cuyo mapa no da coordenadas: su entrada (o nil)
+local function InstanceOnly(self, spawns, px, py, pinst)
+    for areaId in pairs(spawns or {}) do
+        local inst = AREA_INSTANCE[areaId]
+        if inst then return self:OutsidePoint({ instance = inst, areaId = areaId }, px, py, pinst) end
+    end
+end
+
+--- Punto mas cercano de quien da / recibe una mision (quest.Starts o quest.Finisher). Dentro de una mazmorra, su
+--- entrada (p.inDungeon dice cual).
 function Bridge:NearestNpcOrObject(holder, px, py, pinst)
     local best
+    local function consider(p, name, npcId)
+        if not p then return end
+        p.name, p.npcId = name, npcId
+        p = self:OutsidePoint(p, px, py, pinst)
+        if p and (not best or p.dist < best.dist) then best = p end
+    end
     for _, npcId in pairs(holder and holder.NPC or {}) do
         local npc = self.QuestieDB:GetNPC(npcId)
         if npc and npc.spawns and npc.friendly ~= false then
-            local p = self:NearestSpawn(OnlyArea(npc.spawns, self.npcArea[npcId]), px, py, pinst)
-            if p and (not best or p.dist < best.dist) then p.name = npc.name; p.npcId = npcId; best = p end
+            local spawns = OnlyArea(npc.spawns, self.npcArea[npcId])
+            consider(self:NearestSpawn(spawns, px, py, pinst) or InstanceOnly(self, spawns, px, py, pinst), npc.name, npcId)
         end
     end
     for _, objId in pairs(holder and holder.GameObject or {}) do
         local obj = self.QuestieDB:GetObject(objId)
         if obj and obj.spawns then
-            local p = self:NearestSpawn(OnlyArea(obj.spawns, self.objectArea[objId]), px, py, pinst)
-            if p and (not best or p.dist < best.dist) then p.name = obj.name; best = p end
+            local spawns = OnlyArea(obj.spawns, self.objectArea[objId])
+            consider(self:NearestSpawn(spawns, px, py, pinst) or InstanceOnly(self, spawns, px, py, pinst), obj.name, nil)
         end
     end
     return best
@@ -488,6 +565,12 @@ end
 function Bridge:ObjectiveArea(quest, objective, maps, px, py, pinst)
     local poi = self:GamePOI(quest.Id, maps, px, py, pinst)
     local best = self:BestSpawnArea(objective and objective.spawnList, px, py, pinst, poi)
+    -- objetivo dentro de una mazmorra o banda: a su entrada
+    if best and best.instance and best.instance ~= 0 and best.instance ~= 1 then
+        local name = best.name
+        best = self:OutsidePoint(best, px, py, pinst)
+        if best then best.name = name or best.name end
+    end
     if best then return best end
     if poi then
         local name

@@ -199,7 +199,7 @@ QR:RegisterLocale("esES", {
     ["Material: doppler"] = "Material: doppler",
     ["Drag to move. /qr for options."] = "Arrastra para mover. /qr para opciones.",
     ["Recover your body to continue the guide"] = "Recupera tu cuerpo para seguir con la guia",
-    ["%sPick up|r from %s%s|r"] = "%sCoger|r a %s%s|r",
+    ["%sPick up|r from %s%s|r"] = "%sCoger|r de %s%s|r",
     ["%sTurn in|r to %s%s|r"] = "%sEntregar|r a %s%s|r",
     ["%s+%d more|r"] = "%s+%d mas|r",
     ["Another continent"] = "Otro continente",

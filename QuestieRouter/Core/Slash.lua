@@ -259,6 +259,10 @@ SlashCmdList.QUESTIEROUTER = function(msg)
         QR.MapLines:StartPerf(tonumber(arg) or 10)
     elseif cmd == "walk" then
         QR.Walk:Status()
+    elseif cmd == "wp" then
+        if arg == "clear" then QR.Waypoints:Clear() else QR.Waypoints:Status() end
+    elseif cmd == "obs" then
+        if arg == "reset" then QR.Obs:AskReset() else QR.Obs:Report() end
     elseif cmd == "taxi" then
         local sub, rest = arg:match("^(%S*)%s*(.-)$")
         if sub == "debug" then QR.Router:TaxiDebug()

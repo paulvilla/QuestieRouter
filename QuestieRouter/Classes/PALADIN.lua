@@ -21,10 +21,10 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
-    key = "Alliance_Class_PALADIN_79946",
+    key = "Alliance_Class_PALADIN_79970",
     faction = "Alliance",
     class = "PALADIN",
-    titleQuest = 79946,
+    titleQuest = 79970,
     minLevel = 40,
     maxLevel = 40,
     areaId = 1519,
@@ -34,6 +34,8 @@ QR:RegisterClassGuide({
     quests = {
         { 79945, 40, 35, 4294967373 }, -- Orders from the Grand Crusader
         { 79946, 40, 35, 4294967373 }, -- A Brother In Need
+        { 79963, 40, 35, 4294967373 }, -- By The Light's Grace
+        { 79970, 40, 35, 4294967373 }, -- Aeonas the Vindicated
     },
 })
 
@@ -44,21 +46,30 @@ QR:RegisterClassGuide({
     titleQuest = 1788,
     minLevel = 12,
     maxLevel = 13,
-    areaId = 1519,
-    zone = "Stormwind City",
-    focus = { 54.0, 53.8 },   -- punto medio de la cadena en el mapa de la zona
+    areaId = 1537,
+    zone = "Ironforge",
+    focus = { 25.1, 20.1 },   -- punto medio de la cadena en el mapa de la zona
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
         { "spell", 7328, 0 },
         { "item", 6866, 1790 },
+        { "item", 6916, 1645 },
+        { "item", 6775, 1641 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1641, 12, 12, 1 }, -- El Libro de la Divinidad
         { 1642, 12, 12, 1 }, -- El Libro de la Divinidad
         { 1643, 12, 12, 1 }, -- El Libro de la Divinidad
+        { 1645, 12, 12, 4 }, -- El Libro de la Divinidad
         { 1646, 12, 12, 4 }, -- El Libro de la Divinidad
         { 1647, 12, 12, 4 }, -- El Libro de la Divinidad
+        { 2997, 12, 12, 4 }, -- El Libro de la Divinidad
+        { 2998, 12, 12, 1 }, -- Libro de la Divinidad
+        { 2999, 12, 12, 4 }, -- El Libro de la Divinidad
+        { 3000, 12, 12, 4 }, -- El Libro de la Divinidad
+        { 3681, 12, 12, 1 }, -- Libro de la Divinidad
         { 1644, 13, 12, 1 }, -- El Libro de la Divinidad
         { 1648, 13, 12, 4 }, -- El Libro de la Divinidad
         { 1778, 13, 12, 4 }, -- El Libro de la Divinidad
@@ -92,16 +103,44 @@ QR:RegisterClassGuide({
         { "spell", 5502, 0 },
         { "item", 6953, 1806 },
         { "item", 9607, 1652 },
+        { "item", 6993, 1655 },
+        { "item", 7083, 1442 },
+        { "item", 6776, 1794 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 1649, 20, 20, 5 }, -- Libro del valor
+        { 1793, 20, 20, 5 }, -- Libro del valor
+        { 1794, 20, 20, 5 }, -- Libro del valor
+        { 1442, 22, 20, 5 }, -- La búsqueda de la gema Kor
+        { 1655, 22, 20, 5 }, -- Envío de minerales de Bailor
         { 1650, 23, 20, 5 }, -- Libro del valor
         { 1651, 25, 20, 5 }, -- Libro del valor
         { 1652, 25, 20, 5 }, -- Libro del valor
         { 1653, 21, 20, 5 }, -- La prueba de rectitud
         { 1654, 22, 20, 5 }, -- La prueba de rectitud
         { 1806, 22, 20, 5 }, -- La prueba de rectitud
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Alliance_Class_PALADIN_1661",
+    faction = "Alliance",
+    class = "PALADIN",
+    titleQuest = 1661,
+    minLevel = 40,
+    maxLevel = 40,
+    areaId = 1519,
+    zone = "Stormwind City",
+    focus = { 50.5, 47.5 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "spell", 13819, 1661 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 1661, 40, 40, 5 }, -- Libro de la nobleza
     },
 })
 
@@ -134,10 +173,10 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
-    key = "Alliance_Class_PALADIN_78092",
+    key = "Alliance_Class_PALADIN_78093",
     faction = "Alliance",
     class = "PALADIN",
-    titleQuest = 78092,
+    titleQuest = 78093,
     minLevel = 30,
     maxLevel = 30,
     areaId = 1519,
@@ -155,26 +194,28 @@ QR:RegisterClassGuide({
         { 78090, 30, 22, 5 }, -- A Second Opinion
         { 78091, 30, 22, 5 }, -- Earning Your Salt
         { 78092, 30, 22, 5 }, -- It Must Be Destroyed
+        { 78093, 30, 22, 5 }, -- Return to Delgren
     },
 })
 
 QR:RegisterClassGuide({
-    key = "Alliance_Class_PALADIN_7508",
+    key = "Alliance_Class_PALADIN_7509",
     faction = "Alliance",
     class = "PALADIN",
-    titleQuest = 7508,
+    titleQuest = 7509,
     minLevel = 60,
     maxLevel = 60,
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
-        { "item", 18348, 0 },
-        { "rep", 809, 200 },
+        { "item", 18348, 7509 },
+        { "rep", 809, 400 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 7507, 60, 60 }, -- Compendio de Nostro
         { 7508, 60, 60 }, -- Forjar Quel'Serrar
+        { 7509, 60, 60 }, -- Forjar Quel'Serrar
     },
 })
 
@@ -203,19 +244,21 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
-    key = "Alliance_Class_PALADIN_7648",
+    key = "Alliance_Class_PALADIN_7666",
     faction = "Alliance",
     class = "PALADIN",
-    titleQuest = 7648,
+    titleQuest = 7666,
     minLevel = 60,
     maxLevel = 60,
     areaId = 1519,
     zone = "Stormwind City",
-    focus = { 52.0, 45.1 },   -- punto medio de la cadena en el mapa de la zona
+    focus = { 50.9, 46.7 },   -- punto medio de la cadena en el mapa de la zona
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
-        { "rep", 72, 260 },
+        { "spell", 23214, 7647 },
+        { "item", 18746, 7666 },
+        { "rep", 72, 660 },
         { "rep", 47, 250 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
@@ -227,30 +270,10 @@ QR:RegisterClassGuide({
         { 7641, 60, 60, 5 }, -- El trabajo de Grimand Elmore
         { 7642, 60, 60, 5 }, -- Recopilación de artículos
         { 7643, 60, 60, 5 }, -- El antiguo espíritu equino
-        { 7648, 60, 60, 5 }, -- Un trabajo bien hecho
-    },
-})
-
-QR:RegisterClassGuide({
-    key = "Alliance_Class_PALADIN_7666",
-    faction = "Alliance",
-    class = "PALADIN",
-    titleQuest = 7666,
-    minLevel = 60,
-    maxLevel = 60,
-    areaId = 1519,
-    zone = "Stormwind City",
-    focus = { 48.4, 50.2 },   -- punto medio de la cadena en el mapa de la zona
-    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
-    --   o puntos de reputacion }; la primera que no es reputacion es la principal
-    rewards = {
-        { "item", 18746, 7666 },
-        { "rep", 72, 250 },
-    },
-    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
-    quests = {
+        { 7644, 60, 60, 5 }, -- La gualdrapa de arcanita bendecida
         { 7646, 60, 60, 5 }, -- El cristal de adivinación
         { 7647, 60, 60, 5 }, -- Juzgar y redimir
+        { 7648, 60, 60, 5 }, -- Un trabajo bien hecho
         { 7666, 60, 60, 5 }, -- El regreso a El Gran Osario
     },
 })
@@ -271,14 +294,11 @@ QR:RegisterClassGuide({
         { "item", 20700, 8376 },
         { "item", 20711, 8376 },
         { "item", 18775, 7645 },
-        { "item", 6993, 1655 },
-        { "item", 7083, 1442 },
-        { "item", 6776, 1794 },
-        { "item", 6916, 1645 },
-        { "item", 6775, 1641 },
         { "rep", 529, 1600 },
+        { "rep", 910, 1000 },
         { "rep", 609, 400 },
         { "rep", 809, 200 },
+        { "rep", 270, 100 },
         { "rep", 72, 60 },
         { "rep", 47, 50 },
     },
@@ -286,19 +306,6 @@ QR:RegisterClassGuide({
     quests = {
         { 3101, 1, 1, 1 }, -- Una carta consagrada
         { 3107, 1, 1, 4 }, -- Runa consagrada
-        { 1641, 12, 12, 1 }, -- El Libro de la Divinidad
-        { 1645, 12, 12, 4 }, -- El Libro de la Divinidad
-        { 2997, 12, 12, 4 }, -- El Libro de la Divinidad
-        { 2998, 12, 12, 1 }, -- Libro de la Divinidad
-        { 2999, 12, 12, 4 }, -- El Libro de la Divinidad
-        { 3000, 12, 12, 4 }, -- El Libro de la Divinidad
-        { 3681, 12, 12, 1 }, -- Libro de la Divinidad
-        { 1793, 20, 20, 5 }, -- Libro del valor
-        { 1794, 20, 20, 5 }, -- Libro del valor
-        { 1442, 22, 20, 5 }, -- La búsqueda de la gema Kor
-        { 1655, 22, 20, 5 }, -- Envío de minerales de Bailor
-        { 78093, 30, 22, 5 }, -- Return to Delgren
-        { 1661, 40, 40, 5 }, -- Libro de la nobleza
         { 4485, 40, 40, 5 }, -- Libro de la nobleza
         { 4486, 40, 40, 5 }, -- Libro de la nobleza
         { 96438, 40, 35, 4294967373 }, -- Battle at the Mannoroc Coven
@@ -315,7 +322,13 @@ QR:RegisterClassGuide({
         { 7501, 60, 54 }, -- La Luz y cómo alterarla
         { 7645, 60, 60, 5 }, -- Alimento para caballos enriquecido con maná
         { 7670, 60, 60, 4294967373 }, -- Lord Grisillo Quiebrasombras
+        { 8185, 60, 58, 4294967373 }, -- Sigilo de Sincretista
         { 8376, 60, 58, 4294967373 }, -- Armamentos de guerra
+        { 8627, 60, 60, 4294967373 }, -- La coraza del Vengador
+        { 8628, 60, 60, 4294967373 }, -- La corona de vengador
+        { 8629, 60, 60, 4294967373 }, -- Los leotardos de vengador
+        { 8630, 60, 60, 4294967373 }, -- Los espaldares del Vengador
+        { 8655, 60, 60, 4294967373 }, -- Las grebas de vengador
         { 8695, 60, 60, 4294967373 }, -- El manteo de justicia eterna
         { 8703, 60, 60, 4294967373 }, -- El anillo de justicia eterna
         { 8711, 60, 60, 4294967373 }, -- La espada de justicia eterna
@@ -353,26 +366,28 @@ QR:RegisterClassGuide({
     rewards = {
         { "item", 268484, 95126 },
         { "item", 267369, 95140 },
+        { "item", 272448, 95042 },
         { "rep", 2787, 450 },
-        { "rep", 68, 312.5 },
-        { "rep", 76, 125.0 },
-        { "rep", 67, 87.5 },
-        { "rep", 81, 87.5 },
-        { "rep", 530, 87.5 },
+        { "rep", 68, 387.5 },
+        { "rep", 76, 143.75 },
+        { "rep", 67, 106.25 },
+        { "rep", 81, 106.25 },
+        { "rep", 530, 106.25 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 91858, 22, 18, 16 }, -- Incidente diplomático
-        { 91859, 22, 18, 8589934770 }, -- Una extraña pareja
-        { 91860, 22, 18, 8589934770 }, -- Un destino funesto
+        { 91859, 22, 18, 16 }, -- Una extraña pareja
+        { 91860, 22, 18, 16 }, -- Un destino funesto
         { 91861, 22, 18, 16 }, -- En el castillo de Fenris
         { 91862, 22, 18, 16 }, -- Lumina Vientocantor
         { 96204, 22, 18, 16 }, -- La cólera de la Formavientos
         { 95034, 24, 18, 16 }, -- La deuda
         { 95036, 25, 20, 16 }, -- Una hoja tocada por la luna
-        { 95111, 25, 20, 8589934770 }, -- Un talento infravalorado
-        { 95125, 25, 20, 8589934770 }, -- Obra maestra de Ott
-        { 95126, 25, 20, 8589934770 }, -- La hoja de plata lunar
+        { 95042, 25, 20, 8589934770 }, -- En busca de la gema Kor
+        { 95111, 25, 20, 16 }, -- Un talento infravalorado
+        { 95125, 25, 20, 16 }, -- Obra maestra de Ott
+        { 95126, 25, 20, 16 }, -- La hoja de plata lunar
         { 95140, 26, 20, 16 }, -- Viejo Ojofuego
     },
 })
@@ -382,11 +397,11 @@ QR:RegisterClassGuide({
     faction = "Horde",
     class = "PALADIN",
     titleQuest = 95803,
-    minLevel = 2,
+    minLevel = 1,
     maxLevel = 12,
     areaId = 85,
     zone = "Tirisfal Glades",
-    focus = { 28.9, 48.6 },   -- punto medio de la cadena en el mapa de la zona
+    focus = { 31.3, 51.2 },   -- punto medio de la cadena en el mapa de la zona
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
@@ -394,7 +409,7 @@ QR:RegisterClassGuide({
         { "item", 246265, 91316 },
         { "choice", 246164, 91285 },
         { "choice", 246165, 91285 },
-        { "rep", 68, 575 },
+        { "rep", 68, 625 },
         { "rep", 67, 118.75 },
         { "rep", 76, 118.75 },
         { "rep", 81, 118.75 },
@@ -402,8 +417,11 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 98601, 1, 1, 16 }, -- Una senda complicada
         { 90902, 2, 2, 16 }, -- Redescubriendo la Luz
         { 91208, 4, 4, 16 }, -- Momento de aceptación
+        { 91209, 4, 4, 16 }, -- Proseguir tu entrenamiento
+        { 91282, 11, 8, 16 }, -- Un segundo hogar
         { 91285, 11, 7, 16 }, -- Múrlocs a las puertas
         { 91294, 11, 8, 16 }, -- Una visita por el recinto
         { 91316, 11, 8, 16 }, -- Trabajos de reparación
@@ -420,22 +438,23 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
-    key = "Horde_Class_PALADIN_7508",
+    key = "Horde_Class_PALADIN_7509",
     faction = "Horde",
     class = "PALADIN",
-    titleQuest = 7508,
+    titleQuest = 7509,
     minLevel = 60,
     maxLevel = 60,
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
-        { "item", 18348, 0 },
-        { "rep", 809, 200 },
+        { "item", 18348, 7509 },
+        { "rep", 809, 400 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 7507, 60, 60 }, -- Compendio de Nostro
         { 7508, 60, 60 }, -- Forjar Quel'Serrar
+        { 7509, 60, 60 }, -- Forjar Quel'Serrar
     },
 })
 
@@ -444,7 +463,7 @@ QR:RegisterClassGuide({
     faction = "Horde",
     class = "PALADIN",
     misc = true,
-    minLevel = 1,
+    minLevel = 4,
     maxLevel = 60,
     areaId = 139,
     zone = "Eastern Plaguelands",
@@ -452,22 +471,17 @@ QR:RegisterClassGuide({
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
-        { "item", 272448, 95042 },
         { "rep", 529, 1600 },
-        { "rep", 68, 385 },
-        { "rep", 530, 368.75 },
-        { "rep", 76, 318.75 },
+        { "rep", 530, 350 },
+        { "rep", 76, 300 },
+        { "rep", 68, 260 },
         { "rep", 809, 200 },
-        { "rep", 67, 68.75 },
-        { "rep", 81, 68.75 },
+        { "rep", 67, 50 },
+        { "rep", 81, 50 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
-        { 98601, 1, 1, 16 }, -- Una senda complicada
         { 792, 4, 2, 8589934770 }, -- Familiares viles
-        { 91209, 4, 4, 16 }, -- Proseguir tu entrenamiento
-        { 91282, 11, 8, 16 }, -- Un segundo hogar
-        { 95042, 25, 20, 8589934770 }, -- En busca de la gema Kor
         { 94971, 40, 40, 16 }, -- A Paladin's Steed
         { 97022, 40, 40, 16 }, -- Report to Danitha
         { 84318, 57, 54 }, -- Oi!

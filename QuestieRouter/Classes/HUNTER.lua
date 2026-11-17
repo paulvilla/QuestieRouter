@@ -10,9 +10,9 @@ QR:RegisterClassGuide({
     titleQuest = 94050,
     minLevel = 10,
     maxLevel = 10,
-    areaId = 141,
-    zone = "Teldrassil",
-    focus = { 56.7, 59.5 },   -- punto medio de la cadena en el mapa de la zona
+    areaId = 16593,
+    zone = "Zephras Isle",
+    focus = { 56.7, 67.0 },   -- punto medio de la cadena en el mapa de la zona
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
@@ -26,17 +26,18 @@ QR:RegisterClassGuide({
         { 6084, 10, 10, 4 }, -- Domesticar la bestia
         { 6085, 10, 10, 4 }, -- Domesticar la bestia
         { 6086, 10, 10, 4 }, -- Entrenar a la bestia
+        { 94007, 10, 10, 12884901888 }, -- Domar a la bestia
         { 94792, 10, 10, 4294967373 }, -- Domar a la bestia
         { 94863, 10, 10, 4294967373 }, -- Domar a la bestia
-        { 94864, 10, 10, 4294967373 }, -- Domar a la bestia
-        { 94793, 10, 10, 4294967373 }, -- Entrenar a la bestia
+        { 94864, 10, 10, 1 }, -- Domar a la bestia
+        { 94793, 10, 10, 1 }, -- Entrenar a la bestia
         { 94978, 10, 10, 12884901888 }, -- Domar a la bestia
         { 94979, 10, 10, 12884901888 }, -- Domar a la bestia
-        { 94013, 10, 10, 12884901888 }, -- Domar a la bestia
+        { 94013, 10, 10, 59421121885698253195157962752 }, -- Domar a la bestia
         { 6101, 10, 10, 8 }, -- Domesticar la bestia
         { 6102, 10, 10, 8 }, -- Domesticar la bestia
         { 6103, 10, 10, 8 }, -- Domesticar la bestia
-        { 94050, 10, 10, 12884901888 }, -- Entrenar a la bestia
+        { 94050, 10, 10, 59421121885698253195157962752 }, -- Entrenar a la bestia
     },
 })
 
@@ -63,6 +64,33 @@ QR:RegisterClassGuide({
         { 8153, 52, 50 }, -- Cuernos de corcel
         { 8231, 52, 50 }, -- Los vándalos marinos
         { 8232, 52, 50 }, -- El draco verde
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Alliance_Class_HUNTER_7636",
+    faction = "Alliance",
+    class = "HUNTER",
+    titleQuest = 7636,
+    minLevel = 60,
+    maxLevel = 60,
+    areaId = 361,
+    zone = "Felwood",
+    focus = { 47.7, 23.6 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "item", 18707, 7636 },
+        { "item", 18724, 7635 },
+        { "item", 18714, 7634 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 7632, 60, 60 }, -- La hoja antigua
+        { 7633, 60, 60 }, -- Una presentación
+        { 7634, 60, 60 }, -- Carcaj antiguo cosido con tendón
+        { 7635, 60, 60 }, -- La cuerda adecuada
+        { 7636, 60, 60 }, -- El báculo de los Ancestros
     },
 })
 
@@ -105,12 +133,10 @@ QR:RegisterClassGuide({
     rewards = {
         { "item", 20702, 8377 },
         { "item", 20713, 8377 },
-        { "item", 18707, 7636 },
-        { "item", 18724, 7635 },
-        { "item", 18714, 7634 },
         { "item", 18473, 7503 },
         { "rep", 529, 1600 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
         { "rep", 609, 400 },
         { "rep", 809, 200 },
         { "rep", 47, 50 },
@@ -132,17 +158,18 @@ QR:RegisterClassGuide({
         { 6076, 10, 10, 4 }, -- El camino del cazador
         { 6721, 10, 10, 8 }, -- El camino del cazador
         { 6722, 10, 10, 8 }, -- El camino del cazador
-        { 94007, 10, 10, 12884901888 }, -- Domar a la bestia
         { 78830, 40, 26 }, -- El terror de los cielos del desierto
         { 7503, 60, 54 }, -- La mayor raza de cazadores
-        { 7633, 60, 60 }, -- Una presentación
-        { 7634, 60, 60 }, -- Carcaj antiguo cosido con tendón
-        { 7635, 60, 60 }, -- La cuerda adecuada
-        { 7636, 60, 60 }, -- El báculo de los Ancestros
         { 8062, 60, 60 }, -- Dechados de Poder: los Brazales de depredador
         { 8066, 60, 60 }, -- Dechados de Poder: el Cinturón de predador
         { 8067, 60, 60 }, -- Dechados de Poder: el Manto de depredador
+        { 8187, 60, 58 }, -- Llamada del halcón
         { 8377, 60, 58 }, -- Armamentos de guerra
+        { 8626, 60, 60 }, -- Las botas de artillero
+        { 8656, 60, 60 }, -- El camisote de asediador
+        { 8657, 60, 60 }, -- La diadema de artillero
+        { 8658, 60, 60 }, -- Los leotardos de artillero
+        { 8659, 60, 60 }, -- Los espaldares de artillero
         { 8696, 60, 60 }, -- La capa de la senda oculta
         { 8704, 60, 60 }, -- El anillo con sello de la senda oculta
         { 8712, 60, 60 }, -- La guadaña de la Senda Oculta
@@ -173,7 +200,7 @@ QR:RegisterClassGuide({
     maxLevel = 10,
     areaId = 16593,
     zone = "Zephras Isle",
-    focus = { 59.6, 72.6 },   -- punto medio de la cadena en el mapa de la zona
+    focus = { 56.7, 67.0 },   -- punto medio de la cadena en el mapa de la zona
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
@@ -182,10 +209,11 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 94007, 10, 10, 12884901888 }, -- Domar a la bestia
         { 94978, 10, 10, 12884901888 }, -- Domar a la bestia
         { 94979, 10, 10, 12884901888 }, -- Domar a la bestia
-        { 94013, 10, 10, 12884901888 }, -- Domar a la bestia
-        { 94050, 10, 10, 12884901888 }, -- Entrenar a la bestia
+        { 94013, 10, 10, 59421121885698253195157962752 }, -- Domar a la bestia
+        { 94050, 10, 10, 59421121885698253195157962752 }, -- Entrenar a la bestia
     },
 })
 
@@ -245,6 +273,33 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
+    key = "Horde_Class_HUNTER_7636",
+    faction = "Horde",
+    class = "HUNTER",
+    titleQuest = 7636,
+    minLevel = 60,
+    maxLevel = 60,
+    areaId = 361,
+    zone = "Felwood",
+    focus = { 47.7, 23.6 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "item", 18707, 7636 },
+        { "item", 18724, 7635 },
+        { "item", 18714, 7634 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 7632, 60, 60 }, -- La hoja antigua
+        { 7633, 60, 60 }, -- Una presentación
+        { 7634, 60, 60 }, -- Carcaj antiguo cosido con tendón
+        { 7635, 60, 60 }, -- La cuerda adecuada
+        { 7636, 60, 60 }, -- El báculo de los Ancestros
+    },
+})
+
+QR:RegisterClassGuide({
     key = "Horde_Class_HUNTER_8148",
     faction = "Horde",
     class = "HUNTER",
@@ -283,12 +338,10 @@ QR:RegisterClassGuide({
     rewards = {
         { "item", 20702, 8377 },
         { "item", 20713, 8377 },
-        { "item", 18707, 7636 },
-        { "item", 18724, 7635 },
-        { "item", 18714, 7634 },
         { "item", 18473, 7503 },
         { "rep", 529, 1600 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
         { "rep", 609, 400 },
         { "rep", 530, 200 },
         { "rep", 76, 200 },
@@ -310,17 +363,18 @@ QR:RegisterClassGuide({
         { 6068, 10, 10, 130 }, -- El camino del cazador
         { 6069, 10, 10, 130 }, -- El camino del cazador
         { 6070, 10, 10, 130 }, -- El camino del cazador
-        { 94007, 10, 10, 12884901888 }, -- Domar a la bestia
         { 78830, 40, 26 }, -- El terror de los cielos del desierto
         { 7503, 60, 54 }, -- La mayor raza de cazadores
-        { 7633, 60, 60 }, -- Una presentación
-        { 7634, 60, 60 }, -- Carcaj antiguo cosido con tendón
-        { 7635, 60, 60 }, -- La cuerda adecuada
-        { 7636, 60, 60 }, -- El báculo de los Ancestros
         { 8062, 60, 60 }, -- Dechados de Poder: los Brazales de depredador
         { 8066, 60, 60 }, -- Dechados de Poder: el Cinturón de predador
         { 8067, 60, 60 }, -- Dechados de Poder: el Manto de depredador
+        { 8187, 60, 58 }, -- Llamada del halcón
         { 8377, 60, 58 }, -- Armamentos de guerra
+        { 8626, 60, 60 }, -- Las botas de artillero
+        { 8656, 60, 60 }, -- El camisote de asediador
+        { 8657, 60, 60 }, -- La diadema de artillero
+        { 8658, 60, 60 }, -- Los leotardos de artillero
+        { 8659, 60, 60 }, -- Los espaldares de artillero
         { 8696, 60, 60 }, -- La capa de la senda oculta
         { 8704, 60, 60 }, -- El anillo con sello de la senda oculta
         { 8712, 60, 60 }, -- La guadaña de la Senda Oculta

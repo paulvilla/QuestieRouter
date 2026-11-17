@@ -88,8 +88,12 @@ local playerRaceBit
 local function ForMyRace(races)
     if not races or races == 0 then return true end
     if not playerRaceBit then
+        -- el bit de la raza es su PlayableRaceBit (el que usa Questie), no siempre 2^(id - 1): los Skyborne de WoW
+        -- Forever van en los bits 32 y 33. Sin la tabla de Questie, el de siempre.
         local id = select(3, UnitRace("player")) or 0
-        playerRaceBit = id > 0 and 2 ^ (id - 1) or 0
+        local lib = _G.LibQuestieDB
+        local byId = lib and lib.Enum and lib.Enum.raceMaskById
+        playerRaceBit = (byId and byId[id]) or (id > 0 and 2 ^ (id - 1)) or 0
     end
     if playerRaceBit == 0 then return true end
     -- sin libreria de bits: las mascaras pasan de 32 bits
@@ -112,6 +116,64 @@ function QR.ClassRewardName(g)
             return name
         end
     end
+end
+
+local function KnowsSpell(id)
+    local f = _G.IsPlayerSpell or _G.IsSpellKnown
+    if not (f and id) then return false end
+    local ok, known = pcall(f, id)
+    return ok and known or false
+end
+
+--- ¿Ya tienes lo que da la guia? (el hechizo principal de una guia de clase: invocar infernal, abisario...)
+local function HasMainReward(g)
+    for _, r in ipairs(g.rewards or {}) do
+        if r[1] == "spell" then return KnowsSpell(r[2]) end
+        if r[1] ~= "rep" then return false end   -- (la principal es un objeto: eso no se puede saber asi)
+    end
+    return false
+end
+
+--- Estado de una guia (lo usan el menu de guias y el menu rapido): "done" (hecha), "active" (empezada),
+--- "lowlevel" (aun no tienes el nivel de su primera mision) o nil (sin empezar y a tu nivel).
+--- Hecha: todas sus misiones entregadas, o la mision que da su recompensa (titleQuest), o ya conoces el hechizo que
+--- da (una cadena puede tener una mision suelta que Questie no marca, y el hechizo lo puedes tener de antes).
+function QR.GuideState(g)
+    local B = QR.Bridge
+    if not (B and B.QuestStatus and g and g.quests) then return nil end
+    local done, started, minReq, open = 0, false, nil, false
+    local complete = Questie and Questie.db and Questie.db.char and Questie.db.char.complete or {}
+    local query = B.QuestieDB and B.QuestieDB.QueryQuestSingle
+    for _, row in ipairs(g.quests) do
+        local ok, st = pcall(B.QuestStatus, B, row[1])
+        st = ok and st or nil
+        -- una mision que se excluye con otra ya hecha (la misma con otro NPC u otra ciudad) cuenta como hecha
+        if st ~= "done" and st ~= "active" and query then
+            local okE, excl = pcall(query, row[1], "exclusiveTo")
+            for _, x in ipairs((okE and type(excl) == "table") and excl or {}) do
+                if complete[x] then st = "done" break end
+            end
+        end
+        if st == "done" then done = done + 1; started = true
+        elseif st == "active" then started = true; open = true
+        elseif st == "available" and not (QR.charDB and QR.charDB.skipped and QR.charDB.skipped[row[1]]) then
+            open = true   -- (las saltadas a proposito no cuentan)
+        end
+        minReq = math.min(minReq or row[3], row[3])
+    end
+    if #g.quests > 0 and done == #g.quests then return "done" end
+    -- Los atajos (la mision principal entregada, o el hechizo ya aprendido) solo si no queda ninguna mision de la guia
+    -- en el registro o por coger: una guia con dos recompensas (el sucubo y el incubo) no esta hecha por entregar la
+    -- principal si la otra rama sigue a medias. Las bloqueadas o excluidas no cuentan (esas no se van a poder hacer).
+    if open then return "active" end
+    if g.titleQuest and not g.misc then
+        local ok, st = pcall(B.QuestStatus, B, g.titleQuest)
+        if ok and st == "done" then return "done" end
+    end
+    if g.class and not g.misc and HasMainReward(g) then return "done" end
+    if started then return "active" end
+    if minReq and UnitLevel("player") < minReq then return "lowlevel" end
+    return nil
 end
 
 function QR:RegisterClassGuide(g)

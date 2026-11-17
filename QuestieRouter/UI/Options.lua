@@ -635,7 +635,8 @@ local function AddOnStatus(a)
     if reason == "DISABLED" then return "reload", "Enabled: reload the interface to use it", "reload" end
     if reason == "DEP_DISABLED" then return "off", "The routes engine is disabled", "enable" end
     if reason == "INTERFACE_VERSION" then return "old", "Out of date: tick \"Load out of date AddOns\"" end
-    if not loadable and reason then return "error", string.format(L["Cannot load: %s"], tostring(reason)) end
+    -- carga bajo demanda y aun sin cargar: es lo normal (el juego lo dice asi), no un error
+    if not loadable and reason and reason ~= "DEMAND_LOADED" then return "error", string.format(L["Cannot load: %s"], tostring(reason)) end
     -- el mapa de un continente cuyo motor no carga nunca podra cargarse
     if a.map and not E and QR.Walk and QR.Walk.engine == false then return "error", "The routes engine failed to load" end
     return "lazy", a.hint
@@ -715,6 +716,35 @@ local function AddOnStatusRow(parent, a)
         else
             btn:Hide()
         end
+    end
+    return row
+end
+
+--- Fila con un boton a todo lo ancho (mismo aspecto que el boton "Activar" de Estado: tarjeta con el acento)
+local function ActionButton(parent, text, onClick)
+    local row = CreateFrame("Frame", nil, parent)
+    row:SetHeight(ROW + 6)
+    local btn = CreateFrame("Button", nil, row)
+    btn:SetPoint("TOPLEFT", 4, -4)
+    btn:SetPoint("BOTTOMRIGHT", -4, 4)
+    btn.bg = QR.Skin:CreateCard(btn)
+    btn.bg:SetAllPoints()
+    btn.art = CreateFrame("Frame", nil, btn)
+    btn.art:SetAllPoints()
+    btn.art:SetFrameLevel(btn.bg:GetFrameLevel() + 2)
+    btn.text = btn.art:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    btn.text:SetPoint("CENTER")
+    btn:SetScript("OnEnter", function(s) s.bg.bg:SetAlpha(1) end)
+    btn:SetScript("OnLeave", function(s) s.bg.bg:SetAlpha(0.85) end)
+    btn:SetScript("OnClick", onClick)
+    row.button = btn
+    function row:Update()
+        btn.text:SetText(L[text])
+        btn.text:SetTextColor(1, 1, 1)
+        local r, g, b = QR.Skin:Color("accent")
+        btn.bg.bg:SetVertexColor(r * 0.85, g * 0.85, b * 0.85, 1)
+        btn.bg.bg:SetAlpha(btn:IsMouseOver() and 1 or 0.85)
+        QR.Skin:SetRounded(btn.bg, btn.bg.bg)
     end
     return row
 end
@@ -870,7 +900,14 @@ function Options:Create(parent)
     local function pct(v) return v .. " %" end
     local function px(v) return v .. " px" end
     local controls = {
-        -- estado de los addons de rutas (primera seccion: se ve nada mas abrir Opciones)
+        -- instalador (primera seccion): abre el asistente de instalacion de QuestieRouter (/qr install)
+        Header(content, "SETUP"),
+        ActionButton(content, "Open the QuestieRouter installer", function()
+            if QR.Browser and QR.Browser.frame and QR.Browser.frame:IsShown() then QR.Browser.frame:Hide() end
+            if QR.Install then QR.Install:Show() end
+        end),
+
+        -- estado de los addons de rutas
         Header(content, "STATUS"),
         AddOnStatusRow(content, ADDONS[1]),
         AddOnStatusRow(content, ADDONS[2]),

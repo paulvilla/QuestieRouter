@@ -115,11 +115,15 @@ local function PaintMarker(m, t, size, fontScale)
         m.text:Show()
         m.icon:Hide()
     else
-        local travelIcon = (t.travelKind == "flight") and "Gryphon" or (t.travelKind == "border" and "Arrow") or "Boat"
+        local TRAVEL_MARK = { flight = "Gryphon", border = "Arrow", road = "Arrow", walk = "Arrow", tram = "Tram",
+                              portal = "Arrow", door = "Arrow" }
+        local travelIcon = TRAVEL_MARK[t.travelKind] or "Boat"
         local icon = (t.kind == "travel" and (MEDIA .. "Icons\\UI\\" .. travelIcon .. ".tga")) or t.kind == "corpse" and ICON_CORPSE
+            or (t.kind == "manualpoint" and (MEDIA .. "Icons\\UI\\Pin.tga"))   -- punto añadido a mano (Alt + clic)
             or (t.kind == "turnin" and ICON_TURNIN or (t.kind == "pickup" and ICON_PICKUP or ICON_OBJECTIVE))
         m.icon:SetTexture(icon)
-        if t.kind == "travel" then m.icon:SetVertexColor(QR.Skin:TextAccent()) else m.icon:SetVertexColor(1, 1, 1) end
+        if t.kind == "travel" or t.kind == "manualpoint" then m.icon:SetVertexColor(QR.Skin:TextAccent())
+        else m.icon:SetVertexColor(1, 1, 1) end
         m.icon:Show()
         m.text:Hide()
     end
@@ -376,7 +380,7 @@ function MapLines:UpdateWorldMap()
     elseif geo then
         owner.marker:Hide(); owner.glow:Hide()
     end
-    local f = t.final
+    local f = t.final or (t.via and t.via.final)
     if f and st.fx then
         local fbadge = f.fromGame and true or false
         local fsize = fbadge and 17 or 22
@@ -556,37 +560,45 @@ local function RouteCanvas(route)
     return c
 end
 
---- Ancla los trozos de la ruta y calcula la posicion del marcador del final (solo al recolocar)
+--- Ancla los trozos de la ruta y calcula la posicion del marcador del final (solo al recolocar).
+--- Rutas que se dibujan: la del viaje (destino "travel") y la de los puntos de paso (Alt + clic en el mapa) hasta la
+--- guia, ya calculada por el router desde el punto (Router:RouteFrom: caminos, vuelos, barcos segun los ajustes); si
+--- hay que viajar hasta el punto, las dos seguidas.
 function MapLines:LayoutRoute(owner, t, W, H)
     local st = owner.st
-    local route = t.kind == "travel" and t.route
     st.fx, st.fy = nil, nil
-    if not route then self:HideRoute(owner); return end
+    local routes = {}
+    if t.kind == "travel" and t.route then routes[#routes + 1] = t.route end
+    local via = t.via or (t.final and t.final.via)
+    if via and via.route then routes[#routes + 1] = via.route end
+    if #routes == 0 then self:HideRoute(owner); return end
     local cfg = QR.db.lines
-    local c = RouteCanvas(route)
     local n = 0
-    for si, seg in ipairs(route.segments) do
-        -- el primer tramo a pie (desde el jugador) ya lo dibuja la linea principal
-        if not seg.fromPlayer then
-            for _, pts in ipairs(c.segs[si]) do
-                for k = 1, #pts - 1 do
-                    local a, b = pts[k], pts[k + 1]
-                    local x1, y1, x2, y2 = a[1] * W, -a[2] * H, b[1] * W, -b[2] * H
-                    local dx, dy = x2 - x1, y2 - y1
-                    local len = math.sqrt(dx * dx + dy * dy)
-                    if len > 0.5 then
-                        n = n + 1
-                        local line = owner.routeLines[n]
-                        if not line then
-                            line = NewAnimatedLine(owner, "OVERLAY")
-                            owner.routeLines[n] = line
+    for _, route in ipairs(routes) do
+        local c = RouteCanvas(route)
+        for si, seg in ipairs(route.segments) do
+            -- el primer tramo a pie (desde el jugador) ya lo dibuja la linea principal
+            if not seg.fromPlayer then
+                for _, pts in ipairs(c.segs[si]) do
+                    for k = 1, #pts - 1 do
+                        local a, b = pts[k], pts[k + 1]
+                        local x1, y1, x2, y2 = a[1] * W, -a[2] * H, b[1] * W, -b[2] * H
+                        local dx, dy = x2 - x1, y2 - y1
+                        local len = math.sqrt(dx * dx + dy * dy)
+                        if len > 0.5 then
+                            n = n + 1
+                            local line = owner.routeLines[n]
+                            if not line then
+                                line = NewAnimatedLine(owner, "OVERLAY")
+                                owner.routeLines[n] = line
+                            end
+                            line:SetStartPoint("TOPLEFT", owner, x1, y1)
+                            line:SetEndPoint("TOPLEFT", owner, x2, y2)
+                            line.len = len
+                            line.styleOverride, line.color = ROUTE_STYLE[seg.kind], ROUTE_COLOR[seg.kind]
+                            StyleLine(line, cfg.alphaWorld or 0.9, line.styleOverride, line.color)
+                            line:Show()
                         end
-                        line:SetStartPoint("TOPLEFT", owner, x1, y1)
-                        line:SetEndPoint("TOPLEFT", owner, x2, y2)
-                        line.len = len
-                        line.styleOverride, line.color = ROUTE_STYLE[seg.kind], ROUTE_COLOR[seg.kind]
-                        StyleLine(line, cfg.alphaWorld or 0.9, line.styleOverride, line.color)
-                        line:Show()
                     end
                 end
             end
@@ -594,8 +606,9 @@ function MapLines:LayoutRoute(owner, t, W, H)
     end
     for k = n + 1, owner.nRoute do owner.routeLines[k]:Hide() end
     owner.nRoute = n
-    -- marcador del final del viaje (el primer NPC / objetivo de la guia)
-    local f = t.final
+    -- marcador del final: el del viaje (el primer NPC / objetivo de la guia, o el punto de paso) o, yendo a un punto de
+    -- paso, el destino de la guia
+    local f = t.final or (t.via and t.via.final)
     if f then
         if f.uiMapId then st.fx, st.fy = CanvasFromZone(f.uiMapId, f.x, f.y) else st.fx, st.fy = CanvasFromWorld(f.wx, f.wy, f.instance) end
     end

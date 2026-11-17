@@ -30,6 +30,9 @@ local function SameTarget(a, b)
         and a.travelKind == b.travelKind and SamePlace(a, b)
         -- viajes: misma ruta (p. ej. al activar / desactivar los vuelos puede empezar igual y cambiar despues)
         and (a.route and a.route.key) == (b.route and b.route.key)
+        -- puntos de paso: mismo camino despues del punto (otros puntos y destino de la guia)
+        and (a.via and a.via.key) == (b.via and b.via.key)
+        and (a.final and a.final.via and a.final.via.key) == (b.final and b.final.via and b.final.via.key)
 end
 
 local function DistanceTo(t)
@@ -107,6 +110,41 @@ function Target:Refresh(force)
         local quest = QR.Bridge:GetQuest(QR.Bridge:GetActiveQuestId())
         candidate = QR.Bridge:ComputeTarget(quest)
     end
+    -- punto añadido a mano (Alt + clic en el mapa): va primero. El planificador ya ha calculado (su lista de pasos sigue
+    -- al dia y al llegar al punto se sigue con ella)
+    -- Con puntos de paso (Alt + clic) la guia no se oculta: el destino lleva en .via el resto del camino (los demas
+    -- puntos y el destino de la guia, calculado desde el ultimo punto) para dibujarlo en el mapa.
+    local wp = QR.Waypoints and QR.Waypoints:First()
+    if wp then
+        local guideTarget = candidate
+        candidate = QR.Waypoints:Target(wp)
+        if QR.Waypoints:ViaMode() then
+            local list = QR.Waypoints:All()
+            local points, key = {}, {}
+            for i = 2, #list do
+                points[#points + 1] = QR.Waypoints:Target(list[i])
+                key[#key + 1] = string.format("%.4f,%.4f", list[i].x or 0, list[i].y or 0)
+            end
+            if guideTarget then
+                points[#points + 1] = guideTarget
+                key[#key + 1] = string.format("%s:%s:%.1f,%.1f", tostring(guideTarget.questId), tostring(guideTarget.kind),
+                    guideTarget.wx or 0, guideTarget.wy or 0)
+            end
+            -- el camino de verdad entre cada punto y el siguiente (vuelos, barcos, pasos entre zonas y, a pie, por el
+            -- terreno), como la ruta desde el jugador; no una recta
+            local route = { segments = {} }
+            local prev = candidate
+            for _, p in ipairs(points) do
+                local r = QR.Router and QR.Router.RouteFrom and QR.Router:RouteFrom(p, prev.wx, prev.wy, prev.instance)
+                if r then
+                    for _, seg in ipairs(r.segments) do route.segments[#route.segments + 1] = seg end
+                    key[#key + 1] = r.key or ""
+                end
+                prev = p
+            end
+            candidate.via = { points = points, final = guideTarget, route = route, key = table.concat(key, "|") }
+        end
+    end
 
     -- viajes: si compensa, primero al maestro de vuelo o al muelle
     if candidate and QR.Router then candidate = QR.Router:Wrap(candidate) end
@@ -166,6 +204,7 @@ function Target:Init()
     -- mueve un deslizador de Opciones
     local settingsPending = false
     QR:On("SETTINGS_CHANGED", function()
+        if QR.Router and QR.Router.ClearRouteFrom then QR.Router:ClearRouteFrom() end   -- (rutas desde puntos de paso)
         if settingsPending then return end
         settingsPending = true
         C_Timer.After(0.3, function()

@@ -25,16 +25,16 @@ QR:RegisterClassGuide({
     quests = {
         { 26, 16, 16, 8 }, -- Una lección que aprender
         { 29, 16, 16, 8 }, -- La prueba del lago
-        { 272, 16, 16, 4294967304 }, -- La prueba del león marino
+        { 272, 16, 16, 8 }, -- La prueba del león marino
         { 5061, 16, 16, 8 }, -- Forma acuática
     },
 })
 
 QR:RegisterClassGuide({
-    key = "Alliance_Class_DRUID_94638",
+    key = "Alliance_Class_DRUID_94914",
     faction = "Alliance",
     class = "DRUID",
-    titleQuest = 94638,
+    titleQuest = 94914,
     minLevel = 10,
     maxLevel = 10,
     areaId = 1657,
@@ -44,17 +44,20 @@ QR:RegisterClassGuide({
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
         { "spell", 5487, 0 },
-        { "rep", 609, 275 },
-        { "rep", 2758, 100 },
+        { "rep", 609, 325 },
+        { "rep", 2758, 200 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 5921, 10, 10, 8 }, -- Claro de la Luna
+        { 5925, 10, 10, 8 }, -- Atendiendo a la llamada
         { 5929, 10, 10, 8 }, -- Espíritu del gran oso
         { 5931, 10, 10, 8 }, -- El regreso a Darnassus
         { 6001, 10, 10, 8 }, -- Cuerpo y corazón
         { 94006, 10, 10, 12884901888 }, -- El gran espíritu de Ursera
-        { 94638, 10, 10, 12884901888 }, -- Fuerza y misericordia
+        { 94638, 10, 10, 59421121885698253195157962752 }, -- Fuerza y misericordia
+        { 94912, 10, 10, 4294967296 }, -- Descendiente de la naturaleza
+        { 94914, 10, 10, 19807040628566084398385987584 }, -- Claro de la Luna
     },
 })
 
@@ -105,7 +108,7 @@ QR:RegisterClassGuide({
         { 98394, 20, 20, 8 }, -- El gran espíritu felino
         { 98396, 20, 20, 8 }, -- El gran espíritu felino
         { 98731, 20, 20, 8 }, -- Bendiciones del gran espíritu felino
-        { 98397, 20, 20, 4294967304 }, -- A Darnassus
+        { 98397, 20, 20, 19807040628566084398385987592 }, -- A Darnassus
     },
 })
 
@@ -134,10 +137,10 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
-    key = "Alliance_Class_DRUID_9053",
+    key = "Alliance_Class_DRUID_9063",
     faction = "Alliance",
     class = "DRUID",
-    titleQuest = 9053,
+    titleQuest = 9063,
     minLevel = 52,
     maxLevel = 52,
     areaId = 490,
@@ -156,6 +159,7 @@ QR:RegisterClassGuide({
         { 9052, 52, 50 }, -- Veneno de pétalo de sangre
         { 9051, 52, 50 }, -- Prueba de toxicidad
         { 9053, 52, 50 }, -- Un ingrediente mejor
+        { 9063, 52, 50 }, -- Torwa Abrecaminos
     },
 })
 
@@ -202,10 +206,10 @@ QR:RegisterClassGuide({
         { "item", 20704, 8382 },
         { "item", 20714, 8382 },
         { "rep", 529, 1600 },
-        { "rep", 609, 500 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
+        { "rep", 609, 450 },
         { "rep", 809, 200 },
-        { "rep", 2758, 100 },
         { "rep", 69, 50 },
         { "rep", 2778, 50 },
         { "rep", 2779, 50 },
@@ -216,16 +220,18 @@ QR:RegisterClassGuide({
         { 92485, 2, 2 }, -- El estudio de la naturaleza
         { 5923, 10, 10, 8 }, -- Escucha la llamada
         { 5924, 10, 10, 8 }, -- Escucha la llamada
-        { 5925, 10, 10, 8 }, -- Atendiendo a la llamada
-        { 94912, 10, 10, 4294967296 }, -- Descendiente de la naturaleza
-        { 94914, 10, 10, 4294967296 }, -- Claro de la Luna
         { 81924, 50, 40 }, -- Wisdom of the Guardians
-        { 9063, 52, 50 }, -- Torwa Abrecaminos
         { 7506, 60, 54 }, -- El Sueño Esmeralda
         { 8057, 60, 60 }, -- Dechados de Poder: los Brazales de adivino
         { 8064, 60, 60 }, -- Dechados de Poder: el Cinturón de adivino
         { 8065, 60, 60 }, -- Dechados de Poder: la guerrera de haruspex
+        { 8192, 60, 58 }, -- Caricia del animista
         { 8382, 60, 58 }, -- Armamentos de guerra
+        { 8665, 60, 60 }, -- Las botas del Génesis
+        { 8666, 60, 60 }, -- El jubón del Génesis
+        { 8667, 60, 60 }, -- El casco del Génesis
+        { 8668, 60, 60 }, -- Los pantalones del Génesis
+        { 8669, 60, 60 }, -- Las hombreras del Génesis
         { 8692, 60, 60 }, -- Capa de vida inagotable
         { 8700, 60, 60 }, -- La sortija de vida inagotable
         { 8708, 60, 60 }, -- La maza de vida inagotable
@@ -276,10 +282,10 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
-    key = "Horde_Class_DRUID_94638",
+    key = "Horde_Class_DRUID_94913",
     faction = "Horde",
     class = "DRUID",
-    titleQuest = 94638,
+    titleQuest = 94913,
     minLevel = 10,
     maxLevel = 10,
     areaId = 1638,
@@ -289,17 +295,20 @@ QR:RegisterClassGuide({
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
         { "spell", 5487, 0 },
-        { "rep", 609, 275 },
-        { "rep", 2758, 100 },
+        { "rep", 609, 325 },
+        { "rep", 2758, 200 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 5922, 10, 10, 32 }, -- Claro de la Luna
+        { 5928, 10, 10, 32 }, -- Escucha la llamada
         { 5930, 10, 10, 32 }, -- Espíritu del gran oso
         { 5932, 10, 10, 32 }, -- Vuelve a Cima del Trueno
         { 6002, 10, 10, 32 }, -- Cuerpo y corazón
         { 94006, 10, 10, 12884901888 }, -- El gran espíritu de Ursera
-        { 94638, 10, 10, 12884901888 }, -- Fuerza y misericordia
+        { 94638, 10, 10, 59421121885698253195157962752 }, -- Fuerza y misericordia
+        { 94911, 10, 10, 8589934592 }, -- Descendiente de la naturaleza
+        { 94913, 10, 10, 39614081257132168796771975168 }, -- Claro de la Luna
     },
 })
 
@@ -350,7 +359,7 @@ QR:RegisterClassGuide({
         { 98405, 20, 20, 32 }, -- El gran espíritu felino
         { 98342, 20, 20, 32 }, -- El gran espíritu felino
         { 98739, 20, 20, 32 }, -- Bendiciones del gran espíritu felino
-        { 98362, 20, 20, 8589934624 }, -- Viaje a Cima del Trueno
+        { 98362, 20, 20, 39614081257132168796771975200 }, -- Viaje a Cima del Trueno
     },
 })
 
@@ -379,10 +388,10 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
-    key = "Horde_Class_DRUID_9053",
+    key = "Horde_Class_DRUID_9063",
     faction = "Horde",
     class = "DRUID",
-    titleQuest = 9053,
+    titleQuest = 9063,
     minLevel = 52,
     maxLevel = 52,
     areaId = 490,
@@ -401,6 +410,7 @@ QR:RegisterClassGuide({
         { 9052, 52, 50 }, -- Veneno de pétalo de sangre
         { 9051, 52, 50 }, -- Prueba de toxicidad
         { 9053, 52, 50 }, -- Un ingrediente mejor
+        { 9063, 52, 50 }, -- Torwa Abrecaminos
     },
 })
 
@@ -447,12 +457,12 @@ QR:RegisterClassGuide({
         { "item", 20704, 8382 },
         { "item", 20714, 8382 },
         { "rep", 529, 1600 },
-        { "rep", 609, 500 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
+        { "rep", 609, 450 },
         { "rep", 809, 200 },
         { "rep", 76, 150 },
         { "rep", 530, 150 },
-        { "rep", 2758, 100 },
         { "rep", 81, 50 },
         { "rep", 2778, 50 },
         { "rep", 2779, 50 },
@@ -464,16 +474,18 @@ QR:RegisterClassGuide({
         { 792, 4, 2, 8589934770 }, -- Familiares viles
         { 5926, 10, 10, 32 }, -- Escucha la llamada
         { 5927, 10, 10, 32 }, -- Escucha la llamada
-        { 5928, 10, 10, 32 }, -- Escucha la llamada
-        { 94911, 10, 10, 8589934592 }, -- Descendiente de la naturaleza
-        { 94913, 10, 10, 8589934592 }, -- Claro de la Luna
         { 81924, 50, 40 }, -- Wisdom of the Guardians
-        { 9063, 52, 50 }, -- Torwa Abrecaminos
         { 7506, 60, 54 }, -- El Sueño Esmeralda
         { 8057, 60, 60 }, -- Dechados de Poder: los Brazales de adivino
         { 8064, 60, 60 }, -- Dechados de Poder: el Cinturón de adivino
         { 8065, 60, 60 }, -- Dechados de Poder: la guerrera de haruspex
+        { 8192, 60, 58 }, -- Caricia del animista
         { 8382, 60, 58 }, -- Armamentos de guerra
+        { 8665, 60, 60 }, -- Las botas del Génesis
+        { 8666, 60, 60 }, -- El jubón del Génesis
+        { 8667, 60, 60 }, -- El casco del Génesis
+        { 8668, 60, 60 }, -- Los pantalones del Génesis
+        { 8669, 60, 60 }, -- Las hombreras del Génesis
         { 8692, 60, 60 }, -- Capa de vida inagotable
         { 8700, 60, 60 }, -- La sortija de vida inagotable
         { 8708, 60, 60 }, -- La maza de vida inagotable

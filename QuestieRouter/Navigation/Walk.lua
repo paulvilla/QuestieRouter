@@ -374,7 +374,8 @@ function Walk:Status()
     end
     local px, py, pinst = QR.HBD:GetPlayerWorldPosition()
     out(string.format("mapa=%s, datos=%s, en memoria=%s", tostring(pinst),
-        tostring(E.Available and E.Available(pinst) or false), tostring(E.Resident and E.Resident(pinst) or "?")))
+        tostring(E.Available and E.Available(pinst) or false),
+        E.Resident and tostring(E.Resident(pinst) and true or false) .. (E.Resident(pinst) and "" or " (se carga con la primera ruta)") or "?"))
     if t and t.wx and px then out(string.format("distancia al destino: %.0f yd", Dist(px, py, t.wx, t.wy))) end
     out("buscando=" .. tostring(self.pending ~= nil) .. ", intento=" .. tostring(self.try or 1))
     local path = self.path
@@ -402,6 +403,12 @@ function Walk:Init()
         local t = QR.target
         if Enabled() and t and t.route then
             ok, err = pcall(Walk.RefineRoute, Walk, t.route)
+            if not ok and QR.db.debug then QR:Print("Walk: " .. tostring(err)) end
+        end
+        -- la ruta desde los puntos de paso (Alt + clic en el mapa) hasta la guia: tambien por el terreno
+        local via = t and (t.via or (t.final and t.final.via))
+        if Enabled() and via and via.route then
+            ok, err = pcall(Walk.RefineRoute, Walk, via.route)
             if not ok and QR.db.debug then QR:Print("Walk: " .. tostring(err)) end
         end
     end)

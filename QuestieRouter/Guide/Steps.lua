@@ -115,6 +115,9 @@ function Steps:FromTasks(tasks)
             local quest = B:GetQuest(t.questId)
             s.questName = t.questName
             s.lines, s.remaining, s.total = ObjectiveLines(quest)
+            -- nota propia de lo que hay que hacer (Data/QuestNotes.lua), debajo de los objetivos
+            local note = QR.QuestNote and QR.QuestNote(t.questId)
+            if note then table.insert(s.lines, { icon = "gossip", text = "|cffffd166" .. note .. "|r", note = true }) end
             local d = quest.Description
             s.description = Colorize(type(d) == "table" and d[1] or d, quest)
         elseif t.dist < s.point.dist then
@@ -210,7 +213,9 @@ end
 --- first (opcional): paso elegido por el jugador; va primero y el resto se ordena desde ahi
 function Steps:Simulate(liveSteps, first)
     local B = QR.Bridge
-    local px, py, pinst = QR.HBD:GetPlayerWorldPosition()
+    -- el orden empieza en tu posicion o, con puntos de paso (Alt + clic en el mapa), en el ultimo de ellos
+    local px, py, pinst
+    if QR.Waypoints then px, py, pinst = QR.Waypoints:PlanOrigin() else px, py, pinst = QR.HBD:GetPlayerWorldPosition() end
     local pool = {}
     for _, s in ipairs(liveSteps) do pool[#pool + 1] = s end
     local out = {}

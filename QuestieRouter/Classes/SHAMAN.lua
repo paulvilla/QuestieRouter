@@ -8,7 +8,7 @@ QR:RegisterClassGuide({
     faction = "Alliance",
     class = "SHAMAN",
     titleQuest = 94468,
-    minLevel = 11,
+    minLevel = 10,
     maxLevel = 14,
     areaId = 38,
     zone = "Loch Modan",
@@ -22,9 +22,10 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 94449, 10, 10, 4 }, -- La llamada del fuego
         { 94465, 11, 10, 4294967373 }, -- La llamada del fuego
         { 94466, 14, 10, 4 }, -- La llamada del fuego
-        { 94473, 13, 10, 4294967373 }, -- Sapta de fuego
+        { 94473, 13, 10, 4 }, -- Sapta de fuego
         { 94467, 14, 10, 4 }, -- La llamada del fuego
         { 94468, 14, 10, 4 }, -- La llamada del fuego
     },
@@ -64,22 +65,24 @@ QR:RegisterClassGuide({
     faction = "Alliance",
     class = "SHAMAN",
     titleQuest = 94472,
-    minLevel = 4,
+    minLevel = 1,
     maxLevel = 4,
     areaId = 1,
     zone = "Dun Morogh",
-    focus = { 27.8, 65.1 },   -- punto medio de la cadena en el mapa de la zona
+    focus = { 28.2, 66.3 },   -- punto medio de la cadena en el mapa de la zona
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
         { "spell", 8071, 0 },
         { "item", 5175, 94375 },
+        { "rep", 47, 50 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 98581, 1, 1, 4 }, -- Runa arcaica
         { 94373, 4, 4, 4294967373 }, -- La llamada de la tierra
         { 94374, 4, 4, 4294967373 }, -- La llamada de la tierra
-        { 94375, 4, 4, 4294967373 }, -- La llamada de la tierra
+        { 94375, 4, 4, 4 }, -- La llamada de la tierra
         { 94472, 4, 4, 4294967373 }, -- La sapta de tierra
     },
 })
@@ -112,7 +115,7 @@ QR:RegisterClassGuide({
         { 94616, 20, 20, 4294967373 }, -- La sapta de agua
         { 94502, 23, 20, 4294967373 }, -- La llamada del agua
         { 94503, 23, 20, 68 }, -- La llamada del agua
-        { 94505, 23, 20, 68 }, -- La llamada del agua
+        { 94505, 23, 20, 4 }, -- La llamada del agua
     },
 })
 
@@ -121,7 +124,7 @@ QR:RegisterClassGuide({
     faction = "Alliance",
     class = "SHAMAN",
     misc = true,
-    minLevel = 1,
+    minLevel = 4,
     maxLevel = 60,
     areaId = 139,
     zone = "Eastern Plaguelands",
@@ -133,13 +136,10 @@ QR:RegisterClassGuide({
         { "rep", 270, 450 },
         { "rep", 809, 200 },
         { "rep", 67, 150 },
-        { "rep", 47, 50 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
-        { 98581, 1, 1, 4 }, -- Runa arcaica
         { 96243, 4, 4, 68 }, -- Call of Earth
-        { 94449, 10, 10, 4 }, -- La llamada del fuego
         { 7505, 60, 54 }, -- El choque de Escarcha y tú
         { 8056, 60, 60 }, -- Dechados de Poder: los Brazales de augur
         { 8074, 60, 60 }, -- Dechados de Poder: el Cinturón de augur
@@ -172,6 +172,7 @@ QR:RegisterClassGuide({
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
+        { "spell", 5394, 96 },
         { "item", 5177, 96 },
         { "item", 6637, 972 },
     },
@@ -185,7 +186,7 @@ QR:RegisterClassGuide({
         { 972, 20, 20, 8589934770 }, -- La sapta de agua
         { 63, 23, 20, 8589934770 }, -- La llamada del agua
         { 100, 23, 20, 8589934770 }, -- La llamada del agua
-        { 96, 23, 20, 8589934770 }, -- La llamada del agua
+        { 96, 23, 20, 162 }, -- La llamada del agua
         { 1103, 23, 20, 8589934770 }, -- La llamada del agua
     },
 })
@@ -217,7 +218,7 @@ QR:RegisterClassGuide({
         { 79360, 33, 30, 8589934770 }, -- Ayuda elemental
         { 79364, 33, 30, 8589934770 }, -- Ojos en el cielo
         { 79361, 43, 30, 162 }, -- Tormenta, tierra y fuego
-        { 79366, 40, 30, 8589934770 }, -- Heed My Call
+        { 79366, 40, 30, 162 }, -- Heed My Call
         { 79442, 40, 30, 162 }, -- The Tempest's Weapons
     },
 })
@@ -229,9 +230,9 @@ QR:RegisterClassGuide({
     titleQuest = 1527,
     minLevel = 10,
     maxLevel = 13,
-    areaId = 16593,
-    zone = "Zephras Isle",
-    focus = { 53.0, 84.3 },   -- punto medio de la cadena en el mapa de la zona
+    areaId = 14,
+    zone = "Durotar",
+    focus = { 41.8, 55.5 },   -- punto medio de la cadena en el mapa de la zona
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
@@ -244,15 +245,45 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1522, 10, 10, 8589934770 }, -- La llamada del Fuego
+        { 1523, 10, 10, 8589934770 }, -- La llamada del Fuego
+        { 2983, 10, 10, 8589934770 }, -- La llamada del Fuego
+        { 2984, 10, 10, 8589934770 }, -- La llamada del Fuego
         { 97243, 10, 10, 8589934592 }, -- La llamada del fuego
-        { 97244, 10, 10, 8589934770 }, -- La llamada del fuego
-        { 97245, 10, 10, 8589934770 }, -- La llamada del fuego
-        { 97257, 10, 10, 8589934770 }, -- La llamada del fuego
+        { 97244, 10, 10, 8589934592 }, -- La llamada del fuego
+        { 97245, 10, 10, 8589934592 }, -- La llamada del fuego
+        { 97257, 10, 10, 39614081257132168796771975168 }, -- La llamada del fuego
         { 1524, 11, 10, 8589934770 }, -- La llamada del Fuego
         { 1525, 12, 10, 8589934770 }, -- La llamada del Fuego
         { 1464, 13, 10, 8589934770 }, -- La sapta de fuego
         { 1526, 13, 10, 8589934770 }, -- La llamada del Fuego
-        { 1527, 13, 10, 8589934770 }, -- La llamada del Fuego
+        { 1527, 13, 10, 162 }, -- La llamada del Fuego
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Horde_Class_SHAMAN_2986",
+    faction = "Horde",
+    class = "SHAMAN",
+    titleQuest = 2986,
+    minLevel = 20,
+    maxLevel = 20,
+    areaId = 1637,
+    zone = "Orgrimmar",
+    focus = { 38.0, 37.7 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "spell", 5394, 0 },
+        { "item", 5177, 0 },
+        { "item", 6637, 0 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 1528, 20, 20, 8589934770 }, -- La llamada del agua
+        { 1529, 20, 20, 8589934770 }, -- La llamada del agua
+        { 2985, 20, 20, 8589934770 }, -- La llamada del agua
+        { 2986, 20, 20, 8589934770 }, -- La llamada del agua
     },
 })
 
@@ -330,13 +361,13 @@ QR:RegisterClassGuide({
         { 1519, 4, 4, 8589934770 }, -- La llamada de la tierra
         { 1517, 4, 4, 8589934770 }, -- Clamor de Tierra
         { 1463, 4, 4, 8589934770 }, -- Sapta de tierra
-        { 1518, 4, 4, 8589934770 }, -- Clamor de Tierra
+        { 1518, 4, 4, 128 }, -- Clamor de Tierra
         { 1520, 4, 4, 8589934770 }, -- La llamada de la tierra
         { 1462, 4, 4, 8589934770 }, -- Sapta de tierra
-        { 1521, 4, 4, 8589934770 }, -- La llamada de la tierra
+        { 1521, 4, 4, 34 }, -- La llamada de la tierra
         { 92466, 4, 3, 8589934770 }, -- La llamada de la tierra
         { 92467, 4, 3, 8589934770 }, -- La llamada de la tierra
-        { 92468, 4, 3, 8589934770 }, -- La llamada de la tierra
+        { 92468, 4, 3, 39614081257132168796771975168 }, -- La llamada de la tierra
     },
 })
 
@@ -380,7 +411,8 @@ QR:RegisterClassGuide({
         { "item", 20701, 8380 },
         { "item", 20712, 8380 },
         { "rep", 529, 1600 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
         { "rep", 609, 400 },
         { "rep", 530, 200 },
         { "rep", 76, 200 },
@@ -395,15 +427,7 @@ QR:RegisterClassGuide({
         { 3093, 1, 1, 32 }, -- La nota con runas
         { 92484, 2, 2, 8589934770 }, -- Uno con los elementos
         { 792, 4, 2, 8589934770 }, -- Familiares viles
-        { 1522, 10, 10, 8589934770 }, -- La llamada del Fuego
-        { 1523, 10, 10, 8589934770 }, -- La llamada del Fuego
-        { 2983, 10, 10, 8589934770 }, -- La llamada del Fuego
-        { 2984, 10, 10, 8589934770 }, -- La llamada del Fuego
         { 98517, 10, 10, 8589934592 }, -- Call of Fire
-        { 1528, 20, 20, 8589934770 }, -- La llamada del agua
-        { 1529, 20, 20, 8589934770 }, -- La llamada del agua
-        { 2985, 20, 20, 8589934770 }, -- La llamada del agua
-        { 2986, 20, 20, 8589934770 }, -- La llamada del agua
         { 79362, 25, 18, 162 }, -- Escudo de Grant
         { 79363, 27, 18, 162 }, -- Espada de Silvia
         { 79365, 40, 30, 34 }, -- With Wind Beneath Your Wings
@@ -411,7 +435,13 @@ QR:RegisterClassGuide({
         { 8056, 60, 60 }, -- Dechados de Poder: los Brazales de augur
         { 8074, 60, 60 }, -- Dechados de Poder: el Cinturón de augur
         { 8075, 60, 60 }, -- Dechados de Poder: el Camisote de augur
+        { 8188, 60, 58, 8589934770 }, -- Abrazo del vigilante de Vodouisant
         { 8380, 60, 58, 8589934770 }, -- Armamentos de guerra
+        { 8602, 60, 60, 8589934770 }, -- Los espaldares de clamatormentas
+        { 8621, 60, 60, 8589934770 }, -- Los guardapiés de clamatormentas
+        { 8622, 60, 60, 8589934770 }, -- El camisote de clamatormentas
+        { 8623, 60, 60, 8589934770 }, -- La diadema de clamatormentas
+        { 8624, 60, 60, 8589934770 }, -- Los leotardos de clamatormentas
         { 8690, 60, 60, 8589934770 }, -- La capa de la inminente tormenta
         { 8698, 60, 60, 8589934770 }, -- El anillo de la inminente tormenta
         { 8706, 60, 60, 8589934770 }, -- El martillo de la tormenta inminente

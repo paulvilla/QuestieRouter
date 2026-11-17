@@ -4,35 +4,6 @@ local _, QR = ...
 if select(2, UnitClass("player")) ~= "WARRIOR" then return end
 
 QR:RegisterClassGuide({
-    key = "Alliance_Class_WARRIOR_1792",
-    faction = "Alliance",
-    class = "WARRIOR",
-    titleQuest = 1792,
-    minLevel = 30,
-    maxLevel = 40,
-    areaId = 36,
-    zone = "Alterac Mountains",
-    focus = { 80.5, 66.9 },   -- punto medio de la cadena en el mapa de la zona
-    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
-    --   o puntos de reputacion }; la primera que no es reputacion es la principal
-    rewards = {
-        { "spell", 2458, 0 },
-        { "choice", 6975, 1792 },
-        { "choice", 6977, 1792 },
-        { "choice", 6976, 1792 },
-    },
-    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
-    quests = {
-        { 1718, 30, 30 }, -- El isleño
-        { 1719, 30, 30 }, -- La Reyerta
-        { 1791, 30, 30 }, -- El Cazavientos
-        { 1712, 40, 30 }, -- Cicloniano
-        { 1713, 40, 30 }, -- La invocación
-        { 1792, 40, 30 }, -- Arma torbellino
-    },
-})
-
-QR:RegisterClassGuide({
     key = "Alliance_Class_WARRIOR_1682",
     faction = "Alliance",
     class = "WARRIOR",
@@ -46,7 +17,7 @@ QR:RegisterClassGuide({
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
         { "spell", 71, 0 },
-        { "item", 275290, 0 },
+        { "item", 275290, 94003 },
         { "choice", 6979, 1667 },
         { "choice", 6983, 1667 },
         { "choice", 6980, 1667 },
@@ -59,16 +30,22 @@ QR:RegisterClassGuide({
         { "choice", 6968, 1693 },
         { "choice", 6969, 1693 },
         { "choice", 6967, 1693 },
+        { "rep", 2778, 50 },
+        { "rep", 2779, 50 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1638, 10, 10, 4294967373 }, -- Instrucción de guerrero
         { 1639, 10, 10, 4294967373 }, -- Bartleby, el borracho
-        { 1683, 10, 10, 4294967373 }, -- Vorlus Pezuñavil
-        { 1678, 11, 10, 4294967373 }, -- Vejrek
+        { 1679, 10, 10, 4294967373 }, -- Muren Pico Tormenta
+        { 1683, 10, 10, 8 }, -- Vorlus Pezuñavil
+        { 1684, 10, 10, 4294967373 }, -- Elanaria
+        { 94003, 10, 10, 59421121885698253195157962752 }, -- El baluarte Rompecielos
+        { 1678, 11, 10, 68 }, -- Vejrek
         { 1640, 10, 10, 4294967373 }, -- Vence a Bartleby
-        { 1665, 10, 10, 4294967373 }, -- La jarra de Bartleby
-        { 1666, 10, 10, 4294967373 }, -- El alguacil Haggard
-        { 1667, 10, 10, 4294967373 }, -- Jack Dentomuerto
+        { 1665, 10, 10, 1 }, -- La jarra de Bartleby
+        { 1666, 10, 10, 1 }, -- El alguacil Haggard
+        { 1667, 10, 10, 1 }, -- Jack Dentomuerto
         { 1686, 10, 10, 4294967373 }, -- La sombra de Elura
         { 1692, 10, 10, 4294967373 }, -- Mathiel, el herrero
         { 1693, 10, 10, 4294967373 }, -- Armas de Elunita
@@ -83,7 +60,7 @@ QR:RegisterClassGuide({
     faction = "Alliance",
     class = "WARRIOR",
     titleQuest = 1711,
-    minLevel = 22,
+    minLevel = 20,
     maxLevel = 30,
     areaId = 1519,
     zone = "Stormwind City",
@@ -99,6 +76,7 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1698, 20, 20, 4294967373 }, -- Yorus Cebadiz
         { 1699, 22, 20, 4294967373 }, -- El guantelete de Rethban
         { 1702, 22, 20, 4294967373 }, -- El forjador de escudos
         { 1701, 28, 20, 4294967373 }, -- Armadura de mallas endurecida con fuego
@@ -116,22 +94,80 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
-    key = "Alliance_Class_WARRIOR_7508",
+    key = "Alliance_Class_WARRIOR_1792",
     faction = "Alliance",
     class = "WARRIOR",
-    titleQuest = 7508,
+    titleQuest = 1792,
+    minLevel = 30,
+    maxLevel = 40,
+    areaId = 36,
+    zone = "Alterac Mountains",
+    focus = { 80.2, 66.9 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "spell", 2458, 0 },
+        { "item", 6851, 1714 },
+        { "choice", 6975, 1792 },
+        { "choice", 6977, 1792 },
+        { "choice", 6976, 1792 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 1718, 30, 30 }, -- El isleño
+        { 1719, 30, 30, 59421121885698253195157963007 }, -- La Reyerta
+        { 1791, 30, 30, 59421121885698253195157963007 }, -- El Cazavientos
+        { 1714, 37, 30 }, -- Esencia del exilio
+        { 1712, 40, 30, 59421121885698253195157963007 }, -- Cicloniano
+        { 1713, 40, 30, 59421121885698253195157963007 }, -- La invocación
+        { 1792, 40, 30, 59421121885698253195157963007 }, -- Arma torbellino
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Alliance_Class_WARRIOR_8425",
+    faction = "Alliance",
+    class = "WARRIOR",
+    titleQuest = 8425,
+    minLevel = 50,
+    maxLevel = 52,
+    areaId = 8,
+    zone = "Swamp of Sorrows",
+    focus = { 34.3, 66.1 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "choice", 20521, 8425 },
+        { "choice", 20130, 8425 },
+        { "choice", 20517, 8425 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 8417, 50, 50 }, -- Un espíritu afligido
+        { 8423, 52, 50 }, -- Parentesco guerrero
+        { 8424, 52, 50 }, -- La guerra contra los Sombra Jurada
+        { 8425, 52, 50 }, -- Plumas Vudú
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Alliance_Class_WARRIOR_7509",
+    faction = "Alliance",
+    class = "WARRIOR",
+    titleQuest = 7509,
     minLevel = 60,
     maxLevel = 60,
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
-        { "item", 18348, 0 },
-        { "rep", 809, 200 },
+        { "item", 18348, 7509 },
+        { "rep", 809, 400 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 7507, 60, 60 }, -- Compendio de Nostro
         { 7508, 60, 60 }, -- Forjar Quel'Serrar
+        { 7509, 60, 60 }, -- Forjar Quel'Serrar
     },
 })
 
@@ -160,31 +196,6 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
-    key = "Alliance_Class_WARRIOR_8425",
-    faction = "Alliance",
-    class = "WARRIOR",
-    titleQuest = 8425,
-    minLevel = 52,
-    maxLevel = 52,
-    areaId = 8,
-    zone = "Swamp of Sorrows",
-    focus = { 34.3, 66.1 },   -- punto medio de la cadena en el mapa de la zona
-    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
-    --   o puntos de reputacion }; la primera que no es reputacion es la principal
-    rewards = {
-        { "choice", 20521, 8425 },
-        { "choice", 20130, 8425 },
-        { "choice", 20517, 8425 },
-    },
-    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
-    quests = {
-        { 8423, 52, 50 }, -- Parentesco guerrero
-        { 8424, 52, 50 }, -- La guerra contra los Sombra Jurada
-        { 8425, 52, 50 }, -- Plumas Vudú
-    },
-})
-
-QR:RegisterClassGuide({
     key = "Alliance_Class_WARRIOR_Misc",
     faction = "Alliance",
     class = "WARRIOR",
@@ -199,18 +210,17 @@ QR:RegisterClassGuide({
     rewards = {
         { "item", 20699, 8316 },
         { "item", 20710, 8316 },
-        { "item", 6851, 1714 },
-        { "item", 275290, 94003 },
         { "rep", 529, 1600 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
         { "rep", 609, 400 },
         { "rep", 809, 200 },
-        { "rep", 2778, 100 },
-        { "rep", 2779, 100 },
         { "rep", 72, 50 },
         { "rep", 47, 50 },
         { "rep", 54, 50 },
         { "rep", 69, 50 },
+        { "rep", 2778, 50 },
+        { "rep", 2779, 50 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
@@ -219,21 +229,20 @@ QR:RegisterClassGuide({
         { 3112, 1, 1, 64 }, -- Memorándum simple
         { 3116, 1, 1, 8 }, -- El sigilo simple
         { 92532, 2, 2 }, -- La senda del guerrero
-        { 1638, 10, 10, 4294967373 }, -- Instrucción de guerrero
-        { 1679, 10, 10, 4294967373 }, -- Muren Pico Tormenta
-        { 1684, 10, 10, 4294967373 }, -- Elanaria
-        { 94003, 10, 10, 12884901888 }, -- El baluarte Rompecielos
-        { 1698, 20, 20, 4294967373 }, -- Yorus Cebadiz
-        { 1714, 37, 30 }, -- Esencia del exilio
-        { 8417, 50, 50 }, -- Un espíritu afligido
         { 7499, 60, 54 }, -- Códice de Defensa
         { 8058, 60, 60 }, -- Dechados de Poder: los Guardabrazos de vindicador
         { 8078, 60, 60 }, -- Dechados de Poder: el Cinturón de vindicador
         { 8079, 60, 60 }, -- Dechados de Poder: el Peto de vindicador
+        { 8184, 60, 58 }, -- Presencia de poderío
         { 8316, 60, 58 }, -- Armamentos de guerra
+        { 8544, 60, 60 }, -- Las hombreras de conquistador
         { 8556, 60, 60 }, -- El anillo con sello de fuerza implacable
         { 8557, 60, 60 }, -- El mantón de fuerza implacable
         { 8558, 60, 60 }, -- La hoz de fuerza implacable
+        { 8559, 60, 60 }, -- Las grebas de conquistador
+        { 8560, 60, 60 }, -- Los leotardos de conquistador
+        { 8561, 60, 60 }, -- La corona de conquistador
+        { 8562, 60, 60 }, -- La coraza de conquistador
         { 8912, 60, 58, 4294967373 }, -- Una propuesta seria
         { 8937, 60, 58, 4294967373 }, -- Una compensación justa
         { 8959, 60, 58, 4294967373 }, -- La despedida de Anthion
@@ -261,11 +270,12 @@ QR:RegisterClassGuide({
     maxLevel = 40,
     areaId = 36,
     zone = "Alterac Mountains",
-    focus = { 80.5, 66.9 },   -- punto medio de la cadena en el mapa de la zona
+    focus = { 80.2, 66.9 },   -- punto medio de la cadena en el mapa de la zona
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
         { "spell", 2458, 0 },
+        { "item", 6851, 1714 },
         { "choice", 6975, 1792 },
         { "choice", 6977, 1792 },
         { "choice", 6976, 1792 },
@@ -273,11 +283,38 @@ QR:RegisterClassGuide({
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 1718, 30, 30 }, -- El isleño
-        { 1719, 30, 30 }, -- La Reyerta
-        { 1791, 30, 30 }, -- El Cazavientos
-        { 1712, 40, 30 }, -- Cicloniano
-        { 1713, 40, 30 }, -- La invocación
-        { 1792, 40, 30 }, -- Arma torbellino
+        { 1719, 30, 30, 59421121885698253195157963007 }, -- La Reyerta
+        { 1791, 30, 30, 59421121885698253195157963007 }, -- El Cazavientos
+        { 1714, 37, 30 }, -- Esencia del exilio
+        { 1712, 40, 30, 59421121885698253195157963007 }, -- Cicloniano
+        { 1713, 40, 30, 59421121885698253195157963007 }, -- La invocación
+        { 1792, 40, 30, 59421121885698253195157963007 }, -- Arma torbellino
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Horde_Class_WARRIOR_8425",
+    faction = "Horde",
+    class = "WARRIOR",
+    titleQuest = 8425,
+    minLevel = 50,
+    maxLevel = 52,
+    areaId = 8,
+    zone = "Swamp of Sorrows",
+    focus = { 34.3, 66.1 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "choice", 20521, 8425 },
+        { "choice", 20130, 8425 },
+        { "choice", 20517, 8425 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 8417, 50, 50 }, -- Un espíritu afligido
+        { 8423, 52, 50 }, -- Parentesco guerrero
+        { 8424, 52, 50 }, -- La guerra contra los Sombra Jurada
+        { 8425, 52, 50 }, -- Plumas Vudú
     },
 })
 
@@ -290,7 +327,7 @@ QR:RegisterClassGuide({
     maxLevel = 11,
     areaId = 85,
     zone = "Tirisfal Glades",
-    focus = { 60.0, 51.9 },   -- punto medio de la cadena en el mapa de la zona
+    focus = { 60.3, 52.0 },   -- punto medio de la cadena en el mapa de la zona
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
@@ -307,13 +344,15 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
-        { 1498, 10, 10, 8589934770 }, -- Camino de defensa
-        { 1819, 10, 10, 8589934770 }, -- Ulag, el cuchillero
-        { 1502, 10, 10, 8589934770 }, -- Thun'grim Vistafuego
-        { 1503, 10, 10, 8589934770 }, -- Acero fundido
-        { 1820, 10, 10, 8589934770 }, -- Habla con Coleman
-        { 1821, 11, 10, 8589934770 }, -- Reliquias Agamand
-        { 1822, 11, 10, 8589934770 }, -- Arma reliquia
+        { 1498, 10, 10, 162 }, -- Camino de defensa
+        { 1505, 10, 10, 8589934770 }, -- Uzzek, el veterano
+        { 1818, 10, 10, 8589934770 }, -- Habla con Dillinger
+        { 1819, 10, 10, 16 }, -- Ulag, el cuchillero
+        { 1502, 10, 10, 178 }, -- Thun'grim Vistafuego
+        { 1503, 10, 10, 178 }, -- Acero fundido
+        { 1820, 10, 10, 178 }, -- Habla con Coleman
+        { 1821, 11, 10, 178 }, -- Reliquias Agamand
+        { 1822, 11, 10, 178 }, -- Arma reliquia
     },
 })
 
@@ -338,6 +377,7 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1823, 20, 20, 8589934770 }, -- Habla con Ruga
         { 1824, 20, 20, 8589934770 }, -- Prueba en Tierra de Gigantes
         { 1825, 20, 20, 8589934770 }, -- Habla con Thun'grim
         { 1838, 30, 20, 8589934770 }, -- Armadura brutal
@@ -355,47 +395,67 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
-    key = "Horde_Class_WARRIOR_7508",
+    key = "Horde_Class_WARRIOR_94003",
     faction = "Horde",
     class = "WARRIOR",
-    titleQuest = 7508,
+    titleQuest = 94003,
+    minLevel = 10,
+    maxLevel = 10,
+    areaId = 16593,
+    zone = "Zephras Isle",
+    focus = { 59.9, 72.9 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "spell", 71, 0 },
+        { "item", 275290, 94003 },
+        { "choice", 6979, 0 },
+        { "choice", 6983, 0 },
+        { "choice", 6980, 0 },
+        { "choice", 6985, 0 },
+        { "choice", 6978, 0 },
+        { "choice", 6982, 0 },
+        { "choice", 6981, 0 },
+        { "choice", 6984, 0 },
+        { "choice", 6966, 0 },
+        { "choice", 6968, 0 },
+        { "choice", 6969, 0 },
+        { "choice", 6967, 0 },
+        { "choice", 7326, 0 },
+        { "choice", 7328, 0 },
+        { "choice", 7327, 0 },
+        { "choice", 7329, 0 },
+        { "choice", 7115, 0 },
+        { "choice", 7117, 0 },
+        { "choice", 7116, 0 },
+        { "choice", 7118, 0 },
+        { "rep", 2778, 50 },
+        { "rep", 2779, 50 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 94003, 10, 10, 59421121885698253195157962752 }, -- El baluarte Rompecielos
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Horde_Class_WARRIOR_7509",
+    faction = "Horde",
+    class = "WARRIOR",
+    titleQuest = 7509,
     minLevel = 60,
     maxLevel = 60,
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
-        { "item", 18348, 0 },
-        { "rep", 809, 200 },
+        { "item", 18348, 7509 },
+        { "rep", 809, 400 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 7507, 60, 60 }, -- Compendio de Nostro
         { 7508, 60, 60 }, -- Forjar Quel'Serrar
-    },
-})
-
-QR:RegisterClassGuide({
-    key = "Horde_Class_WARRIOR_8425",
-    faction = "Horde",
-    class = "WARRIOR",
-    titleQuest = 8425,
-    minLevel = 52,
-    maxLevel = 52,
-    areaId = 8,
-    zone = "Swamp of Sorrows",
-    focus = { 34.3, 66.1 },   -- punto medio de la cadena en el mapa de la zona
-    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
-    --   o puntos de reputacion }; la primera que no es reputacion es la principal
-    rewards = {
-        { "choice", 20521, 8425 },
-        { "choice", 20130, 8425 },
-        { "choice", 20517, 8425 },
-    },
-    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
-    quests = {
-        { 8423, 52, 50 }, -- Parentesco guerrero
-        { 8424, 52, 50 }, -- La guerra contra los Sombra Jurada
-        { 8425, 52, 50 }, -- Plumas Vudú
+        { 7509, 60, 60 }, -- Forjar Quel'Serrar
     },
 })
 
@@ -438,18 +498,17 @@ QR:RegisterClassGuide({
     rewards = {
         { "item", 20699, 8316 },
         { "item", 20710, 8316 },
-        { "item", 6851, 1714 },
-        { "item", 275290, 94003 },
         { "rep", 529, 1600 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
         { "rep", 609, 400 },
         { "rep", 76, 200 },
         { "rep", 530, 200 },
         { "rep", 809, 200 },
-        { "rep", 2778, 100 },
-        { "rep", 2779, 100 },
         { "rep", 81, 50 },
         { "rep", 68, 50 },
+        { "rep", 2778, 50 },
+        { "rep", 2779, 50 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
@@ -459,20 +518,20 @@ QR:RegisterClassGuide({
         { 3095, 1, 1, 16 }, -- Un pergamino simple
         { 92532, 2, 2 }, -- La senda del guerrero
         { 792, 4, 2, 8589934770 }, -- Familiares viles
-        { 1505, 10, 10, 8589934770 }, -- Uzzek, el veterano
-        { 1818, 10, 10, 8589934770 }, -- Habla con Dillinger
-        { 94003, 10, 10, 12884901888 }, -- El baluarte Rompecielos
-        { 1823, 20, 20, 8589934770 }, -- Habla con Ruga
-        { 1714, 37, 30 }, -- Esencia del exilio
-        { 8417, 50, 50 }, -- Un espíritu afligido
         { 7499, 60, 54 }, -- Códice de Defensa
         { 8058, 60, 60 }, -- Dechados de Poder: los Guardabrazos de vindicador
         { 8078, 60, 60 }, -- Dechados de Poder: el Cinturón de vindicador
         { 8079, 60, 60 }, -- Dechados de Poder: el Peto de vindicador
+        { 8184, 60, 58 }, -- Presencia de poderío
         { 8316, 60, 58 }, -- Armamentos de guerra
+        { 8544, 60, 60 }, -- Las hombreras de conquistador
         { 8556, 60, 60 }, -- El anillo con sello de fuerza implacable
         { 8557, 60, 60 }, -- El mantón de fuerza implacable
         { 8558, 60, 60 }, -- La hoz de fuerza implacable
+        { 8559, 60, 60 }, -- Las grebas de conquistador
+        { 8560, 60, 60 }, -- Los leotardos de conquistador
+        { 8561, 60, 60 }, -- La corona de conquistador
+        { 8562, 60, 60 }, -- La coraza de conquistador
         { 8920, 60, 58, 8589934770 }, -- Una propuesta seria
         { 8944, 60, 58, 8589934770 }, -- Una compensación justa
         { 9013, 60, 58, 8589934770 }, -- Guardar lo mejor para el final

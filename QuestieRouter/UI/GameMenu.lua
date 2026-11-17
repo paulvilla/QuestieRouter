@@ -6,6 +6,11 @@
 -- Polestar pone el suyo a mitad del hueco entre Tienda y el boton siguiente; el nuestro va antes (al 40 %), asi
 -- que siempre queda encima, y si Polestar esta, el suyo pasa a ir pegado debajo del nuestro (misma seccion).
 -- No se toca nada de Blizzard: solo se leen los botones del menu y se ponen campos en el nuestro.
+--
+-- EllesmereUI: pone su boton (y el de "Unlock Mode") a mano debajo de Tienda tras el Layout del menu y baja solo los
+-- botones de Blizzard; el nuestro quedaba encima del suyo. Con EllesmereUI el nuestro va pegado debajo de los suyos
+-- (se recoloca tras cada Layout). Si su modulo de aspectos de Blizzard (EllesmereUIBlizzardSkin) restila el menu,
+-- el nuestro lleva el mismo aspecto oscuro que sus botones.
 
 local _, QR = ...
 local L = QR.L
@@ -24,6 +29,77 @@ local function Open()
         if HideUIPanel then HideUIPanel(menu) else menu:Hide() end
     end
     if QR.Browser then QR.Browser:Open() end
+end
+
+---------------------------------------------------------------------------
+-- EllesmereUI
+---------------------------------------------------------------------------
+local function AddOnLoaded(name)
+    if C_AddOns and C_AddOns.IsAddOnLoaded then return C_AddOns.IsAddOnLoaded(name) end
+    return IsAddOnLoaded and IsAddOnLoaded(name)
+end
+
+--- ¿EllesmereUI restila el menu del juego? (lo mismo que mira EllesmereUI para sus botones; como ellos, se decide
+--- al entrar: si se cambia la opcion hace falta /reload)
+local function EllesmereSkin()
+    local E = _G.EllesmereUI
+    return E and AddOnLoaded("EllesmereUIBlizzardSkin")
+        and not (_G.EllesmereUIDB and _G.EllesmereUIDB.reskinGameMenu == false)
+end
+
+--- El ultimo boton de EllesmereUI en el menu (Unlock Mode va debajo del suyo). Se decide con sus mismas opciones y no
+--- con IsShown: su gancho de Layout puede ir despues del nuestro y mostrar / ocultar sus botones entonces.
+local function EllesmereLast()
+    local db = _G.EllesmereUIDB
+    local unlock, eui = _G.EllesmereUI_UnlockMenuButton, _G.EllesmereUI_GameMenuButton
+    if unlock and db and db.hideUnlockMenuButton == false then return unlock end
+    if eui and not (db and db.hideGameMenuButton) then return eui end
+    return nil
+end
+
+--- Aspecto oscuro de los botones de EllesmereUI (copiado de como restilan los suyos)
+local function SkinEllesmere(b)
+    local E = _G.EllesmereUI
+    if b.qrSkin or not E then return end
+    local fs = b:GetFontString()
+    for _, r in ipairs({ b:GetRegions() }) do
+        if r and r:IsObjectType("Texture") and r ~= fs then r:SetAlpha(0) end
+    end
+    for _, key in ipairs({ "Left", "Middle", "Right" }) do
+        local tex = b[key]
+        if tex and tex.SetAlpha then
+            tex:SetAlpha(0)
+            hooksecurefunc(tex, "SetAlpha", function(self, a) if a > 0 then self:SetAlpha(0) end end)
+        end
+    end
+    local inset = CreateFrame("Frame", nil, b)
+    inset:SetPoint("TOPLEFT", 2, -2)
+    inset:SetPoint("BOTTOMRIGHT", -2, 2)
+    inset:SetFrameLevel(b:GetFrameLevel())
+    local bg = inset:CreateTexture(nil, "BACKGROUND", nil, -6)
+    bg:SetAllPoints()
+    local hl = b:CreateTexture(nil, "HIGHLIGHT")
+    hl:SetAllPoints(inset)
+    hl:SetColorTexture(1, 1, 1, 0.1)
+    b.qrSkin = { inset = inset, bg = bg }
+end
+
+--- Colores, borde y letra de EllesmereUI (en cada apertura: asi siguen los cambios de sus opciones)
+local function PaintEllesmere(b)
+    local E, s = _G.EllesmereUI, b.qrSkin
+    if not (E and s) then return end
+    local c = _G.EllesmereUIDB and _G.EllesmereUIDB.popupMenuButtonBackgroundColor or { r = .1, g = .1, b = .1, a = .8 }
+    s.bg:SetColorTexture(c.r, c.g, c.b, c.a == nil and .8 or c.a)
+    if E._applyBlizzardConfiguredBorder then pcall(E._applyBlizzardConfiguredBorder, s.inset, "popupMenuButton", 1) end
+    local fs = b:GetFontString()
+    if fs then
+        local font = E.GetFontPath and E.GetFontPath() or "Fonts\\FRIZQT__.TTF"
+        fs:SetFont(font, 13, "")
+        if E._getPopupMenuElementMode and E._getPopupMenuElementMode() ~= "native" and E._getPopupMenuButtonTextColor then
+            local r, g, bl = E._getPopupMenuButtonTextColor()
+            fs:SetTextColor(r, g, bl, 1)
+        end
+    end
 end
 
 local function Build(menu, template)
@@ -90,7 +166,27 @@ local function Place(menu)
         local path, size, flags = theirs:GetFont()
         if path then mine:SetFont(path, size, flags or "") end
     end
+    -- EllesmereUI con sus aspectos de Blizzard: el mismo aspecto oscuro que sus botones
+    if EllesmereSkin() then
+        SkinEllesmere(b)
+        PaintEllesmere(b)
+    end
     b:Show()
+end
+
+--- Tras cada Layout del menu: con EllesmereUI, el nuestro pegado debajo de sus botones (y el de Polestar debajo del
+--- nuestro). El hueco ya esta: el menu deja sitio a nuestro boton y EllesmereUI baja los de Blizzard por los suyos.
+local function AfterLayout()
+    if not (button and button:IsShown()) or InCombatLockdown() then return end   -- (en combate EllesmereUI oculta los suyos)
+    local last = EllesmereLast()
+    if not last then return end
+    button:ClearAllPoints()
+    button:SetPoint("TOP", last, "BOTTOM", 0, -GAP)
+    local pole = _G.PolestarGameMenuButton
+    if pole and pole:IsShown() then
+        pole:ClearAllPoints()
+        pole:SetPoint("TOP", button, "BOTTOM", 0, -GAP)
+    end
 end
 
 --- Menu antiguo (sin InitButtons): el boton debajo del menu
@@ -122,6 +218,7 @@ function GameMenu:Hook()
     self.hooked = true
     if type(rawget(menu, "InitButtons")) == "function" then
         hooksecurefunc(menu, "InitButtons", Place)
+        if type(menu.Layout) == "function" then hooksecurefunc(menu, "Layout", AfterLayout) end
     else
         menu:HookScript("OnShow", PlaceOld)
     end

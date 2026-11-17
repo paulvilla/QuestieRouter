@@ -20,6 +20,7 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1919, 15, 15, 65 }, -- Preséntate ante Jennea
         { 1920, 16, 15, 4294967361 }, -- Investiga lo que pasa en El Ermitaño Azul
         { 1921, 15, 15, 65 }, -- Recolección de materiales
         { 1941, 15, 15, 65 }, -- Toga Tejemaná
@@ -44,7 +45,7 @@ QR:RegisterClassGuide({
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 9362, 60, 60 }, -- Señor de la Guerra Krellian
-        { 9364, 60, 60 }, -- Magia fragmentada
+        { 9364, 60, 60, 59421121885698253195157963007 }, -- Magia fragmentada
     },
 })
 
@@ -66,6 +67,7 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1939, 26, 26, 65 }, -- Alto Hechicero Andromath
         { 1938, 28, 26, 65 }, -- Tratado de Ur sobre la Magia de las Sombras
         { 1940, 26, 26, 65 }, -- Seda prístina de araña
         { 1942, 26, 26, 65 }, -- Prendas de nudo astral
@@ -118,11 +120,31 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1953, 40, 35 }, -- Regreso al pantano
         { 1954, 40, 35 }, -- El orbe infernal
         { 1955, 40, 35 }, -- El exorcismo
         { 1956, 40, 35 }, -- Poder en Uldaman
         { 1957, 40, 35 }, -- Oleadas de maná
         { 1958, 40, 35 }, -- Poder celestial
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Alliance_Class_MAGE_7463",
+    faction = "Alliance",
+    class = "MAGE",
+    titleQuest = 7463,
+    minLevel = 60,
+    maxLevel = 60,
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "spell", 10140, 0 },
+        { "rep", 809, 200 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 7463, 60, 60, 59421121885698253195157963007 }, -- El refresco arcano
     },
 })
 
@@ -194,9 +216,40 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 8250, 52, 50 }, -- Pura magia
         { 8251, 52, 50 }, -- El polvo mágico
         { 8252, 52, 50 }, -- El coral de las sirenas
         { 8253, 52, 50 }, -- Destruye a Morphaz
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Alliance_Class_MAGE_93791",
+    faction = "Alliance",
+    class = "MAGE",
+    titleQuest = 93791,
+    minLevel = 10,
+    maxLevel = 10,
+    areaId = 12,
+    zone = "Elwynn Forest",
+    focus = { 43.2, 66.2 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "item", 263430, 0 },
+        { "choice", 7508, 1861 },
+        { "choice", 9513, 1861 },
+        { "choice", 7507, 1880 },
+        { "choice", 9514, 1880 },
+        { "rep", 2779, 50 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 1860, 10, 10, 65 }, -- Habla con Jennea
+        { 1861, 10, 10, 4294967361 }, -- Lago Espejo
+        { 1879, 10, 10, 65 }, -- Habla con Bink
+        { 1880, 10, 10, 65 }, -- Trastónitor maguitronic
+        { 93791, 10, 10, 4294967373 }, -- Hablar con Belann
     },
 })
 
@@ -215,39 +268,33 @@ QR:RegisterClassGuide({
     rewards = {
         { "item", 20705, 8381 },
         { "item", 20716, 8381 },
-        { "choice", 7507, 1880 },
-        { "choice", 9514, 1880 },
-        { "choice", 7508, 1861 },
-        { "choice", 9513, 1861 },
         { "rep", 529, 1600 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
         { "rep", 609, 400 },
         { "rep", 809, 200 },
-        { "rep", 2779, 100 },
         { "rep", 72, 50 },
         { "rep", 54, 50 },
+        { "rep", 2779, 50 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 3104, 1, 1, 1 }, -- Una carta con glifos
         { 3114, 1, 1, 64 }, -- Memorándum con inscripciones
         { 92481, 2, 2, 4294967373 }, -- El estudio de lo Arcano
-        { 1860, 10, 10, 65 }, -- Habla con Jennea
-        { 1861, 10, 10, 4294967361 }, -- Lago Espejo
-        { 1879, 10, 10, 65 }, -- Habla con Bink
-        { 1880, 10, 10, 65 }, -- Trastónitor maguitronic
-        { 93791, 10, 10, 4294967373 }, -- Hablar con Belann
-        { 1919, 15, 15, 65 }, -- Preséntate ante Jennea
         { 97286, 20, 1 }, -- Acceso a la investigación
-        { 1939, 26, 26, 65 }, -- Alto Hechicero Andromath
-        { 1953, 40, 35 }, -- Regreso al pantano
         { 82084, 45, 42 }, -- A Lesson in Literacy
-        { 8250, 52, 50 }, -- Pura magia
         { 7500, 60, 54 }, -- El libro de cocina del Arcanista
         { 8060, 60, 60 }, -- Dechados de Poder: los Brazaletes de ilusionista
         { 8068, 60, 60 }, -- Dechados de Poder: el Manto de ilusionista
         { 8069, 60, 60 }, -- Dechados de Poder: la Toga de ilusionista
+        { 8189, 60, 58 }, -- Presencia de visión
         { 8381, 60, 58 }, -- Armamentos de guerra
+        { 8625, 60, 60 }, -- Las hombreras Enigma
+        { 8631, 60, 60 }, -- Los leotardos Enigma
+        { 8632, 60, 60 }, -- El aro Enigma
+        { 8633, 60, 60 }, -- Togas Enigma
+        { 8634, 60, 60 }, -- Las botas Enigma
         { 8691, 60, 60 }, -- El mantón de secretos oscuros
         { 8699, 60, 60 }, -- La sortija de secretos oscuros
         { 8707, 60, 60 }, -- La espada de secretos oscuros
@@ -287,7 +334,7 @@ QR:RegisterClassGuide({
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 9362, 60, 60 }, -- Señor de la Guerra Krellian
-        { 9364, 60, 60 }, -- Magia fragmentada
+        { 9364, 60, 60, 59421121885698253195157963007 }, -- Magia fragmentada
     },
 })
 
@@ -309,6 +356,7 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1943, 26, 26, 144 }, -- Habla con Deino
         { 1944, 26, 26, 144 }, -- Aguas de Xavian
         { 1945, 26, 26, 144 }, -- Hermanas sonrientes
         { 1946, 26, 26, 144 }, -- Prendas de encaje abisal
@@ -361,6 +409,7 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1953, 40, 35 }, -- Regreso al pantano
         { 1954, 40, 35 }, -- El orbe infernal
         { 1955, 40, 35 }, -- El exorcismo
         { 1956, 40, 35 }, -- Poder en Uldaman
@@ -386,9 +435,29 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1959, 15, 15, 144 }, -- Preséntate ante Anastasia
         { 1960, 16, 15, 146 }, -- Investiga la tienda de alquimia
         { 1961, 15, 15, 146 }, -- Recolección de materiales
         { 1962, 15, 15, 144 }, -- Toga Fuegohechizo
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Horde_Class_MAGE_7463",
+    faction = "Horde",
+    class = "MAGE",
+    titleQuest = 7463,
+    minLevel = 60,
+    maxLevel = 60,
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "spell", 10140, 0 },
+        { "rep", 809, 200 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 7463, 60, 60, 59421121885698253195157963007 }, -- El refresco arcano
     },
 })
 
@@ -460,9 +529,36 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 8250, 52, 50 }, -- Pura magia
         { 8251, 52, 50 }, -- El polvo mágico
         { 8252, 52, 50 }, -- El coral de las sirenas
         { 8253, 52, 50 }, -- Destruye a Morphaz
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Horde_Class_MAGE_1884",
+    faction = "Horde",
+    class = "MAGE",
+    titleQuest = 1884,
+    minLevel = 10,
+    maxLevel = 10,
+    areaId = 85,
+    zone = "Tirisfal Glades",
+    focus = { 62.0, 52.5 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "choice", 7508, 1884 },
+        { "choice", 9513, 1884 },
+        { "choice", 7507, 1882 },
+        { "choice", 9514, 1882 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 1881, 10, 10, 144 }, -- Habla con Anastasia
+        { 1882, 10, 10, 144 }, -- La Hacienda Balnir
+        { 1884, 10, 10, 146 }, -- Montones de Ju-Ju
     },
 })
 
@@ -481,12 +577,9 @@ QR:RegisterClassGuide({
     rewards = {
         { "item", 20705, 8381 },
         { "item", 20716, 8381 },
-        { "choice", 7508, 1884 },
-        { "choice", 9513, 1884 },
-        { "choice", 7507, 1882 },
-        { "choice", 9514, 1882 },
         { "rep", 529, 1600 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
         { "rep", 609, 400 },
         { "rep", 530, 200 },
         { "rep", 76, 200 },
@@ -499,21 +592,20 @@ QR:RegisterClassGuide({
         { 3098, 1, 1, 16 }, -- Un pergamino con glifos
         { 98576, 1, 1, 2 }, -- Glyphic Parchment
         { 792, 4, 2, 8589934770 }, -- Familiares viles
-        { 1881, 10, 10, 144 }, -- Habla con Anastasia
-        { 1882, 10, 10, 144 }, -- La Hacienda Balnir
         { 1883, 10, 10, 8589934770 }, -- Habla con Un'thuwa
-        { 1884, 10, 10, 146 }, -- Montones de Ju-Ju
-        { 1959, 15, 15, 144 }, -- Preséntate ante Anastasia
         { 97286, 20, 1 }, -- Acceso a la investigación
-        { 1943, 26, 26, 144 }, -- Habla con Deino
-        { 1953, 40, 35 }, -- Regreso al pantano
         { 82084, 45, 42 }, -- A Lesson in Literacy
-        { 8250, 52, 50 }, -- Pura magia
         { 7500, 60, 54 }, -- El libro de cocina del Arcanista
         { 8060, 60, 60 }, -- Dechados de Poder: los Brazaletes de ilusionista
         { 8068, 60, 60 }, -- Dechados de Poder: el Manto de ilusionista
         { 8069, 60, 60 }, -- Dechados de Poder: la Toga de ilusionista
+        { 8189, 60, 58 }, -- Presencia de visión
         { 8381, 60, 58 }, -- Armamentos de guerra
+        { 8625, 60, 60 }, -- Las hombreras Enigma
+        { 8631, 60, 60 }, -- Los leotardos Enigma
+        { 8632, 60, 60 }, -- El aro Enigma
+        { 8633, 60, 60 }, -- Togas Enigma
+        { 8634, 60, 60 }, -- Las botas Enigma
         { 8691, 60, 60 }, -- El mantón de secretos oscuros
         { 8699, 60, 60 }, -- La sortija de secretos oscuros
         { 8707, 60, 60 }, -- La espada de secretos oscuros

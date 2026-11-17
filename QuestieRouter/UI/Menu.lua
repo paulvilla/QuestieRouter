@@ -205,6 +205,9 @@ function Menu:OpenLevel(level, entries, anchor, mode)
         S:StyleText(b.right, "small", "ui")
         b.right:SetText(e.right or "")
         b.right:SetShown(e.right ~= nil and not e.spacer)
+        -- con submenu, la columna derecha deja sitio a la flechita
+        b.right:ClearAllPoints()
+        b.right:SetPoint("RIGHT", e.menu and -24 or -8, 0)
         local rightW = e.right and (b.right:GetStringWidth() + 24) or 0
         if not e.spacer then width = math.max(width, b.text:GetStringWidth() + 30 + 30 + rightW) end
         b:ClearAllPoints()
@@ -261,19 +264,35 @@ function Menu:GuideEntries(category)
     -- Zonas y mazmorras: agrupadas por tramo de nivel para que el menu no sea eterno
     local bands = { { 1, 20 }, { 20, 30 }, { 30, 40 }, { 40, 50 }, { 50, 60 } }
     local active = QR.Planner:GetGuide()
+    local S = Skin()
+    local STATUS = QR.GuideUI and QR.GuideUI.STATUS
+    -- a la derecha de cada guia: hecha (icono + texto, y el nombre apagado) o empezada
+    local function StateRight(st)
+        if not (STATUS and STATUS[st]) then return nil end
+        local text = st == "done" and L["Done"] or L["In progress"]
+        return S:IconTag(STATUS[st][1], 14) .. " " .. STATUS[st][2] .. text .. "|r"
+    end
     for _, band in ipairs(bands) do
         local sub = {}
+        local done = 0
         for _, g in ipairs(category.guides) do
             if g.minLevel >= band[1] and (g.minLevel < band[2] or (band[2] == 60 and g.minLevel <= 60)) then
+                local st = QR.GuideState and QR.GuideState(g)
+                if st == "done" then done = done + 1 end
+                local label = string.format("[%d-%d] %s", g.minLevel, g.maxLevel, QR.GuideLabel(g))
                 sub[#sub + 1] = {
-                    text = string.format("[%d-%d] %s", g.minLevel, g.maxLevel, QR.GuideLabel(g)),
+                    text = st == "done" and ("|cff9a9f9c" .. label .. "|r") or label,
                     checked = g == active,
+                    right = (st == "done" or st == "active") and StateRight(st) or nil,
                     func = function() QR.Planner:SetGuide(g.key) end,
                 }
             end
         end
         if #sub > 0 then
-            list[#list + 1] = { text = string.format(L["Levels %d-%d"], band[1], band[2]), menu = function() return sub end }
+            -- en el tramo: cuantas llevas hechas
+            local right = done > 0 and string.format("|cff9a9f9c%d/%d|r", done, #sub) or nil
+            list[#list + 1] = { text = string.format(L["Levels %d-%d"], band[1], band[2]), right = right,
+                                menu = function() return sub end }
         end
     end
     return list

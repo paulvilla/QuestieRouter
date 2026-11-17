@@ -76,6 +76,8 @@ local function StepText(step, dim, section)
 end
 
 local HISTORY_HEAD = { pickup = "Accepted", objective = "Objectives completed", turnin = "Turned in" }
+-- pasos ya hechos: el icono de su accion (el "?" en las entregadas, el "!" en las aceptadas), para ver de un vistazo
+-- que se hizo en cada uno; la tarjeta va atenuada
 local HISTORY_ICON = { pickup = "accept", objective = "complete", turnin = "turnin" }
 
 local function HistoryText(entry)
@@ -529,7 +531,8 @@ local function TravelRoute()
     return t and t.kind == "travel" and t.route and #t.route.steps > 0 and t.route or nil
 end
 
-local TRAVEL_ICON = { walk = "walk", flight = "Gryphon", boat = "Boat", zeppelin = "Boat", airship = "Boat" }
+local TRAVEL_ICON = { walk = "walk", border = "walk", road = "walk", flight = "Gryphon", boat = "Boat",
+                      zeppelin = "Boat", airship = "Boat", tram = "Tram", portal = "Arrow", door = "Arrow" }
 
 --- Icono de la etapa en el hueco del numero
 local function TravelIcon(ts, section)
@@ -538,6 +541,40 @@ local function TravelIcon(ts, section)
     local path = S.ICON[key] or S:UIIcon(key)
     local size = math.floor((S:Section(section) and S:Section(section).numberSize or 15) * 1.1)
     return string.format("|T%s:%d:%d|t", path, size, size)
+end
+
+--- Icono de un punto añadido a mano en el hueco del numero
+local function PinIcon(section)
+    local S = Skin()
+    local size = math.floor((S:Section(section) and S:Section(section).numberSize or 15) * 1.1)
+    return string.format("|T%s:%d:%d|t", S:UIIcon("Pin"), size, size)
+end
+
+--- texto de un punto añadido a mano: "Punto añadido a mano" y donde esta (y a cuanto, si se sabe)
+local function WaypointText(p, withDist)
+    local T = Skin().TEXT
+    local info = p.map and C_Map and C_Map.GetMapInfo and C_Map.GetMapInfo(p.map)
+    local where = string.format("%s (%.1f, %.1f)", info and info.name or "?", (p.x or 0) * 100, (p.y or 0) * 100)
+    local text = T.warn .. L["Manual waypoint"] .. "|r\n" .. T.friendly .. where .. "|r"
+    if withDist then
+        local px, py, pinst = QR.HBD:GetPlayerWorldPosition()
+        local d = px and pinst == p.inst and QR.HBD:GetWorldDistance(pinst, px, py, p.wx, p.wy)
+        if d then text = text .. string.format("   %s%d yd|r", T.done, d) end
+    end
+    return text
+end
+
+--- Clic derecho en un punto añadido a mano: quitarlo (o todos) o cancelar
+function UI:WaypointMenu(p)
+    local W = QR.Waypoints
+    if not W then return end
+    local entries = { { text = L["Manual waypoint"], header = true },
+                      { text = L["Remove this waypoint"], icon = "Close", func = function() W:Remove(p) end } }
+    if #W:All() > 1 then
+        entries[#entries + 1] = { text = L["Remove all manual waypoints"], icon = "Reset", func = function() W:Clear() end }
+    end
+    entries[#entries + 1] = { text = L["Cancel"], func = function() end }
+    QR.Menu:Open(entries)
 end
 
 function UI:PaintActive(plan, number)
@@ -556,6 +593,17 @@ function UI:PaintActive(plan, number)
         card.text:SetText(table.concat(out, "\n"))
         card.num:SetText(TravelIcon(travel.steps[1], "active"))
         PaintCard(card, "active", QR.db.skin.width)
+        -- (un tramo de viaje no es una mision: sin menu de clic derecho)
+        card.onRightClick = nil
+        return
+    end
+    -- punto añadido a mano (Alt + clic en el mapa): va primero
+    local wp = QR.Waypoints and QR.Waypoints:First()
+    if wp then
+        card.text:SetText(WaypointText(wp, true))
+        card.num:SetText(PinIcon("active"))
+        PaintCard(card, "active", QR.db.skin.width)
+        card.onRightClick = function() UI:WaypointMenu(wp) end
         return
     end
     if step then
@@ -585,6 +633,8 @@ function UI:PaintActive(plan, number)
     end
     card.text:SetText(text)
     PaintCard(card, "active", QR.db.skin.width)
+    -- clic derecho en la tarjeta del paso actual: su menu (despues de PaintCard, que lo borra)
+    card.onRightClick = step and function() UI:StepMenu(step, number) end or nil
 end
 
 function UI:FillSteps(plan)
@@ -602,6 +652,9 @@ function UI:FillSteps(plan)
         card.text:SetText(HistoryText(entries[k]))
         card.num:SetText(entries[k].number)
         PaintCard(card, "done", width)
+        -- paso ya hecho: solo añadir nota (o cancelar)
+        local entry = entries[k]
+        card.onRightClick = entry.questId and function() UI:DoneMenu(entry) end or nil
         card:ClearAllPoints()
         card:SetPoint("TOPLEFT", 0, -y)
         card:SetWidth(width)
@@ -615,12 +668,28 @@ function UI:FillSteps(plan)
         card.text:SetText(ts.text)
         card.num:SetText(TravelIcon(ts, "list"))
         PaintCard(card, n == 1 and "current" or "next", width)
+        -- (un tramo de viaje no es una mision: sin menu de clic derecho)
         card.onRightClick = nil
         card:ClearAllPoints()
         card:SetPoint("TOPLEFT", 0, -y)
         card:SetWidth(width)
         card:Show()
         if n == 1 then currentTop = y end
+        y = y + card:GetHeight() + GAP
+    end
+    local wps = QR.Waypoints and QR.Waypoints:All() or {}
+    for wi, wp in ipairs(wps) do
+        i = i + 1
+        local card = self:GetCard(i)
+        card.text:SetText(WaypointText(wp, false))
+        card.num:SetText(PinIcon("list"))
+        PaintCard(card, (wi == 1 and not travel) and "current" or "next", width)
+        card.onRightClick = function() UI:WaypointMenu(wp) end
+        card:ClearAllPoints()
+        card:SetPoint("TOPLEFT", 0, -y)
+        card:SetWidth(width)
+        card:Show()
+        if wi == 1 and not travel then currentTop = y end
         y = y + card:GetHeight() + GAP
     end
     local maxSteps = QR.db.skin.list.maxSteps or 14
@@ -630,13 +699,13 @@ function UI:FillSteps(plan)
         local card = self:GetCard(i)
         card.text:SetText(StepText(step, false, "list"))
         card.num:SetText(count + n)
-        PaintCard(card, (n == 1 and not travel) and "current" or "next", width)
+        PaintCard(card, (n == 1 and not travel and #wps == 0) and "current" or "next", width)
         card.onRightClick = function() UI:StepMenu(step, count + n) end
         card:ClearAllPoints()
         card:SetPoint("TOPLEFT", 0, -y)
         card:SetWidth(width)
         card:Show()
-        if n == 1 and not travel then currentTop = y end
+        if n == 1 and not travel and #wps == 0 then currentTop = y end
         y = y + card:GetHeight() + GAP
     end
     for k = i + 1, #self.frame.cards do self.frame.cards[k]:Hide() end
@@ -719,6 +788,8 @@ local STATUS = {
     done = { "complete", "|cff7f8a84" }, complete = { "turnin", "|cff71d6a2" }, active = { "combat", "|cffffd166" },
     available = { "accept", "|cffffffff" }, lowlevel = { "clock", "|cffff8178" }, locked = { "error", "|cff606660" },
     skipped = { QR.Skin:UIIcon("Minus"), "|cff8a8f8c" },
+    -- el NPC no la ofrecia al hablar con el (Guide/Planner.lua): sigue en la guia, marcada
+    notoffered = { "gossip", "|cffff9f4a" },
     elite = { "elite", "|cffffd166" },   -- (para la leyenda; en las filas va junto al icono de estado)
     dungeon = { "dungeon", "|cffb59cff" },
 }
@@ -729,8 +800,8 @@ local LEGEND = {
     { "available", "Available to pick up" }, { "active", "In progress" },
     { "complete", "Ready to turn in" }, { "done", "Done" },
     { "lowlevel", "Level too low" }, { "locked", "Locked (prerequisite)" },
-    { "skipped", "Skipped (Shift+click)" }, { "elite", "Elite (group recommended)" },
-    { "dungeon", "Dungeon quest", right = true },
+    { "skipped", "Skipped (Shift+click)" }, { "notoffered", "The NPC doesn't offer it" },
+    { "elite", "Elite (group recommended)" }, { "dungeon", "Dungeon quest" },
 }
 -- (el menu de guias, UI/Browser.lua, usa los mismos estados y la misma leyenda)
 UI.STATUS, UI.LEGEND = STATUS, LEGEND
@@ -917,6 +988,15 @@ function UI:QuestRowMenu(questId)
     local B, P = QR.Bridge, QR.Planner
     local quest = B:GetQuest(questId)
     local entries = { { text = quest and quest.name or ("#" .. questId), header = true } }
+    -- añadir una nota sobre esta mision (la posicion se toma ahora, al hacer clic derecho)
+    if QR.Obs and P:GetGuide() then
+        local snap = QR.Obs:Snapshot()
+        local st = B:QuestStatus(questId)
+        local kind = (st == "active") and "objective" or (st == "available" and "pickup") or nil
+        entries[#entries + 1] = { text = L["Add a note..."], icon = "Note", func = function()
+            UI:NoteForStep({ questIds = { questId }, kind = kind }, nil, snap)
+        end }
+    end
     -- la cadena en el orden en que hay que hacerla, numerada: 1 = la que ya se puede coger ... N = esta mision.
     -- (cada linea: si al pulsarla aun no se puede coger, sale el aviso rojo y no crea ruta)
     if quest then
@@ -1058,14 +1138,25 @@ function UI:FillQuests()
     for k = 1, #QR.Planner:GetQuestRows() do Skin():SetRounded(clip, f.rows[k].bg) end
 end
 
+--- Texto de arriba del banner y titulo de una guia: las de zona, "GUIA DE ZONA" y el nombre de la zona; las demas
+--- (clase, mazmorra, otras), su tipo y el nombre de la guia (antes salia la zona donde empieza: "Ciudad de Ventormenta")
+local function BannerHead(guide)
+    if guide.class then return L["QUESTIEROUTER  /  CLASS GUIDE"], QR.GuideLabel(guide) end
+    if guide.instanceId or guide.dungeon then return L["QUESTIEROUTER  /  DUNGEON GUIDE"], QR.GuideLabel(guide) end
+    if guide.titleKey and not guide.event then return L["QUESTIEROUTER  /  OTHER GUIDES"], QR.GuideLabel(guide) end
+    local map = QR.Bridge:UiMapOf(guide.areaId)
+    local info = map and C_Map.GetMapInfo and C_Map.GetMapInfo(map)
+    return L["QUESTIEROUTER  /  ZONE GUIDE"], info and info.name or guide.zone
+end
+UI.BannerHead = BannerHead
+
 --- Mientras Questie termina de cargar: el banner de la guia y un "Cargando misiones de Questie..." en la lista
 function UI:PaintLoading()
     local f = self.frame
     local guide = QR.Planner and QR.Planner:GetGuide()
     if guide then
-        local ok, map = pcall(function() return QR.Bridge:UiMapOf(guide.areaId) end)
-        local info = ok and map and C_Map.GetMapInfo and C_Map.GetMapInfo(map)
-        f.banner:SetTexts(L["QUESTIEROUTER  /  ZONE GUIDE"], (info and info.name) or QR.GuideLabel and select(2, pcall(QR.GuideLabel, guide)) or guide.zone,
+        local ok, head, title = pcall(BannerHead, guide)
+        f.banner:SetTexts(ok and head or L["QUESTIEROUTER  /  ZONE GUIDE"], ok and title or guide.zone,
             string.format(L["Levels %d-%d"], guide.minLevel, guide.maxLevel))
     else
         f.banner:SetTexts(L["QUESTIEROUTER  /  GUIDES"], L["Welcome to QuestieRouter"], "")
@@ -1109,11 +1200,10 @@ function UI:Refresh()
     if guide and guide.BannerTexts then
         f.banner:SetTexts(guide:BannerTexts())
     elseif guide then
-        local map = QR.Bridge:UiMapOf(guide.areaId)
-        local info = map and C_Map.GetMapInfo and C_Map.GetMapInfo(map)
         local done, total = 0, #guide.quests
         for _, row in ipairs(guide.quests) do if Questie.db.char.complete[row[1]] then done = done + 1 end end
-        f.banner:SetTexts(L["QUESTIEROUTER  /  ZONE GUIDE"], info and info.name or guide.zone,
+        local head, title = BannerHead(guide)
+        f.banner:SetTexts(head, title,
             string.format(L["Levels %d-%d  ·  %d/%d quests"], guide.minLevel, guide.maxLevel, done, total))
     else
         local cat = self.browseCategory
@@ -1208,10 +1298,63 @@ function UI:PaintFlight()
 end
 
 --- Menu del clic derecho en un paso de la lista
+local STEP_CODE = { pickup = "p", objective = "o", turnin = "t" }
+
+--- Nota de un paso (guias de clase): ventana para escribirla y, al guardar, al registro de observaciones con la
+--- posicion de cuando se hizo clic derecho (snap). Cancelar no guarda nada.
+function UI:NoteForStep(step, number, snap)
+    local guide = QR.Planner:GetGuide()
+    if not (guide and QR.NoteEditor and QR.Obs) then return end
+    local names = {}
+    for _, q in ipairs(step.questIds or {}) do
+        local quest = QR.Bridge:GetQuest(q)
+        names[#names + 1] = quest and quest.name or ("#" .. q)
+    end
+    local where = ""
+    if snap and snap.map and snap.x then
+        local info = C_Map and C_Map.GetMapInfo and C_Map.GetMapInfo(snap.map)
+        where = string.format(L["Position: %s (%.1f, %.1f)"], info and info.name or "?", snap.x / 10, snap.y / 10)
+    end
+    QR.NoteEditor:Open({
+        title = number and string.format(L["Note for step %d"], number) or L["Note for this quest"],
+        subtitle = table.concat(names, ", ") .. (where ~= "" and ("\n" .. where) or ""),
+        onSave = function(text, noteType)
+            local ids = {}
+            for _, q in ipairs(step.questIds or {}) do ids[q] = true end
+            QR.Obs:Record("N", { questId = step.questIds and step.questIds[1], giverKind = "n", giverId = step.npcId,
+                                 offer = { mode = "q", ids = ids }, guide = guide, snapshot = snap,
+                                 stepKind = step.done and "h" or STEP_CODE[step.kind], note = text,
+                                 noteType = noteType })
+            QR:Print(L["Note saved. It will go with your export."])
+        end,
+    })
+end
+
+--- Menu de un paso ya hecho: solo añadir una nota (la posicion se toma ahora, al hacer clic derecho) o cancelar
+function UI:DoneMenu(entry)
+    if not (entry and entry.questId and QR.Obs and QR.Planner:GetGuide()) then return end
+    local snap = QR.Obs:Snapshot()
+    QR.Menu:Open({
+        { text = string.format(L["Step %d (done)"], entry.number or 0), header = true },
+        { text = L["Add a note..."], icon = "Note", func = function()
+            UI:NoteForStep({ questIds = { entry.questId }, kind = entry.kind, done = true }, entry.number, snap)
+        end },
+        { text = L["Cancel"], func = function() end },
+    })
+end
+
 function UI:StepMenu(step, number)
+    -- solo los pasos de misiones (coger, hacer, entregar); los tramos de viaje no tienen menu
+    if not (step and STEP_CODE[step.kind] and step.questIds and #step.questIds > 0) then return end
     local P = QR.Planner
     local pinned = P:IsPinned(step)
     local entries = { { text = string.format(L["Step %d"], number), header = true } }
+    -- añadir una nota a este paso (la posicion se toma ahora, al hacer clic derecho)
+    local guide = P:GetGuide()
+    if guide and QR.Obs then
+        local snap = QR.Obs:Snapshot()
+        entries[#entries + 1] = { text = L["Add a note..."], icon = "Note", func = function() UI:NoteForStep(step, number, snap) end }
+    end
     if step.future then
         -- un "hacer" o "entregar" de una mision que aun no tienes: antes hay que cogerla
         entries[#entries + 1] = { text = L["Go to this step (pick up the quest first)"], disabled = true }
@@ -1281,6 +1424,7 @@ function UI:Init()
     QR:On("PLAN_UPDATED", function() UI:Refresh() end)
     QR:On("TARGET_CHANGED", function() if UI.frame and UI.frame:IsShown() then UI:Refresh() end end)
     QR:On("HISTORY_CHANGED", function() UI:Refresh() end)
+    QR:On("WAYPOINTS_CHANGED", function() if UI.frame and UI.frame:IsShown() then UI:Refresh() end end)
     QR:On("GUIDE_CHANGED", function(g)
         UI.browseCategory = nil
         UI.view = "steps"

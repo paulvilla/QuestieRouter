@@ -139,7 +139,11 @@ function WhatsNew:Show()
     f.scroll:SetPoint("TOPLEFT", f.logTitle, "BOTTOMLEFT", 0, -8)
     f.scroll:SetPoint("BOTTOMRIGHT", f.content, "BOTTOMRIGHT", -28, 10)
     local lines = {}
-    for _, l in ipairs(log and log.lines or {}) do lines[#lines + 1] = "|cffffd166•|r  " .. l end
+    for _, l in ipairs(log and log.lines or {}) do
+        -- "# texto": subtitulo de un grupo de cambios (como en Ajustes > Cambios); lo demas, un punto de la lista
+        if l:sub(1, 2) == "# " then lines[#lines + 1] = "|cffffd200" .. l:sub(3) .. "|r"
+        else lines[#lines + 1] = "|cffffd166•|r  " .. l end
+    end
     f.logText:SetText(table.concat(lines, "\n\n"))
     f.log:SetHeight(f.logText:GetStringHeight() + 6)
     f.never:SetChecked(QR.db.whatsNew == false)

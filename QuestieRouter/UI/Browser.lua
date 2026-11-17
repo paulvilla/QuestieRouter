@@ -811,22 +811,10 @@ local function GuideLevelColor(g)
     return (level < g.minLevel and "|cffff8178") or (level > g.maxLevel and "|cff9a9f9c") or "|cff71d6a2"
 end
 
---- estado de una guia para el icono de su tarjeta: "done" (todo hecho), "active" (empezada), "lowlevel" (aun no
---- tienes el nivel de su primera mision) o nil (sin empezar y a tu nivel)
+--- estado de una guia para el icono de su tarjeta: "done" (hecha), "active" (empezada), "lowlevel" (aun no tienes
+--- el nivel de su primera mision) o nil (sin empezar y a tu nivel). Comun con el menu rapido: Guide/ZoneGuides.lua
 local function GuideState(g)
-    local B = QR.Bridge
-    if not (B and B.QuestStatus) then return nil end
-    local done, started, minReq = 0, false, nil
-    for _, row in ipairs(g.quests) do
-        local st = B:QuestStatus(row[1])
-        if st == "done" then done = done + 1; started = true
-        elseif st == "active" then started = true end
-        minReq = math.min(minReq or row[3], row[3])
-    end
-    if done == #g.quests then return "done" end
-    if started then return "active" end
-    if minReq and UnitLevel("player") < minReq then return "lowlevel" end
-    return nil
+    return QR.GuideState(g)
 end
 
 local function GuideEntries(list, isDungeon)
@@ -1928,7 +1916,8 @@ function Browser:PaintDetail()
             else
                 self:FillProfession(pg, rank)
             end
-            self:SetLoad(false, L["Coming soon"])
+            -- (la guia existe: es de consulta, no se carga en la flecha; antes decia "Proximamente")
+            self:SetLoad(false, L["Reference only"])
             return
         end
         d.desc:SetText(L["This guide is being prepared. It will take you from 1 to 300: trainers, materials, recipes and where to get everything."])
@@ -1977,18 +1966,59 @@ local RANK_NAMES = { "Apprentice", "Journeyman", "Expert", "Artisan" }
 
 local function MyFaction() return UnitFactionGroup("player") == "Horde" and "H" or "A" end
 
---- el entrenador / vendedor de tu faccion: en tu zona si lo hay; si no, el primero de tu faccion
+--- el entrenador / vendedor de tu faccion (o neutral: "AH", los goblins) mas cercano a ti. Antes los neutrales no
+--- salian nunca (se comparaba "AH" con "A" / "H") y, fuera de su zona, salia el primero de la lista (un humano en
+--- Ventormenta podia ver uno de Darnassus).
 local function PickCandidate(list)
     if type(list) ~= "table" then return nil end
-    local f, here = MyFaction(), C_Map and C_Map.GetBestMapForUnit and C_Map.GetBestMapForUnit("player")
-    local first
+    local f = MyFaction()
+    local px, py, pinst = QR.HBD and QR.HBD:GetPlayerWorldPosition()
+    local best, bestD
     for _, c in ipairs(list) do
-        if type(c) == "table" and (not c.faction or c.faction == f) then
-            if c.map == here then return c end
-            first = first or c
+        if type(c) == "table" and (not c.faction or c.faction:find(f, 1, true)) then
+            local d = 1e9
+            if px and c.map and c.x and c.y then
+                local wx, wy, inst = QR.HBD:GetWorldCoordinatesFromZone(c.x / 100, c.y / 100, c.map)
+                if wx and inst == pinst then d = QR.HBD:GetWorldDistance(pinst, px, py, wx, wy) or 1e9
+                elseif wx then d = 1e8 end   -- (otro continente: detras de los de este)
+            end
+            if not bestD or d < bestD then best, bestD = c, d end
         end
     end
-    return first
+    return best
+end
+
+--- ¿Este paso u objetivo es para tu personaje? (only = { factions = { ... }, races = { ... } }). Las guias traen
+--- variantes por raza (reunir en Elwynn, en Dun Morogh, en Teldrassil...): antes solo se miraba la faccion y salian
+--- todas, y la lista de la compra las sumaba. Si tu raza no sale en ninguna variante de la guia, no se esconde nada.
+local function ForMe(only, guideRaces)
+    if not only then return true end
+    if only.factions then
+        local me, ok = UnitFactionGroup("player"), false
+        for _, x in ipairs(only.factions) do if x == me then ok = true end end
+        if not ok then return false end
+    end
+    if only.races then
+        local race = select(2, UnitRace("player"))
+        if not (race and guideRaces and guideRaces[race]) then return true end
+        for _, x in ipairs(only.races) do if x == race then return true end end
+        return false
+    end
+    return true
+end
+
+--- razas que aparecen en las variantes de una guia (para ForMe)
+local function GuideRaces(pg)
+    if pg.racesSeen then return pg.racesSeen end
+    local seen = {}
+    for _, step in ipairs(pg.steps or {}) do
+        for _, r in ipairs(step.only and step.only.races or {}) do seen[r] = true end
+        for _, gl in ipairs(step.goals or {}) do
+            for _, r in ipairs(gl.only and gl.only.races or {}) do seen[r] = true end
+        end
+    end
+    pg.racesSeen = seen
+    return seen
 end
 
 local function NpcName(id)
@@ -2058,9 +2088,27 @@ function Browser:GoalLines(gl, pg)
         if c then sub = string.format(L["Vendor: %s (%s)"], NpcName(c.npc), MapName(c.map)) end
     elseif t == "collect" then
         local s; s, ok = ItemText(gl.item, gl.count, 18)
-        main = string.format(L["Gather %s"], s)
+        -- material que la guia de origen daba por hecho (lingotes, polvos, gemas...): cantidad aproximada y de donde sale
+        main = string.format(gl.derived and L["Get about %s"] or L["Gather %s"], s)
         tip = { kind = "item", id = gl.item }
         local src = pg.farm and pg.farm[gl.item]
+        if gl.how == "smelt" then
+            sub = string.format(L["Smelt %s (Mining) or buy them at the auction house"], (ItemText(gl.ore)))
+            src = nil
+        elseif gl.how == "alloy" then
+            sub = string.format(L["Smelt %s and %s (Mining) or buy them at the auction house"],
+                (ItemText(gl.parts and gl.parts[1] or 0)), (ItemText(gl.parts and gl.parts[2] or 0)))
+            src = nil
+        elseif gl.how == "disenchant" then
+            sub = L["Disenchant green items, or buy them at the auction house"]
+            src = nil
+        elseif gl.how == "smith" then
+            sub = L["Made by a blacksmith (or bought at the auction house)"]
+            src = nil
+        elseif gl.how == "craft" then
+            sub = string.format(L["Craft more: %s"], (SpellText(gl.spell)))
+            src = nil
+        end
         if src then
             local parts = {}
             for _, x in ipairs(src) do
@@ -2150,12 +2198,9 @@ function Browser:FillProfession(pg, rank)
     end
     local lastSection
     local need = {}   -- lista de la compra: lo que queda por comprar o reunir (tramos que aun no has pasado)
+    local races = GuideRaces(pg)
     for si, step in ipairs(pg.steps or {}) do
-        local only = step.only
-        local allowed = not (only and only.factions) or (function()
-            for _, f in ipairs(only.factions) do if f == myFaction then return true end end
-        end)()
-        if allowed then
+        if ForMe(step.only, races) then
             local sec = pg.sections and pg.sections[step.section or 1]
             if step.section ~= lastSection and sec then
                 lastSection = step.section
@@ -2176,7 +2221,8 @@ function Browser:FillProfession(pg, rank)
                 Row(string.format(L["Gathering route in %s (%d spots)"], "|cffffd166" .. MapName(map) .. "|r", zonesOf[map]), nil, nil, dim)
             end
             for gi, gl in ipairs(step.goals or {}) do
-                local main, sub, tip, ok = self:GoalLines(gl, pg)
+                local main, sub, tip, ok
+                if ForMe(gl.only, races) then main, sub, tip, ok = self:GoalLines(gl, pg) end
                 if main then
                     if ok == false then missing = true end
                     Row(main, sub, tip, dim, nil, pg.skillLine .. ":" .. si .. ":" .. gi)

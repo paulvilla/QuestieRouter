@@ -29,15 +29,40 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
+    key = "Alliance_Class_WARLOCK_1599",
+    faction = "Alliance",
+    class = "WARLOCK",
+    titleQuest = 1599,
+    minLevel = 4,
+    maxLevel = 4,
+    areaId = 12,
+    zone = "Elwynn Forest",
+    focus = { 49.9, 42.6 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "spell", 688, 0 },
+        { "rep", 72, 100 },
+        { "rep", 47, 100 },
+        { "rep", 54, 100 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 1598, 4, 1, 1 }, -- El libro robado
+        { 1599, 4, 1, 64 }, -- Novato
+    },
+})
+
+QR:RegisterClassGuide({
     key = "Alliance_Class_WARLOCK_65603",
     faction = "Alliance",
     class = "WARLOCK",
     titleQuest = 65603,
     minLevel = 20,
     maxLevel = 20,
-    areaId = 17,
-    zone = "The Barrens",
-    focus = { 49.3, 57.1 },   -- punto medio de la cadena en el mapa de la zona
+    areaId = 1519,
+    zone = "Stormwind City",
+    focus = { 39.2, 85.2 },   -- punto medio de la cadena en el mapa de la zona
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
@@ -47,32 +72,12 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1716, 20, 20, 4294967373 }, -- Devoradora de almas
+        { 1717, 20, 20, 4294967373 }, -- La invocación de Gakin
         { 1738, 20, 20, 4294967373 }, -- Duramen
-        { 1739, 20, 20, 4294967373 }, -- El vínculo
+        { 1739, 20, 20, 65 }, -- El vínculo
         { 65602, 20, 20, 4294967373 }, -- ¿Qué es el amor?
-        { 65603, 20, 20, 4294967373 }, -- El vínculo
-    },
-})
-
-QR:RegisterClassGuide({
-    key = "Alliance_Class_WARLOCK_1689",
-    faction = "Alliance",
-    class = "WARLOCK",
-    titleQuest = 1689,
-    minLevel = 10,
-    maxLevel = 10,
-    areaId = 1519,
-    zone = "Stormwind City",
-    focus = { 39.2, 85.2 },   -- punto medio de la cadena en el mapa de la zona
-    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
-    --   o puntos de reputacion }; la primera que no es reputacion es la principal
-    rewards = {
-        { "spell", 697, 0 },
-    },
-    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
-    quests = {
-        { 1688, 10, 10, 4294967373 }, -- Surena Caledon
-        { 1689, 10, 10, 4294967373 }, -- El vínculo
+        { 65603, 20, 20, 65 }, -- El vínculo
     },
 })
 
@@ -95,6 +100,8 @@ QR:RegisterClassGuide({
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 1796, 31, 31 }, -- Los componentes para la toga de sangre dorada encantada
+        { 4736, 31, 31, 4294967373 }, -- Buscando a Menara Nadiz
+        { 4738, 31, 31, 4294967373 }, -- Buscando a Menara Nadiz
         { 4781, 34, 31 }, -- Los componentes para la toga de sangre dorada encantada
         { 4782, 34, 31 }, -- Los componentes para la toga de sangre dorada encantada
         { 4783, 37, 31 }, -- Los componentes para la toga de sangre dorada encantada
@@ -105,15 +112,61 @@ QR:RegisterClassGuide({
 })
 
 QR:RegisterClassGuide({
+    key = "Alliance_Class_WARLOCK_1715",
+    faction = "Alliance",
+    class = "WARLOCK",
+    titleQuest = 1715,
+    minLevel = 10,
+    maxLevel = 10,
+    areaId = 1519,
+    zone = "Stormwind City",
+    focus = { 39.2, 85.2 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "spell", 697, 0 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 1685, 10, 10, 4294967373 }, -- La invocación de Gakin
+        { 1688, 10, 10, 4294967373 }, -- Surena Caledon
+        { 1689, 10, 10, 65 }, -- El vínculo
+        { 1715, 10, 10, 4294967373 }, -- El Cordero Degollado
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Alliance_Class_WARLOCK_1740",
+    faction = "Alliance",
+    class = "WARLOCK",
+    titleQuest = 1740,
+    minLevel = 25,
+    maxLevel = 25,
+    areaId = 17,
+    zone = "The Barrens",
+    focus = { 49.3, 57.2 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "choice", 6898, 1740 },
+        { "choice", 15109, 1740 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 1740, 25, 20 }, -- El orbe de Soran'ruk
+    },
+})
+
+QR:RegisterClassGuide({
     key = "Alliance_Class_WARLOCK_1795",
     faction = "Alliance",
     class = "WARLOCK",
     titleQuest = 1795,
     minLevel = 30,
     maxLevel = 30,
-    areaId = 17,
-    zone = "The Barrens",
-    focus = { 62.6, 35.5 },   -- punto medio de la cadena en el mapa de la zona
+    areaId = 1537,
+    zone = "Ironforge",
+    focus = { 65.3, 9.3 },   -- punto medio de la cadena en el mapa de la zona
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
@@ -123,9 +176,10 @@ QR:RegisterClassGuide({
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 1758, 30, 30, 4294967373 }, -- El Libro del Conciliábulo
+        { 1798, 30, 30, 4294967373 }, -- Buscando a Strahad
         { 1802, 30, 30, 4294967373 }, -- Libro del Conciliábulo
         { 1804, 30, 30, 4294967373 }, -- Libro del Conciliábulo
-        { 1795, 30, 30 }, -- El vínculo
+        { 1795, 30, 30, 211 }, -- El vínculo
     },
 })
 
@@ -178,12 +232,13 @@ QR:RegisterClassGuide({
     quests = {
         { 4965, 35, 35, 4294967373 }, -- El conocimiento del orbe de Orahil
         { 4968, 35, 35, 4294967373 }, -- El conocimiento del orbe de Orahil
-        { 1799, 40, 35 }, -- Los fragmentos del orbe de Orahil
+        { 1799, 40, 35, 12884902143 }, -- Los fragmentos del orbe de Orahil
         { 4962, 40, 35 }, -- Fragmento de can manáfago
-        { 4961, 40, 35 }, -- La purificación del orbe de Orahil
-        { 4976, 40, 35 }, -- Devolver el orbe purificado
-        { 4964, 40, 35 }, -- El orbe completo de Dar'Orahil
-        { 4975, 40, 35 }, -- El orbe completo de Noh'Orahil
+        { 4961, 40, 35, 12884902143 }, -- La purificación del orbe de Orahil
+        { 4963, 40, 35 }, -- Fragmento de infernal
+        { 4976, 40, 35, 12884902143 }, -- Devolver el orbe purificado
+        { 4964, 40, 35, 12884902143 }, -- El orbe completo de Dar'Orahil
+        { 4975, 40, 35, 12884902143 }, -- El orbe completo de Noh'Orahil
     },
 })
 
@@ -206,7 +261,7 @@ QR:RegisterClassGuide({
     quests = {
         { 4487, 40, 40, 4294967373 }, -- Invoca un malignoecus
         { 4488, 40, 40, 4294967373 }, -- Invoca un malignoecus
-        { 4490, 40, 40 }, -- Invoca un malignoecus
+        { 4490, 40, 40, 211 }, -- Invoca un malignoecus
     },
 })
 
@@ -229,12 +284,36 @@ QR:RegisterClassGuide({
     quests = {
         { 7563, 60, 60 }, -- La ira de sangre
         { 7564, 60, 60 }, -- Ojosalvajes
+        { 7623, 60, 60 }, -- Lord Pesadilla
+        { 7624, 60, 60 }, -- Ulathek el Traidor
+        { 7625, 60, 60 }, -- Polvo estelar xorothiano
         { 7626, 60, 60 }, -- La Campana de Dethmoora
         { 7627, 60, 60 }, -- Rueda de la Marcha Negra
         { 7628, 60, 60 }, -- La Vela del Apocalipsis
         { 7629, 60, 60 }, -- Entrega de diablillo
         { 7630, 60, 60 }, -- La arcanita
-        { 7631, 60, 60 }, -- Terrorecus de Xoroth
+        { 7631, 60, 60, 211 }, -- Terrorecus de Xoroth
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Alliance_Class_WARLOCK_397",
+    faction = "Alliance",
+    class = "WARLOCK",
+    titleQuest = 397,
+    minLevel = 30,
+    maxLevel = 30,
+    areaId = 1519,
+    zone = "Stormwind City",
+    focus = { 40.1, 85.3 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "item", 3556, 397 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 397, 30, 25, 65 }, -- Nos has hecho un gran servicio
     },
 })
 
@@ -251,13 +330,14 @@ QR:RegisterClassGuide({
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
+        { "spell", 18540, 7583 },
         { "item", 18602, 7583 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 7581, 60, 60 }, -- Las selladuras de la prisión
         { 7582, 60, 60 }, -- El revestimiento de la prisión
-        { 7583, 60, 60 }, -- Supresión
+        { 7583, 60, 60, 211 }, -- Supresión
     },
 })
 
@@ -305,7 +385,7 @@ QR:RegisterClassGuide({
     quests = {
         { 7601, 50, 50 }, -- La orden de Niby
         { 7602, 55, 50 }, -- Esencia de energía vil pura
-        { 7603, 55, 50 }, -- El núcleo infernal de Kroshius
+        { 7603, 55, 50, 211 }, -- El núcleo infernal de Kroshius
     },
 })
 
@@ -324,39 +404,30 @@ QR:RegisterClassGuide({
     rewards = {
         { "item", 20705, 8381 },
         { "item", 20716, 8381 },
-        { "item", 3556, 397 },
-        { "choice", 6898, 1740 },
-        { "choice", 15109, 1740 },
         { "rep", 529, 1600 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
         { "rep", 609, 400 },
         { "rep", 809, 200 },
-        { "rep", 72, 150 },
-        { "rep", 54, 150 },
-        { "rep", 47, 100 },
+        { "rep", 72, 50 },
+        { "rep", 54, 50 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 3105, 1, 1, 1 }, -- Una carta impía
         { 3115, 1, 1, 64 }, -- Memorándum corrupto
-        { 1598, 4, 1, 4294967373 }, -- El libro robado
-        { 1599, 4, 1, 4294967373 }, -- Novato
-        { 1685, 10, 10, 4294967373 }, -- La invocación de Gakin
-        { 1715, 10, 10, 4294967373 }, -- El Cordero Degollado
-        { 1717, 20, 20, 4294967373 }, -- La invocación de Gakin
-        { 1740, 25, 20 }, -- El orbe de Soran'ruk
-        { 397, 30, 25, 65 }, -- Nos has hecho un gran servicio
-        { 1798, 30, 30, 4294967373 }, -- Buscando a Strahad
-        { 4736, 31, 31, 4294967373 }, -- Buscando a Menara Nadiz
-        { 4738, 31, 31, 4294967373 }, -- Buscando a Menara Nadiz
-        { 4963, 40, 35 }, -- Fragmento de infernal
         { 7502, 60, 54 }, -- Controlar las Sombras
         { 7562, 60, 60 }, -- Mor'zul Sangredoble
-        { 7623, 60, 60 }, -- Lord Pesadilla
         { 8059, 60, 60 }, -- Dechados de Poder: los Brazaletes de endemoniado
         { 8076, 60, 60 }, -- Dechados de Poder: el Manto de endemoniado
         { 8077, 60, 60 }, -- Dechados de Poder: la Toga de endemoniado
+        { 8190, 60, 58 }, -- Maleficio de mala suerte
         { 8381, 60, 58 }, -- Armamentos de guerra
+        { 8660, 60, 60 }, -- Las botas de clamacondenas
+        { 8661, 60, 60 }, -- Las togas clamacondenas
+        { 8662, 60, 60 }, -- El aro de clamacondenas
+        { 8663, 60, 60 }, -- Los pantalones de clamacondenas
+        { 8664, 60, 60 }, -- El manto de clamacondenas
         { 8694, 60, 60 }, -- El sayo de los nombres prohibidos
         { 8702, 60, 60 }, -- El anillo de los nombres prohibidos
         { 8710, 60, 60 }, -- El kris de los nombres prohibidos
@@ -422,7 +493,7 @@ QR:RegisterClassGuide({
     quests = {
         { 3631, 40, 40, 8589934770 }, -- Invoca un malignoecus
         { 4489, 40, 40, 8589934770 }, -- Invoca un malignoecus
-        { 4490, 40, 40 }, -- Invoca un malignoecus
+        { 4490, 40, 40, 211 }, -- Invoca un malignoecus
     },
 })
 
@@ -435,7 +506,7 @@ QR:RegisterClassGuide({
     maxLevel = 27,
     areaId = 1637,
     zone = "Orgrimmar",
-    focus = { 48.9, 49.3 },   -- punto medio de la cadena en el mapa de la zona
+    focus = { 48.5, 48.3 },   -- punto medio de la cadena en el mapa de la zona
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
@@ -445,17 +516,22 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
+        { 1472, 20, 20, 8589934770 }, -- Devoradora de almas
+        { 1476, 20, 20, 8589934770 }, -- Corazones puros
+        { 1474, 20, 20, 16 }, -- El vínculo
+        { 1507, 20, 20, 8589934770 }, -- Devoradora de almas
+        { 1508, 20, 20, 8589934770 }, -- Cazul, el ciego
         { 1509, 20, 20, 8589934770 }, -- Noticias de Dogran
         { 1510, 20, 20, 8589934770 }, -- Noticias de Dogran
         { 1511, 20, 20, 8589934770 }, -- Poción de Ken'zigla
         { 1515, 20, 20, 8589934770 }, -- El cautiverio de Dogran
         { 1512, 20, 20, 8589934770 }, -- Un regalo de amor
-        { 1513, 20, 20, 8589934770 }, -- El vínculo
+        { 1513, 20, 20, 130 }, -- El vínculo
         { 65593, 20, 20, 8589934770 }, -- Los corazones de los amantes
-        { 65597, 20, 20, 8589934770 }, -- El vínculo
+        { 65597, 20, 20, 16 }, -- El vínculo
         { 65601, 20, 20, 8589934770 }, -- El amor duele
         { 65610, 27, 20, 8589934770 }, -- Ojalá estuvieras aquí
-        { 65604, 20, 20, 8589934770 }, -- El vínculo
+        { 65604, 20, 20, 130 }, -- El vínculo
     },
 })
 
@@ -478,12 +554,36 @@ QR:RegisterClassGuide({
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 1796, 31, 31 }, -- Los componentes para la toga de sangre dorada encantada
+        { 4737, 31, 31, 8589934770 }, -- Buscando a Menara Nadiz
+        { 4739, 31, 31, 8589934770 }, -- Buscando a Menara Nadiz
         { 4781, 34, 31 }, -- Los componentes para la toga de sangre dorada encantada
         { 4782, 34, 31 }, -- Los componentes para la toga de sangre dorada encantada
         { 4783, 37, 31 }, -- Los componentes para la toga de sangre dorada encantada
         { 4784, 37, 31 }, -- Los componentes para la toga de sangre dorada encantada
         { 4785, 37, 31 }, -- Hilo fino de oro
         { 4786, 38, 31 }, -- Toga terminada
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Horde_Class_WARLOCK_1740",
+    faction = "Horde",
+    class = "WARLOCK",
+    titleQuest = 1740,
+    minLevel = 25,
+    maxLevel = 25,
+    areaId = 17,
+    zone = "The Barrens",
+    focus = { 49.3, 57.2 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "choice", 6898, 1740 },
+        { "choice", 15109, 1740 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 1740, 25, 20 }, -- El orbe de Soran'ruk
     },
 })
 
@@ -534,7 +634,7 @@ QR:RegisterClassGuide({
         { 1801, 30, 30, 8589934770 }, -- Libro del Conciliábulo
         { 1803, 30, 30, 8589934770 }, -- Libro del Conciliábulo
         { 1805, 30, 30, 8589934770 }, -- Libro del Conciliábulo
-        { 1795, 30, 30 }, -- El vínculo
+        { 1795, 30, 30, 211 }, -- El vínculo
     },
 })
 
@@ -561,12 +661,13 @@ QR:RegisterClassGuide({
     quests = {
         { 4967, 35, 35, 8589934770 }, -- El conocimiento del orbe de Orahil
         { 4969, 35, 35, 8589934770 }, -- El conocimiento del Orbe de Orahil
-        { 1799, 40, 35 }, -- Los fragmentos del orbe de Orahil
+        { 1799, 40, 35, 12884902143 }, -- Los fragmentos del orbe de Orahil
         { 4962, 40, 35 }, -- Fragmento de can manáfago
-        { 4961, 40, 35 }, -- La purificación del orbe de Orahil
-        { 4976, 40, 35 }, -- Devolver el orbe purificado
-        { 4964, 40, 35 }, -- El orbe completo de Dar'Orahil
-        { 4975, 40, 35 }, -- El orbe completo de Noh'Orahil
+        { 4961, 40, 35, 12884902143 }, -- La purificación del orbe de Orahil
+        { 4963, 40, 35 }, -- Fragmento de infernal
+        { 4976, 40, 35, 12884902143 }, -- Devolver el orbe purificado
+        { 4964, 40, 35, 12884902143 }, -- El orbe completo de Dar'Orahil
+        { 4975, 40, 35, 12884902143 }, -- El orbe completo de Noh'Orahil
     },
 })
 
@@ -589,12 +690,15 @@ QR:RegisterClassGuide({
     quests = {
         { 7563, 60, 60 }, -- La ira de sangre
         { 7564, 60, 60 }, -- Ojosalvajes
+        { 7623, 60, 60 }, -- Lord Pesadilla
+        { 7624, 60, 60 }, -- Ulathek el Traidor
+        { 7625, 60, 60 }, -- Polvo estelar xorothiano
         { 7626, 60, 60 }, -- La Campana de Dethmoora
         { 7627, 60, 60 }, -- Rueda de la Marcha Negra
         { 7628, 60, 60 }, -- La Vela del Apocalipsis
         { 7629, 60, 60 }, -- Entrega de diablillo
         { 7630, 60, 60 }, -- La arcanita
-        { 7631, 60, 60 }, -- Terrorecus de Xoroth
+        { 7631, 60, 60, 211 }, -- Terrorecus de Xoroth
     },
 })
 
@@ -611,13 +715,14 @@ QR:RegisterClassGuide({
     -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
     --   o puntos de reputacion }; la primera que no es reputacion es la principal
     rewards = {
+        { "spell", 18540, 7583 },
         { "item", 18602, 7583 },
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
         { 7581, 60, 60 }, -- Las selladuras de la prisión
         { 7582, 60, 60 }, -- El revestimiento de la prisión
-        { 7583, 60, 60 }, -- Supresión
+        { 7583, 60, 60, 211 }, -- Supresión
     },
 })
 
@@ -665,7 +770,30 @@ QR:RegisterClassGuide({
     quests = {
         { 7601, 50, 50 }, -- La orden de Niby
         { 7602, 55, 50 }, -- Esencia de energía vil pura
-        { 7603, 55, 50 }, -- El núcleo infernal de Kroshius
+        { 7603, 55, 50, 211 }, -- El núcleo infernal de Kroshius
+    },
+})
+
+QR:RegisterClassGuide({
+    key = "Horde_Class_WARLOCK_3001",
+    faction = "Horde",
+    class = "WARLOCK",
+    titleQuest = 3001,
+    minLevel = 30,
+    maxLevel = 30,
+    areaId = 1637,
+    zone = "Orgrimmar",
+    focus = { 48.2, 45.3 },   -- punto medio de la cadena en el mapa de la zona
+    -- recompensas en orden: { tipo (spell, item, choice, rep), id, mision que lo da (0: la cadena)
+    --   o puntos de reputacion }; la primera que no es reputacion es la principal
+    rewards = {
+        { "spell", 691, 0 },
+        { "item", 22244, 0 },
+    },
+    -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
+    quests = {
+        { 2996, 30, 30, 8589934770 }, -- Buscando a Strahad
+        { 3001, 30, 30, 8589934770 }, -- Buscando a Strahad
     },
 })
 
@@ -691,9 +819,9 @@ QR:RegisterClassGuide({
     },
     -- { questId, nivelMision, nivelRequerido, razas (si solo la pueden hacer algunas) }
     quests = {
-        { 1470, 3, 1, 8589934770 }, -- Descubrir el misterio
-        { 1485, 4, 1, 8589934770 }, -- Familiares viles
-        { 1499, 4, 1, 8589934770 }, -- Familiares viles
+        { 1470, 3, 1, 16 }, -- Descubrir el misterio
+        { 1485, 4, 1, 130 }, -- Familiares viles
+        { 1499, 4, 1, 146 }, -- Familiares viles
     },
 })
 
@@ -716,8 +844,10 @@ QR:RegisterClassGuide({
     quests = {
         { 1473, 10, 10, 16 }, -- Criatura abisal
         { 1471, 10, 10, 16 }, -- El vínculo
+        { 1478, 10, 10, 8589934770 }, -- Las invocaciones de Halgar
+        { 1506, 10, 10, 8589934770 }, -- Las invocaciones de Gan'rul
         { 1501, 11, 10, 2 }, -- Criatura abisal
-        { 1504, 11, 10, 2 }, -- El vínculo
+        { 1504, 11, 10, 130 }, -- El vínculo
     },
 })
 
@@ -736,11 +866,9 @@ QR:RegisterClassGuide({
     rewards = {
         { "item", 20705, 8381 },
         { "item", 20716, 8381 },
-        { "item", 22243, 1474 },
-        { "choice", 6898, 1740 },
-        { "choice", 15109, 1740 },
         { "rep", 529, 1600 },
-        { "rep", 270, 450 },
+        { "rep", 910, 1000 },
+        { "rep", 270, 550 },
         { "rep", 609, 400 },
         { "rep", 809, 200 },
         { "rep", 76, 50 },
@@ -752,22 +880,18 @@ QR:RegisterClassGuide({
         { 3090, 1, 1, 2 }, -- Pergamino corrupto
         { 3099, 1, 1, 16 }, -- Un pergamino manchado
         { 98575, 1, 1, 128 }, -- Tainted Tablet
-        { 1478, 10, 10, 8589934770 }, -- Las invocaciones de Halgar
-        { 1506, 10, 10, 8589934770 }, -- Las invocaciones de Gan'rul
-        { 1474, 20, 20, 8589934770 }, -- El vínculo
-        { 1740, 25, 20 }, -- El orbe de Soran'ruk
-        { 2996, 30, 30, 8589934770 }, -- Buscando a Strahad
-        { 3001, 30, 30, 8589934770 }, -- Buscando a Strahad
-        { 4737, 31, 31, 8589934770 }, -- Buscando a Menara Nadiz
-        { 4739, 31, 31, 8589934770 }, -- Buscando a Menara Nadiz
-        { 4963, 40, 35 }, -- Fragmento de infernal
         { 7502, 60, 54 }, -- Controlar las Sombras
         { 7562, 60, 60 }, -- Mor'zul Sangredoble
-        { 7623, 60, 60 }, -- Lord Pesadilla
         { 8059, 60, 60 }, -- Dechados de Poder: los Brazaletes de endemoniado
         { 8076, 60, 60 }, -- Dechados de Poder: el Manto de endemoniado
         { 8077, 60, 60 }, -- Dechados de Poder: la Toga de endemoniado
+        { 8190, 60, 58 }, -- Maleficio de mala suerte
         { 8381, 60, 58 }, -- Armamentos de guerra
+        { 8660, 60, 60 }, -- Las botas de clamacondenas
+        { 8661, 60, 60 }, -- Las togas clamacondenas
+        { 8662, 60, 60 }, -- El aro de clamacondenas
+        { 8663, 60, 60 }, -- Los pantalones de clamacondenas
+        { 8664, 60, 60 }, -- El manto de clamacondenas
         { 8694, 60, 60 }, -- El sayo de los nombres prohibidos
         { 8702, 60, 60 }, -- El anillo de los nombres prohibidos
         { 8710, 60, 60 }, -- El kris de los nombres prohibidos

@@ -17,13 +17,15 @@ Button.ICON = ICON
 local function OnClick(button)
     -- antes de que Questie termine de cargar: se hace en cuanto este listo
     if not QR.ready then QR:WhenReady(function() OnClick(button) end) return end
-    if button == "RightButton" then
-        QR.Menu:OpenMain()
-    elseif IsShiftKeyDown() then
+    if IsShiftKeyDown() then
+        -- Mayus + clic (cualquier boton): opciones
         QR.Options:Toggle()
-    else
-        -- clic: activar / desactivar el addon entero (ventana, flecha, lineas y ventanitas)
+    elseif button == "RightButton" then
+        -- clic derecho: activar / desactivar el addon entero (ventana, flecha, lineas y ventanitas)
         QR:SetEnabled(not QR.db.enabled)
+    else
+        -- clic izquierdo: el menu
+        QR.Menu:OpenMain()
     end
 end
 
@@ -45,8 +47,8 @@ local function FillTooltip(tt)
         tt:AddLine(L["No guide chosen"], 0.7, 0.7, 0.7)
     end
     tt:AddLine(" ")
-    tt:AddLine(QR.db.enabled and L["|cffffd166Click|r: disable QuestieRouter"] or L["|cffffd166Click|r: enable QuestieRouter"], 0.8, 0.8, 0.8)
-    tt:AddLine(L["|cffffd166Right-click|r: menu"], 0.8, 0.8, 0.8)
+    tt:AddLine(L["|cffffd166Click|r: menu"], 0.8, 0.8, 0.8)
+    tt:AddLine(QR.db.enabled and L["|cffffd166Right-click|r: disable QuestieRouter"] or L["|cffffd166Right-click|r: enable QuestieRouter"], 0.8, 0.8, 0.8)
     tt:AddLine(L["|cffffd166Shift+click|r: options"], 0.8, 0.8, 0.8)
 end
 

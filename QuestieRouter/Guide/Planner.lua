@@ -112,22 +112,60 @@ local function ToEntrance(guide, p, px, py, pinst)
              name = (p and p.name) or e.name, npcId = p and p.npcId, inDungeon = e.name }
 end
 
+--- Guias de clase: misiones anteriores de la cadena que faltan y NO estan en la guia (p. ej. "Devoradora de almas"
+--- de Gakin, que desbloquea toda la cadena de la sucubo). Sin ellas, todas las misiones de la guia salen bloqueadas
+--- y el planificador creia que la guia estaba terminada. -> { [questId] = orden de la mision de la guia que
+--- desbloquea } (se recorre la cadena hacia atras: tambien las anteriores de esas)
+--- Tambien devuelve las alternativas: { [questId] = clave del grupo } para las de preQuestSingle (basta con una:
+--- p. ej. la misma mision con cada instructor de brujo); de cada grupo solo se coge la mas cercana.
+function Planner:ChainExtras(guide)
+    local extra, alt = {}, {}
+    if not guide.class then return extra, alt end
+    local B = QR.Bridge
+    local skipped = QR.charDB.skipped or {}
+    local function walk(qid, order, depth)
+        if depth > 12 then return end
+        local ok, missing = pcall(self.MissingPrereqs, self, qid, guide)
+        for _, m in ipairs(ok and missing or {}) do
+            -- las que estan en la guia ya las lleva la guia (si estan bloqueadas, se recorren desde su fila)
+            if not m.inGuide and not extra[m.id] and not skipped[m.id] then
+                extra[m.id] = order
+                if m.single then alt[m.id] = qid end
+                walk(m.id, order, depth + 1)
+            end
+        end
+    end
+    for _, row in ipairs(guide.quests) do
+        local id = row[1]
+        if not skipped[id] then
+            local st = B:QuestStatus(id)
+            if st == "locked" or st == "lowlevel" then walk(id, guide.order[id] or 0, 0) end
+        end
+    end
+    return extra, alt
+end
+
 function Planner:BuildTasks(guide)
     local B = QR.Bridge
     if guide.Prepare then guide:Prepare() end   -- guias de evento: p. ej. en que zona esta la Feria este mes
-    local px, py, pinst = QR.HBD:GetPlayerWorldPosition()
+    -- tu posicion o, con puntos de paso (Alt + clic en el mapa), el ultimo de ellos: la guia sigue desde alli
+    local px, py, pinst
+    if QR.Waypoints then px, py, pinst = QR.Waypoints:PlanOrigin() else px, py, pinst = QR.HBD:GetPlayerWorldPosition() end
     local level = UnitLevel("player")
     local guideMap = B:UiMapOf(guide.areaId)
     local maps = B:CandidateMaps(guideMap) -- donde buscar las areas de mision del juego
     local tasks = { pickup = {}, objective = {}, turnin = {}, notes = {} }
     local skipped = QR.charDB.skipped or {}
     local city = self:PlayerCity()
+    -- (guias de clase) misiones anteriores de la cadena que no estan en la guia: cuentan como de la guia
+    local extra, alt = self:ChainExtras(guide)
+    tasks.extra = extra
 
     -- Misiones del log
     for questId in B:IterateActive() do
         local quest = (not skipped[questId]) and B:GetQuest(questId)
         if quest then
-            local inGuide = guide.info[questId] ~= nil
+            local inGuide = guide.info[questId] ~= nil or extra[questId] ~= nil
             if B:IsQuestComplete(quest) then
                 local p = B:NearestNpcOrObject(quest.Finisher, px, py, pinst)
                 -- en una capital: se entrega aqui aunque no sea de la guia (tiene prioridad, ver Choose)
@@ -162,6 +200,8 @@ function Planner:BuildTasks(guide)
                             end
                         elseif not best and inGuide then
                             tasks.notes[questId] = L["objective without a location"]
+                            -- (si no queda nada mas, se dice que hacer en vez de dar la guia por terminada)
+                            tasks.noObjPoint = tasks.noObjPoint or (o.Description or quest.name)
                         end
                     end
                 end
@@ -191,11 +231,74 @@ function Planner:BuildTasks(guide)
                 t.order = guide.order[questId]
                 t.icon = guide.QuestIcon and guide:QuestIcon(questId) or nil
                 table.insert(tasks.pickup, t)
+            elseif quest and quest.Starts and quest.Starts.Item and next(quest.Starts.Item) then
+                -- empieza al usar un objeto (lo suelta un bicho o se encuentra): no hay NPC adonde llevar
+                tasks.notes[questId] = L["Starts from an item"]
+                tasks.itemStart = tasks.itemStart or quest.name or ("#" .. questId)
+            elseif quest then
+                -- se puede coger, pero Questie no sabe quien la da (misiones nuevas de WoW Forever sin el NPC en su
+                -- base de datos): no hay adonde llevar; se avisa en vez de dar la guia por terminada
+                tasks.notes[questId] = L["Questie doesn't know who gives this quest"]
+                tasks.noPoint = tasks.noPoint or quest.name or ("#" .. questId)
             end
         elseif status == "lowlevel" then
             if not nextLevel or row[3] < nextLevel then nextLevel = row[3] end
         end
     end
+    -- Misiones de la guia que se excluyen (la misma mision con otro NPC u otra ciudad: hacer una cierra las demas):
+    -- solo se propone la mas cercana. Las que ya estan cogidas o hechas las cierra Questie (no salen como "coger").
+    do
+        local byId = {}
+        for _, t in ipairs(tasks.pickup) do byId[t.questId] = t end
+        local keep = {}
+        for _, t in ipairs(tasks.pickup) do
+            local ok, excl = pcall(B.QuestieDB.QueryQuestSingle, t.questId, "exclusiveTo")
+            local drop = false
+            for _, x in ipairs((ok and type(excl) == "table") and excl or {}) do
+                local o = byId[x]
+                if o and ((o.dist or FAR) < (t.dist or FAR) or ((o.dist or FAR) == (t.dist or FAR) and x < t.questId)) then
+                    drop = true
+                    break
+                end
+            end
+            if not drop then keep[#keep + 1] = t end
+        end
+        tasks.pickup = keep
+    end
+    -- (guias de clase) las anteriores de la cadena que ya se pueden coger: van justo antes de la mision que desbloquean.
+    -- Alternativas (basta con una): si ya tienes o hiciste una del grupo, las demas sobran; si no, solo la mas cercana.
+    local groupBusy, groupBest = {}, {}
+    for questId, key in pairs(alt) do
+        local st = B:QuestStatus(questId)
+        if st == "active" or st == "done" then groupBusy[key] = true end
+    end
+    for questId, order in pairs(extra) do
+        local status = B:QuestStatus(questId)
+        local key = alt[questId]
+        if key and groupBusy[key] then
+            -- otra alternativa del grupo ya esta cogida o hecha
+        elseif status == "available" and Planner:NotOffered(questId) then
+            tasks.notes[questId] = L["The NPC doesn't offer it yet (earlier quest of the chain missing)"]
+        elseif status == "available" and not logFull then
+            local quest = B:GetQuest(questId)
+            local p = quest and B:NearestNpcOrObject(quest.Starts, px, py, pinst)
+            if p then
+                local t = MakeTask("pickup", quest, p)
+                t.order = order - 0.5
+                t.chain = true
+                if key then
+                    local best = groupBest[key]
+                    if not best or (t.dist or FAR) < (best.dist or FAR) then groupBest[key] = t end
+                else
+                    table.insert(tasks.pickup, t)
+                end
+            end
+        elseif status == "lowlevel" then
+            local req = B.QuestieDB.QueryQuestSingle(questId, "requiredLevel") or 1
+            if not nextLevel or req < nextLevel then nextLevel = req end
+        end
+    end
+    for _, t in pairs(groupBest) do table.insert(tasks.pickup, t) end
     -- Guias de evento: pasos que no son misiones (hablar con un NPC, comprarle algo). Van como "coger" para que
     -- se agrupen y se ordenen igual; su id es negativo (no es una mision).
     for i, v in ipairs(guide.Visits and guide:Visits() or {}) do
@@ -262,7 +365,9 @@ function Planner:Choose(tasks)
     -- 4. Siguiente hub: la disponible mas baja en la guia
     local nextHub
     for _, t in ipairs(tasks.pickup) do
-        if not nextHub or t.order < nextHub.order then nextHub = t end
+        -- (a igual orden, la mas cercana)
+        if not nextHub or t.order < nextHub.order
+            or (t.order == nextHub.order and (t.dist or FAR) < (nextHub.dist or FAR)) then nextHub = t end
     end
     if nextHub then return nextHub, "siguiente hub" end
 
@@ -305,12 +410,30 @@ function Planner:Update()
     if not task then
         if tasks.logFull then
             self.plan.message = L["Quest log full: abandon or turn in some quests."]
+        elseif tasks.noObjPoint then
+            -- una mision a medias cuyo objetivo no tiene punto (p. ej. el demonio que invocas): primero eso
+            self.plan.message = string.format(L["Do: %s (no point on the map for this objective)."], tasks.noObjPoint)
         elseif tasks.nextLevel then
             self.plan.message = string.format(L["Nothing else at your level. Next quest at level %d."], tasks.nextLevel)
         elseif guide.IdleMessage then
             self.plan.message = guide:IdleMessage()
+        elseif tasks.itemStart then
+            self.plan.message = string.format(L["Next: %s. It starts from an item you have to find or loot."], tasks.itemStart)
+        elseif tasks.noPoint then
+            self.plan.message = string.format(L["Next: %s. Questie doesn't know who gives it, so I can't take you there."], tasks.noPoint)
+        elseif guide.class and next(tasks.extra or {}) then
+            -- guia de clase sin nada que hacer aun: falta una mision anterior que no se puede coger todavia
+            local name
+            for id in pairs(tasks.extra) do
+                local q = QR.Bridge:GetQuest(id)
+                name = q and q.name or name
+                if name then break end
+            end
+            self.plan.message = string.format(L["First you need an earlier quest of the chain: %s"], name or "?")
         else
-            self.plan.message = L["Zone complete. Choose the next guide."]
+            -- (las de zona, "Zona completada"; las de clase, mazmorra u otras, "Guia completada")
+            local isZone = not (guide.class or guide.instanceId or guide.dungeon or (guide.titleKey and not guide.event))
+            self.plan.message = isZone and L["Zone complete. Choose the next guide."] or L["Guide complete. Choose the next guide."]
         end
     end
     QR:Fire("PLAN_UPDATED", self.plan)
@@ -546,12 +669,16 @@ function Planner:MissingPrereqs(questId, guide)
                           inGuide = guide and guide.info[p] ~= nil, single = single or nil }
     end
     local okG, group = pcall(q, questId, "preQuestGroup")
-    for _, p in ipairs((okG and type(group) == "table") and group or {}) do if not done[p] then add(p) end end
+    -- (un negativo en preQuestGroup es esa mision, hecha, sin mirar sus exclusivas: QuestieDB:IsPreQuestGroupFulfilled)
+    for _, p in ipairs((okG and type(group) == "table") and group or {}) do
+        p = math.abs(p)
+        if not done[p] then add(p) end
+    end
     local okS, single = pcall(q, questId, "preQuestSingle")
     if okS and type(single) == "table" and #single > 0 then
         local any = false
-        for _, p in ipairs(single) do if done[p] then any = true end end
-        if not any then for _, p in ipairs(single) do add(p, true) end end
+        for _, p in ipairs(single) do if done[math.abs(p)] then any = true end end
+        if not any then for _, p in ipairs(single) do add(math.abs(p), true) end end
     end
     return out
 end
@@ -565,23 +692,34 @@ function Planner:ChainPrereqs(questId)
     local q = B.QuestieDB.QueryQuestSingle
     local out = {}
     local okG, group = pcall(q, questId, "preQuestGroup")
-    for _, p in ipairs((okG and type(group) == "table") and group or {}) do out[#out + 1] = { id = p } end
+    for _, p in ipairs((okG and type(group) == "table") and group or {}) do out[#out + 1] = { id = math.abs(p) } end
     local okS, single = pcall(q, questId, "preQuestSingle")
     if okS and type(single) == "table" and #single > 0 then
         local chosen
-        for _, p in ipairs(single) do if done[p] then chosen = p break end end
+        for _, p in ipairs(single) do if done[math.abs(p)] then chosen = math.abs(p) break end end
         if chosen then
             out[#out + 1] = { id = chosen }
         else
-            for _, p in ipairs(single) do out[#out + 1] = { id = p, single = true } end
+            for _, p in ipairs(single) do out[#out + 1] = { id = math.abs(p), single = true } end
         end
     end
     return out
 end
 
 --- Misiones que el NPC no ofrecio al hablar con el (se olvidan al entregar una mision o subir de nivel)
+--- Marca de "el NPC no la ofrece" de una mision: { lv = nivel, tn = entregas, t = hora, npc, kind } o nil
+function Planner:NotOfferedInfo(questId)
+    local info = QR.charDB.notOffered and QR.charDB.notOffered[questId]
+    if info == true then info = {} end   -- (marcas de versiones anteriores: sin datos)
+    return info or nil
+end
+
+--- ¿Hay que dejarla por ahora? Mientras sigas al mismo nivel y sin entregar ninguna mision desde que se marco (si
+--- algo cambia, el planificador vuelve a llevarte para comprobarlo; la marca sigue en la lista hasta que la ofrezca)
 function Planner:NotOffered(questId)
-    return QR.charDB.notOffered and QR.charDB.notOffered[questId] or false
+    local info = self:NotOfferedInfo(questId)
+    if not info then return false end
+    return info.lv == UnitLevel("player") and (info.tn or 0) == (QR.charDB.turnins or 0)
 end
 
 --- Resumen del estado de cada mision de la guia, para la lista de la ventana.
@@ -599,10 +737,17 @@ function Planner:GetQuestRows(forGuide)
         local status = QR.Bridge:QuestStatus(questId)
         if status == "active" and quest and QR.Bridge:IsQuestComplete(quest) then status = "complete" end
         local note = notes[questId]
-        if status == "available" and isActive and self:NotOffered(questId) then
-            status = "locked"
-            note = L["The NPC doesn't offer it yet (earlier quest of the chain missing)"]
+        -- el NPC no la ofrecia cuando hablaste con el: sigue en la lista, marcada (no se quita de la guia), con el
+        -- nivel al que paso; desaparece la marca cuando el NPC la ofrezca
+        local missing = status == "available" and self:NotOfferedInfo(questId)
+        if missing then
+            status = "notoffered"
+            note = missing.lv and string.format(L["The NPC didn't offer it when you talked to them (level %d)"], missing.lv)
+                or L["The NPC doesn't offer it yet (earlier quest of the chain missing)"]
         end
+        -- nota propia de lo que hay que hacer (Data/QuestNotes.lua): en el tooltip de la mision
+        local qnote = QR.QuestNote and QR.QuestNote(questId)
+        if qnote then note = (note and (note .. "\n") or "") .. "|cffffd166" .. qnote .. "|r" end
         -- cadena: que mision anterior falta y, si es de otra zona, de cual
         local chain, chainZone
         if status == "locked" or status == "lowlevel" then
@@ -632,8 +777,11 @@ function Planner:GetQuestRows(forGuide)
     return rows
 end
 
--- Al hablar con un NPC: que misiones ofrece de verdad. Las de la guia que deberian estar disponibles con el
--- (segun Questie) y no salen, se apartan hasta entregar alguna mision o subir de nivel.
+-- Al hablar con un NPC: que misiones ofrece de verdad. Las de la guia que deberian estar disponibles con el (segun
+-- Questie: disponible y es quien la da) y no salen se marcan "no la ofrece el NPC" (no se quitan de la guia: la lista
+-- las enseña asi) y el planificador no lleva alli hasta que algo cambie (subir de nivel, entregar una mision). Si mas
+-- tarde el NPC si la ofrece, se quita la marca. Las dos cosas se apuntan en el registro de observaciones
+-- (Core/Observations.lua) con todo el contexto, para analizar despues que cambio (nivel, cadena, que ya no existe).
 do
     local listShownAt = 0
     local function NpcId()
@@ -642,69 +790,135 @@ do
         local kind, _, _, _, _, id = strsplit("-", guid)
         return tonumber(id), kind
     end
-    local function Check(offeredIds, offeredTitles)
+
+    --- la mision esta en lo que ofrece el NPC (por id; o por nombre, si el juego solo da los nombres)
+    local function IsOffered(qid, offer, quest)
+        if offer.ids[qid] then return true end
+        return (quest and quest.name and offer.titles[quest.name]) and true or false
+    end
+
+    local function Check(offer)
         local guide = Planner:GetGuide()
         local npcId, kind = NpcId()
         if not guide or not npcId then return end
         local B = QR.Bridge
+        local giverKind = kind == "GameObject" and "o" or "n"
         local changed = false
+        QR.charDB.notOffered = QR.charDB.notOffered or {}
+        local no = QR.charDB.notOffered
+        -- (para el registro: las de la guia que se reconocen por nombre cuando el juego no da ids)
+        if offer.mode == "t" then
+            local matched = 0
+            for _, row in ipairs(guide.quests) do
+                local quest = B:GetQuest(row[1])
+                if quest and quest.name and offer.titles[quest.name] then offer.ids[row[1]] = true; matched = matched + 1 end
+            end
+            local total = 0
+            for _ in pairs(offer.titles) do total = total + 1 end
+            offer.unmatched = math.max(0, total - matched)
+        end
+        local level, turnins = UnitLevel("player"), QR.charDB.turnins or 0
         for _, row in ipairs(guide.quests) do
             local qid = row[1]
-            if B:QuestStatus(qid) == "available" then
-                local quest = B:GetQuest(qid)
-                local starts = quest and quest.Starts or {}
+            local quest = B:GetQuest(qid)
+            local info = no[qid]
+            if info and IsOffered(qid, offer, quest) then
+                -- antes no la ofrecia y ahora si: se quita la marca y se apunta
+                no[qid] = nil
+                changed = true
+                if QR.Obs then
+                    QR.Obs:Record("F", { questId = qid, giverKind = giverKind, giverId = npcId, offer = offer, guide = guide })
+                end
+            elseif quest and B:QuestStatus(qid) == "available" then
+                local starts = quest.Starts or {}
                 local fromHere = false
                 for _, n in pairs((kind == "GameObject" and starts.GameObject or starts.NPC) or {}) do
                     if n == npcId then fromHere = true end
                 end
-                if fromHere and not offeredIds[qid] and not (quest.name and offeredTitles[quest.name]) then
-                    QR.charDB.notOffered = QR.charDB.notOffered or {}
-                    if not QR.charDB.notOffered[qid] then QR.charDB.notOffered[qid] = true; changed = true end
+                if fromHere and not IsOffered(qid, offer, quest) then
+                    if type(info) ~= "table" or info.lv ~= level or (info.tn or 0) ~= turnins then
+                        no[qid] = { lv = level, tn = turnins, t = (GetServerTime and GetServerTime()) or time(),
+                                    npc = npcId, kind = giverKind }
+                        changed = true
+                    end
+                    if QR.Obs then
+                        QR.Obs:Record("M", { questId = qid, giverKind = giverKind, giverId = npcId, offer = offer, guide = guide })
+                    end
                 end
             end
         end
         if changed and QR.Target then QR.Target:Refresh(true) end
     end
+    -- NPC cuya lista de misiones esta abierta (o se acaba de abrir): el texto de una mision elegida en esa lista no
+    -- dice nada de las demas. Antes bastaba con tardar mas de 3 s en elegir para que contara como "el NPC solo da
+    -- esta" y se apartaban las otras (Takar: al mirar Duramen se apartaba "Que es el amor").
+    local listGUID
     local f = CreateFrame("Frame")
-    for _, e in ipairs({ "GOSSIP_SHOW", "QUEST_GREETING", "QUEST_DETAIL", "QUEST_TURNED_IN", "PLAYER_LEVEL_UP" }) do
+    for _, e in ipairs({ "GOSSIP_SHOW", "QUEST_GREETING", "QUEST_DETAIL", "QUEST_FINISHED", "QUEST_TURNED_IN",
+                         "PLAYER_LEVEL_UP" }) do
         pcall(f.RegisterEvent, f, e)
     end
     f:SetScript("OnEvent", function(_, event)
+        if event == "QUEST_FINISHED" then
+            -- (al cerrar la ventana de la mision; pasar de la lista a una mision no la cierra)
+            if GetTime() - listShownAt > 1 then listGUID = nil end
+            return
+        end
         if event == "QUEST_TURNED_IN" or event == "PLAYER_LEVEL_UP" then
-            -- algo de la cadena pudo desbloquearse: se vuelve a intentar
-            if QR.charDB and QR.charDB.notOffered and next(QR.charDB.notOffered) then
-                QR.charDB.notOffered = nil
-                if QR.Target then QR.Target:Refresh(true) end
+            -- algo de la cadena pudo desbloquearse: las marcadas se vuelven a comprobar (Planner:NotOffered compara el
+            -- nivel y las entregas de cuando se marcaron); la marca sigue en la lista hasta que el NPC la ofrezca
+            if QR.charDB and event == "QUEST_TURNED_IN" then QR.charDB.turnins = (QR.charDB.turnins or 0) + 1 end
+            if QR.charDB and QR.charDB.notOffered and next(QR.charDB.notOffered) and QR.Target then
+                QR.Target:Refresh(true)
             end
             return
         end
-        local ids, titles = {}, {}
+        local offer = { mode = "i", ids = {}, titles = {} }
         if event == "GOSSIP_SHOW" then
             listShownAt = GetTime()
+            listGUID = UnitGUID and UnitGUID("npc")
             if C_GossipInfo and C_GossipInfo.GetAvailableQuests then
                 for _, info in ipairs(C_GossipInfo.GetAvailableQuests() or {}) do
-                    if info.questID then ids[info.questID] = true end
-                    if info.title then titles[info.title] = true end
+                    if info.questID then offer.ids[info.questID] = true else offer.mode = "t" end
+                    if info.title then offer.titles[info.title] = true end
                 end
             elseif GetGossipAvailableQuests then
+                offer.mode = "t"
                 for _, v in ipairs({ GetGossipAvailableQuests() }) do
-                    if type(v) == "string" then titles[v] = true end
+                    if type(v) == "string" then offer.titles[v] = true end
                 end
             end
         elseif event == "QUEST_GREETING" then
             listShownAt = GetTime()
+            listGUID = UnitGUID and UnitGUID("npc")
+            offer.mode = "t"
             for i = 1, (GetNumAvailableQuests and GetNumAvailableQuests() or 0) do
                 local t = GetAvailableTitle(i)
-                if t then titles[t] = true end
+                if t then offer.titles[t] = true end
             end
         elseif event == "QUEST_DETAIL" then
-            -- solo cuenta si el NPC abrio la mision directamente (sin lista antes): entonces es la unica que da
-            if GetTime() - listShownAt < 3 then return end
             local id = GetQuestID and GetQuestID()
-            if id then ids[id] = true end
+            if id then offer.ids[id] = true end
             local t = GetTitleText and GetTitleText()
-            if t then titles[t] = true end
+            if t then offer.titles[t] = true end
+            local guid = UnitGUID and UnitGUID("npc")
+            if (guid and guid == listGUID) or GetTime() - listShownAt < 3 then
+                -- elegida en la lista de este NPC: solo dice que esta si la ofrece (quita su marca), nada de las demas
+                local no = QR.charDB.notOffered
+                if id and no and no[id] then
+                    no[id] = nil
+                    local npcId, kind = NpcId()
+                    if QR.Obs then
+                        QR.Obs:Record("F", { questId = id, giverKind = kind == "GameObject" and "o" or "n",
+                                             giverId = npcId, offer = offer, guide = Planner:GetGuide() })
+                    end
+                    if QR.Target then QR.Target:Refresh(true) end
+                end
+                return
+            end
+            -- abierta directamente por el NPC (sin lista): es la unica que da
+            offer.mode = "d"
         end
-        Check(ids, titles)
+        Check(offer)
     end)
 end
