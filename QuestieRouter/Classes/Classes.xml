@@ -1,0 +1,12 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <!-- Generado por tools/class_guides.py -->
+    <Script file="DRUID.lua"/>
+    <Script file="HUNTER.lua"/>
+    <Script file="MAGE.lua"/>
+    <Script file="PALADIN.lua"/>
+    <Script file="PRIEST.lua"/>
+    <Script file="ROGUE.lua"/>
+    <Script file="SHAMAN.lua"/>
+    <Script file="WARLOCK.lua"/>
+    <Script file="WARRIOR.lua"/>
+</Ui>

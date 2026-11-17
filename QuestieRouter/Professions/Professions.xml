@@ -1,0 +1,15 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <!-- Generado por tools/profession_guides.py -->
+    <Script file="alchemy.lua"/>
+    <Script file="blacksmithing.lua"/>
+    <Script file="cooking.lua"/>
+    <Script file="enchanting.lua"/>
+    <Script file="engineering.lua"/>
+    <Script file="first_aid.lua"/>
+    <Script file="fishing.lua"/>
+    <Script file="herbalism.lua"/>
+    <Script file="leatherworking.lua"/>
+    <Script file="mining.lua"/>
+    <Script file="skinning.lua"/>
+    <Script file="tailoring.lua"/>
+</Ui>
