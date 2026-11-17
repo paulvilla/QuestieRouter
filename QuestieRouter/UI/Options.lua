@@ -587,6 +587,138 @@ local function ArrowDropdown(parent)
     return row
 end
 
+---------------------------------------------------------------------------
+-- Estado de los addons de QuestieRouter (motor de rutas a pie y mapas por continente)
+-- "Desactivar todos" en la lista de addons tambien los desmarca, y como se cargan bajo demanda no siempre se ven en
+-- esa lista para volver a marcarlos: aqui se ve su estado y se activan con un boton.
+---------------------------------------------------------------------------
+local NAV_ADDON = "QuestieRouter_Nav"
+local ADDONS = {
+    { name = NAV_ADDON, label = "Walking routes engine", hint = "Active (loads when a route is needed)" },
+    { name = "QuestieRouter_Nav_EK", label = "Eastern Kingdoms walking maps", map = 0,
+      hint = "Active (loads on that continent)" },
+    { name = "QuestieRouter_Nav_Kalimdor", label = "Kalimdor walking maps", map = 1,
+      hint = "Active (loads on that continent)" },
+}
+
+local function AddOnApi(fn)
+    return (C_AddOns and C_AddOns[fn]) or _G[fn]
+end
+
+--- ¿Marcado en la lista de addons para este personaje? (nil si el cliente no lo dice)
+local function AddOnEnabled(name)
+    local who = UnitName("player")
+    if C_AddOns and C_AddOns.GetAddOnEnableState then
+        local ok, v = pcall(C_AddOns.GetAddOnEnableState, name, who)
+        if ok and type(v) == "number" then return v > 0 end
+    end
+    if _G.GetAddOnEnableState then   -- (clientes antiguos: personaje primero)
+        local ok, v = pcall(_G.GetAddOnEnableState, who, name)
+        if ok and type(v) == "number" then return v > 0 end
+    end
+    return nil
+end
+
+--- -> estado ("ok", "lazy", "off", "reload", "missing", "error", "old"), texto y boton ("enable", "reload" o nil)
+local function AddOnStatus(a)
+    local info, isLoaded = AddOnApi("GetAddOnInfo"), AddOnApi("IsAddOnLoaded")
+    local okInfo, title, _, _, loadable, reason = pcall(info or error, a.name)
+    if not okInfo or not title or reason == "MISSING" then return "missing", "Not installed" end
+    local E = _G.QuestieRouter_NavEngine
+    if isLoaded and isLoaded(a.name) then
+        if not E then return "error", "Loaded with errors (/console scriptErrors 1 and /reload)" end
+        if a.map and not (E.HasData and E.HasData(a.map)) then return "error", "Loaded, but its maps failed to load" end
+        return "ok", "Active and working"
+    end
+    local enabled = AddOnEnabled(a.name)
+    if enabled == false then return "off", "Disabled", "enable" end
+    if reason == "DISABLED" then return "reload", "Enabled: reload the interface to use it", "reload" end
+    if reason == "DEP_DISABLED" then return "off", "The routes engine is disabled", "enable" end
+    if reason == "INTERFACE_VERSION" then return "old", "Out of date: tick \"Load out of date AddOns\"" end
+    if not loadable and reason then return "error", string.format(L["Cannot load: %s"], tostring(reason)) end
+    -- el mapa de un continente cuyo motor no carga nunca podra cargarse
+    if a.map and not E and QR.Walk and QR.Walk.engine == false then return "error", "The routes engine failed to load" end
+    return "lazy", a.hint
+end
+
+local STATUS_COLOR = {
+    ok = { 0.35, 0.9, 0.45 }, lazy = { 0.55, 0.85, 0.6 }, reload = { 1, 0.75, 0.25 }, old = { 1, 0.75, 0.25 },
+    off = { 1, 0.4, 0.35 }, error = { 1, 0.4, 0.35 }, missing = { 0.65, 0.65, 0.65 },
+}
+
+local function EnableNavAddOns(which)
+    local enable = AddOnApi("EnableAddOn")
+    if not enable then return end
+    pcall(enable, which)
+    if which ~= NAV_ADDON then pcall(enable, NAV_ADDON) end   -- (los mapas dependen del motor)
+    -- el motor se intenta cargar ya (a veces el juego lo permite sin recargar)
+    if QR.Walk then
+        QR.Walk.engine, QR.Walk.engineAt = nil, nil
+        if QR.db.travel.gridRoutes ~= false and not InCombatLockdown() then pcall(QR.Walk.Engine, QR.Walk) end
+    end
+end
+
+local function AddOnStatusRow(parent, a)
+    local row = CreateFrame("Frame", nil, parent)
+    row:SetHeight(ROW + 4)
+    row.label = Label(row, a.label)
+    row.label:SetPoint("TOPLEFT", 4, -2)
+    row.status = row:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    QR.Skin:StyleText(row.status, "small")
+    -- (punto de color + texto, un poco metidos bajo el nombre)
+    row.status:SetPoint("TOPLEFT", row.label, "BOTTOMLEFT", 13, -1)
+    row.status:SetJustifyH("LEFT")
+    row.status:SetWordWrap(false)
+    row.dot = row:CreateTexture(nil, "OVERLAY")
+    row.dot:SetSize(8, 8)
+    row.dot:SetTexture(QR.Skin.MEDIA .. "Textures\\SoftPanelCircle.tga")
+    row.dot:SetPoint("RIGHT", row.status, "LEFT", -5, 0)
+
+    local btn = CreateFrame("Button", nil, row)
+    btn:SetSize(90, 20)
+    btn:SetPoint("RIGHT", -4, 0)
+    btn.bg = QR.Skin:CreateCard(btn)
+    btn.bg:SetAllPoints()
+    -- el texto en una capa por encima de la tarjeta (si no, la tarjeta lo tapa)
+    btn.art = CreateFrame("Frame", nil, btn)
+    btn.art:SetAllPoints()
+    btn.art:SetFrameLevel(btn.bg:GetFrameLevel() + 2)
+    btn.text = btn.art:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    QR.Skin:StyleText(btn.text, "small")
+    btn.text:SetPoint("CENTER")
+    btn:SetScript("OnEnter", function(s) s.bg.bg:SetAlpha(1) end)
+    btn:SetScript("OnLeave", function(s) s.bg.bg:SetAlpha(0.85) end)
+    btn:SetScript("OnClick", function(s)
+        if s.action == "reload" then ReloadUI() return end
+        EnableNavAddOns(a.name)
+        if Options.frame then Options:Refresh() end
+    end)
+    row.button = btn
+    row.status:SetPoint("RIGHT", btn, "LEFT", -8, 0)
+    row.label:SetPoint("RIGHT", btn, "LEFT", -8, 0)
+    row.label:SetJustifyH("LEFT")
+
+    function row:Update()
+        local state, text, action = AddOnStatus(a)
+        local c = STATUS_COLOR[state] or STATUS_COLOR.missing
+        row.status:SetText(L[text])
+        row.status:SetTextColor(c[1], c[2], c[3])
+        row.dot:SetVertexColor(c[1], c[2], c[3], 1)
+        btn.action = action
+        if action then
+            btn.text:SetText(L[action == "reload" and "Reload" or "Enable"])
+            local r, g, b = QR.Skin:Color("accent")
+            btn.bg.bg:SetVertexColor(r * 0.85, g * 0.85, b * 0.85, 1)
+            btn.bg.bg:SetAlpha(0.85)
+            btn.text:SetTextColor(1, 1, 1)
+            btn:Show()
+        else
+            btn:Hide()
+        end
+    end
+    return row
+end
+
 --- Marca un control para que solo se vea cuando cond() es verdadero
 local function Visible(control, cond)
     control.visibleIf = cond
@@ -738,6 +870,12 @@ function Options:Create(parent)
     local function pct(v) return v .. " %" end
     local function px(v) return v .. " px" end
     local controls = {
+        -- estado de los addons de rutas (primera seccion: se ve nada mas abrir Opciones)
+        Header(content, "STATUS"),
+        AddOnStatusRow(content, ADDONS[1]),
+        AddOnStatusRow(content, ADDONS[2]),
+        AddOnStatusRow(content, ADDONS[3]),
+
         Header(content, "SKIN"),
         Cycle(content, "Skin based on", { { "ZONE", "Automatic" }, { "GUIDE", "Guide zone" }, { "MANUAL", "Fixed zone" } },
             function() return sk.mode end, function(v) sk.mode = v end),
@@ -1027,4 +1165,12 @@ end
 QR:RegisterModule("Options", function()
     QR:On("SETTINGS_CHANGED", function() if Options.frame and Options.frame:IsShown() then Options:Refresh() end end)
     QR:On("SKIN_CHANGED", function() if Options.frame and Options.frame:IsShown() then Options:Refresh() end end)
+    -- el estado de los addons de rutas cambia al cargarse uno (el motor o los mapas de un continente)
+    local f = CreateFrame("Frame")
+    f:RegisterEvent("ADDON_LOADED")
+    f:SetScript("OnEvent", function(_, _, name)
+        if type(name) == "string" and name:find("^QuestieRouter_Nav") and Options.frame and Options.frame:IsShown() then
+            Options:Refresh()
+        end
+    end)
 end)

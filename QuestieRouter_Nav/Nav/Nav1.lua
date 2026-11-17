@@ -53,7 +53,7 @@ QuestieRouterPathData = QuestieRouterPathData or {}
 -- stylua: ignore
 QuestieRouterPathData[1] = {
 	format = 5,
-	-- blocks: base64 (QuestieRouter: ASCII, so packaging cannot break it)
+	blocks = "zlib",
 	profiles = { "Alliance", "Horde" },
 	part = "QuestieRouter_Nav_Kalimdor",
 	cx0 = -24,

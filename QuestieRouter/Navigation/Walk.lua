@@ -21,6 +21,7 @@ local OFF_PATH = 30      -- yardas: si te alejas mas del camino, se vuelve a cal
 local DEST_MOVED = 8     -- yardas: el destino se ha movido (otro spawn): camino nuevo
 local AHEAD = 14         -- yardas: la flecha apunta al primer punto del camino a mas de esto
 local RETRY = 6          -- segundos antes de volver a intentar un camino que fallo
+local PULL = { 15, 40 }  -- yardas: si no hay camino hasta el destino, se prueba hasta un punto asi de antes
 local TICK = 0.4
 
 local function Enabled()
@@ -28,19 +29,53 @@ local function Enabled()
 end
 
 --- el motor (carga el addon la primera vez; nil si no se puede)
+local ENGINE_RETRY = 30  -- segundos antes de volver a intentar cargar el motor si fallo
+
 function Walk:Engine()
-    if self.engine ~= nil then return self.engine or nil end
+    if self.engine then return self.engine end
+    if self.engine == false and GetTime() < (self.engineAt or 0) + ENGINE_RETRY then return nil end
     local A = C_AddOns or {}
     local isLoaded = A.IsAddOnLoaded or _G.IsAddOnLoaded
     local load = A.LoadAddOn or _G.LoadAddOn
-    if not (isLoaded and load) then self.engine = false return nil end
+    if not (isLoaded and load) then
+        self.engine, self.engineAt, self.engineWhy = false, GetTime(), "sin LoadAddOn en este cliente"
+        return nil
+    end
     if not isLoaded(NAV_ADDON) then
         if InCombatLockdown() then return nil end   -- (se intenta otra vez fuera de combate)
-        local ok = load(NAV_ADDON)
-        if not ok then self.engine = false return nil end
+        local okCall, loaded, reason = pcall(load, NAV_ADDON)
+        -- desmarcados en la lista de addons (o desmarcados para este personaje): son parte de QuestieRouter y se
+        -- cargan bajo demanda, asi que se activan aqui los tres y se prueba otra vez (las rutas a pie se apagan
+        -- desde las opciones, no quitando estos addons)
+        if okCall and not loaded and reason == "DISABLED" then
+            local enable = A.EnableAddOn or _G.EnableAddOn
+            if enable then
+                for _, name in ipairs({ NAV_ADDON, "QuestieRouter_Nav_EK", "QuestieRouter_Nav_Kalimdor" }) do
+                    pcall(enable, name)
+                end
+                okCall, loaded, reason = pcall(load, NAV_ADDON)
+                if not loaded and not self.enableWarned then
+                    self.enableWarned = true
+                    QR:Print("QuestieRouter_Nav estaba desactivado: lo he activado. Haz /reload para tener las rutas por el camino.")
+                end
+            end
+        end
+        if not okCall or not loaded then
+            -- reason: DISABLED, MISSING, DEP_MISSING, DEP_DISABLED, INTERFACE_VERSION, CORRUPT, BANNED...
+            self.engine, self.engineAt = false, GetTime()
+            self.engineWhy = "LoadAddOn: " .. tostring(okCall and (reason or "fallo sin motivo") or loaded)
+            return nil
+        end
     end
-    self.engine = _G.QuestieRouter_NavEngine or false
-    return self.engine or nil
+    local E = _G.QuestieRouter_NavEngine
+    if not E then
+        -- el addon esta cargado pero API.lua no llego a ejecutarse: un error de Lua en sus archivos
+        self.engine, self.engineAt = false, GetTime()
+        self.engineWhy = "QuestieRouter_Nav cargado pero sin motor (error de Lua al cargar: activa /console scriptErrors 1 y /reload)"
+        return nil
+    end
+    self.engine, self.engineWhy = E, nil
+    return E
 end
 
 local function Dist(ax, ay, bx, by)
@@ -62,6 +97,16 @@ local function SameGoal(path, t, pinst)
         and Dist(path.dx, path.dy, t.wx, t.wy) <= 8
 end
 
+--- Mientras se calcula el camino del destino nuevo, ¿vale el anterior? Si el destino solo se ha movido un poco
+--- (otro spawn de la misma mision, la ruta rehecha...) el principio del camino viejo sigue siendo bueno: mejor eso
+--- que volver a la linea recta hasta que llegue el nuevo. (Sin busqueda en marcha, o si fallo, no se usa.)
+local function Usable(path, t, pinst, px, py)
+    if SameGoal(path, t, pinst) then return true end
+    if not (path and t and t.wx and Walk.pending and path.inst == pinst and path.inst == t.instance) then return false end
+    local moved = Dist(path.dx, path.dy, t.wx, t.wy)
+    return moved <= math.max(60, 0.35 * Dist(px, py, t.wx, t.wy))
+end
+
 --- tramo del camino mas cercano al jugador: indice del segmento (i -> i + 1) y distancia
 function Walk:Nearest(px, py)
     local path = self.path
@@ -77,13 +122,21 @@ function Walk:Nearest(px, py)
     return bi, best
 end
 
+--- avanza el progreso del camino hasta el tramo mas cercano al jugador (lo usan la flecha y las lineas: antes solo
+--- lo movia la flecha y, con la flecha oculta, la linea salia siempre desde el principio). -> indice del tramo
+function Walk:Advance(px, py)
+    local path = self.path
+    local i = self:Nearest(px, py)
+    if i then path.progress = i end
+    return i
+end
+
 --- el punto al que apunta la flecha: el siguiente punto del camino a mas de AHEAD yardas (nil: recto al destino)
 function Walk:Waypoint(px, py, pinst, t)
     local path = self.path
-    if not SameGoal(path, t, pinst) then return nil end
-    local i = self:Nearest(px, py)
+    if not Usable(path, t, pinst, px, py) then return nil end
+    local i = self:Advance(px, py)
     if not i then return nil end
-    path.progress = i
     local pts = path.points
     for k = i + 1, #pts do
         if Dist(px, py, pts[k].x, pts[k].y) > AHEAD then return pts[k].x, pts[k].y end
@@ -94,12 +147,15 @@ end
 --- el camino que dibuja el mapa: los puntos que quedan desde el jugador (nil si no hay)
 function Walk:Remaining(px, py, pinst, t)
     local path = self.path
-    if not SameGoal(path, t, pinst) then return nil end
-    local i = path.progress or 1
+    if not Usable(path, t, pinst, px, py) then return nil end
+    local i = self:Advance(px, py) or path.progress or 1
     local out = { { x = px, y = py } }
     for k = i + 1, #path.points do out[#out + 1] = path.points[k] end
+    -- el final: el destino de este camino o, con el camino viejo mientras llega el nuevo, el destino actual
+    local gx, gy = path.dx, path.dy
+    if not SameGoal(path, t, pinst) then gx, gy = t.wx, t.wy end
     local last = out[#out]
-    if Dist(last.x, last.y, path.dx, path.dy) > GOAL_GAP then out[#out + 1] = { x = path.dx, y = path.dy } end
+    if Dist(last.x, last.y, gx, gy) > GOAL_GAP then out[#out + 1] = { x = gx, y = gy } end
     return out
 end
 
@@ -172,6 +228,7 @@ function Walk:Update()
     if not need or self.pending then return end
     local key = string.format("%d:%.0f:%.0f", pinst, t.wx, t.wy)
     if self.failKey == key and GetTime() < (self.failAt or 0) + RETRY then return end
+    if self.tryKey ~= key then self.tryKey, self.try = key, 1 end
     -- el motor usa las coordenadas de UnitPosition (x al norte, y al oeste); HereBeDragons, (x, y) = (oeste, norte)
     local style = QR.db.travel.routeStyle or "balanced"
     -- suelo del destino (planta baja de un edificio mejor que su tejado); si el motor aun lo esta leyendo, se espera
@@ -183,7 +240,23 @@ function Walk:Update()
         gz = nil
     end
     self.floorKey, self.floorAt = nil, nil
-    local from, to = { x = py, y = px, z = pz }, { x = t.wy, y = t.wx, z = gz }
+    -- Intentos, del mas exacto al mas flojo (cada uno solo si el anterior no encontro camino):
+    --   1. con la altura del suelo del destino
+    --   2. sin altura: el motor prueba cada superficie del punto (con las dos alturas dadas no lo hace, y si el suelo
+    --      elegido es un sotano, una cueva debajo o un hueco cerrado, la busqueda fallaba siempre y la flecha iba recta)
+    --   3..: el destino acercado hacia el jugador (un punto dentro de una valla, un edificio o una roca, fuera de la malla)
+    local try = self.try or 1
+    local tx, ty, tz = t.wx, t.wy, gz
+    if try == 1 and not gz then try = 2 end
+    if try >= 2 then tz = nil end
+    local pull = PULL[try - 2]
+    if pull then
+        local d = Dist(px, py, t.wx, t.wy)
+        local k = math.min(pull, d * 0.5) / d
+        tx, ty = t.wx + (px - t.wx) * k, t.wy + (py - t.wy) * k
+    end
+    self.try = try
+    local from, to = { x = py, y = px, z = pz }, { x = ty, y = tx, z = tz }
     local opts = { profile = UnitFactionGroup("player"), style = style }
     local token = {}
     self.pending = token
@@ -191,9 +264,17 @@ function Walk:Update()
         if Walk.pending ~= token then return end   -- (una busqueda vieja; puede llegar antes de que Find devuelva)
         Walk.pending, Walk.job = nil, nil
         if not points or #points < 2 then
-            Walk.failKey, Walk.failAt = key, GetTime()
+            Walk.lastFail = { reason = tostring(cost), try = try, at = GetTime() }
+            if QR.db.debug then QR:Print(string.format("Walk: sin camino (%s, intento %d)", tostring(cost), try)) end
+            -- sin datos del mapa no sirve reintentar con otro punto
+            if cost ~= "nodata" and try < 2 + #PULL then
+                Walk.try = try + 1
+            else
+                Walk.failKey, Walk.failAt, Walk.try = key, GetTime(), 1
+            end
             return
         end
+        Walk.lastFail = nil
         local pts = {}
         for _, p in ipairs(points) do pts[#pts + 1] = { x = p.y, y = p.x } end
         Walk.path = { target = t, inst = pinst, dx = t.wx, dy = t.wy, points = pts, progress = 1, style = style,
@@ -267,6 +348,45 @@ function Walk:RefineRoute(route)
         QR:Fire("WALK_PATH")
     end
     return changed
+end
+
+--- /qr walk: por que la flecha va recta o sigue el camino (escribe el estado en el chat)
+function Walk:Status()
+    local function out(s) QR:Print("Walk: " .. s) end
+    local t = QR.target
+    out("activado=" .. tostring(Enabled() and true or false) .. ", destino=" .. tostring(t and t.wx and true or false))
+    local E = self:Engine()
+    if not E then
+        out("motor QuestieRouter_Nav NO cargado: " .. tostring(self.engineWhy or "aun no se ha intentado (o estas en combate)"))
+        local A = C_AddOns or {}
+        local info = A.GetAddOnInfo or _G.GetAddOnInfo
+        for _, name in ipairs({ NAV_ADDON, "QuestieRouter_Nav_EK", "QuestieRouter_Nav_Kalimdor" }) do
+            local ok, n, _, _, loadable, why = pcall(info or error, name)
+            local enabled
+            if A.GetAddOnEnableState then
+                local okE, v = pcall(A.GetAddOnEnableState, name, UnitName("player"))
+                enabled = okE and v or "?"
+            end
+            out(string.format("  %s: %s, cargable=%s %s, activado=%s", name, ok and tostring(n) or "?",
+                tostring(loadable), why and ("(" .. tostring(why) .. ")") or "", tostring(enabled)))
+        end
+        return
+    end
+    local px, py, pinst = QR.HBD:GetPlayerWorldPosition()
+    out(string.format("mapa=%s, datos=%s, en memoria=%s", tostring(pinst),
+        tostring(E.Available and E.Available(pinst) or false), tostring(E.Resident and E.Resident(pinst) or "?")))
+    if t and t.wx and px then out(string.format("distancia al destino: %.0f yd", Dist(px, py, t.wx, t.wy))) end
+    out("buscando=" .. tostring(self.pending ~= nil) .. ", intento=" .. tostring(self.try or 1))
+    local path = self.path
+    if path then
+        local _, d = self:Nearest(px or 0, py or 0)
+        out(string.format("camino: %d puntos, del destino actual=%s, a %.0f yd de ti", #path.points,
+            tostring(SameGoal(path, t, pinst) and true or false), d or -1))
+    else
+        out("sin camino")
+    end
+    local f = self.lastFail
+    if f then out(string.format("ultimo fallo: %s (intento %d, hace %.0f s)", f.reason, f.try, GetTime() - f.at)) end
 end
 
 function Walk:Init()

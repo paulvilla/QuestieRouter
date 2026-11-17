@@ -257,6 +257,8 @@ SlashCmdList.QUESTIEROUTER = function(msg)
         DungeonCommand(arg)
     elseif cmd == "perf" then
         QR.MapLines:StartPerf(tonumber(arg) or 10)
+    elseif cmd == "walk" then
+        QR.Walk:Status()
     elseif cmd == "taxi" then
         local sub, rest = arg:match("^(%S*)%s*(.-)$")
         if sub == "debug" then QR.Router:TaxiDebug()

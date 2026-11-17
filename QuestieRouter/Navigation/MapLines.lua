@@ -621,120 +621,182 @@ function MapLines:StartPerf(seconds)
 end
 
 ---------------------------------------------------------------------------
--- Minimapa (pin flotante de HereBeDragons + linea desde el centro)
+-- Minimapa: marcador del destino + linea desde el centro (el camino a pie si lo hay; si no, recta)
+-- Todo se coloca aqui a partir de las coordenadas de mundo, sin pines de HereBeDragons: la copia de Questie oculta
+-- los pines a mas de 500 yardas del jugador ("questie specific fix" en HereBeDragons-Pins) y con un destino lejano
+-- no salia ni el marcador ni la linea.
 ---------------------------------------------------------------------------
 function MapLines:CreateMinimap()
-    local pin = CreateFrame("Frame", nil, UIParent)
-    pin:SetSize(18, 18)
-    -- Este pin vive en la copia de HereBeDragons de Questie, y Questie recorre todos sus pines del
-    -- minimapa al mostrar sus tooltips esperando un campo "data". Con data + hidden, Questie lo
-    -- descarta antes de usarlo (y su bucle de desvanecido lo ignora porque no tiene miniMapIcon).
-    pin.data = { QuestieRouter = true }
-    pin.hidden = true
-    pin.marker = NewMarker(pin)
-    pin.marker:SetAllPoints()
-    pin:Hide()
-    self.mmTarget = pin
-
     local owner = CreateFrame("Frame", nil, Minimap)
     owner:SetAllPoints(Minimap)
     owner:SetFrameLevel(Minimap:GetFrameLevel() + 2)
     owner.line = NewAnimatedLine(owner, "ARTWORK")
+    owner.walkLines = {}
+    owner.nWalk = 0
+    -- marcador del destino (por encima de las lineas)
+    local m = NewMarker(owner)
+    m:SetFrameLevel(owner:GetFrameLevel() + 2)
+    owner.marker = m
     self.mm = owner
     owner:SetScript("OnUpdate", function() MapLines:UpdateMinimap() end)
 end
 
--- diametro en yardas que abarca el minimapa en cada nivel de zoom (fuera / dentro de edificios)
+-- diametro en yardas que abarca el minimapa en cada nivel de zoom (fuera / dentro de edificios), sin C_Minimap
 local MM_OUTDOOR = { [0] = 466 + 2 / 3, 400, 333 + 1 / 3, 266 + 2 / 3, 200, 133 + 1 / 3 }
 local MM_INDOOR = { [0] = 300, 240, 180, 120, 80, 50 }
+local MM_MARKER = 18
+local MM_EDGE = 4        -- px: las lineas acaban un poco antes del borde
 
---- Camino a pie en el minimapa (Navigation/Walk.lua): los tramos que quedan, hasta el borde. -> true si lo dibuja
-function MapLines:MinimapWalk(owner, cfg)
-    owner.walkLines = owner.walkLines or {}
-    local n = 0
+--- Proyeccion del mundo al minimapa para este fotograma: -> funcion(wx, wy) -> (x, y) en px desde el centro, el
+--- radio en px y si el minimapa es cuadrado; nil sin posicion del jugador
+local function MinimapProjection()
     local px, py, pinst = QR.HBD:GetPlayerWorldPosition()
-    local walk = px and QR.Walk and QR.Walk:Remaining(px, py, pinst, QR.target)
-    if walk and #walk >= 2 then
+    if not px then return nil end
+    local yards
+    if C_Minimap and C_Minimap.GetViewRadius then
+        local ok, r = pcall(C_Minimap.GetViewRadius)
+        if ok and r and r > 0 then yards = r end
+    end
+    if not yards then
         local zoom = Minimap:GetZoom() or 0
-        local indoors = GetCVar and GetCVar("minimapZoom") ~= nil and IsIndoors and IsIndoors()
-        local yards = (indoors and MM_INDOOR or MM_OUTDOOR)[zoom] or 466
-        local radius = Minimap:GetWidth() / 2
-        local perYard = radius / (yards / 2)
-        local rotate = GetCVar and GetCVar("rotateMinimap") == "1"
-        local facing = rotate and (GetPlayerFacing() or 0) or 0
-        local prev
-        for i, p in ipairs(walk) do
-            local x, y = 0, 0
-            if i > 1 then
-                local a, d = QR.HBD:GetWorldVector(pinst, px, py, p.x, p.y)
-                if not a then break end
-                a = a - facing
-                x, y = -math.sin(a) * d * perYard, math.cos(a) * d * perYard
-            end
-            local pt = { x, y }
-            if prev then
-                local x1, y1, x2, y2 = prev[1], prev[2], pt[1], pt[2]
-                -- el tramo que sale del minimapa se corta en el borde (y ahi se acaba)
-                local out = x2 * x2 + y2 * y2 > (radius - 4) ^ 2
-                if out then
-                    local dx, dy = x2 - x1, y2 - y1
-                    local A, B, C = dx * dx + dy * dy, 2 * (x1 * dx + y1 * dy), x1 * x1 + y1 * y1 - (radius - 4) ^ 2
-                    local disc = B * B - 4 * A * C
-                    if A > 0 and disc >= 0 then
-                        local tt = (-B + math.sqrt(disc)) / (2 * A)
-                        x2, y2 = x1 + dx * tt, y1 + dy * tt
-                    end
-                end
-                local dx, dy = x2 - x1, y2 - y1
-                local len = math.sqrt(dx * dx + dy * dy)
-                if len > 1 then
-                    if n == 0 then   -- el primer trozo no tapa la flecha del jugador
-                        local cut = math.min(len * 0.5, 7)
-                        x1, y1, len = x1 + dx / len * cut, y1 + dy / len * cut, len - cut
-                    end
-                    n = n + 1
-                    local l = owner.walkLines[n]
-                    if not l then
-                        l = NewAnimatedLine(owner, "ARTWORK")
-                        owner.walkLines[n] = l
-                    end
-                    l:SetStartPoint("CENTER", Minimap, x1, y1)
-                    l:SetEndPoint("CENTER", Minimap, x2, y2)
-                    PaintLine(l, len, cfg.thicknessMinimap or 4, cfg.alphaMinimap or 0.9)
-                    l:Show()
-                end
-                if out then break end
-            end
-            prev = pt
+        -- (como HereBeDragons: fuera de edificios minimapZoom coincide con el zoom actual)
+        local outdoor = tonumber(GetCVar("minimapZoom") or "") == zoom
+        if IsIndoors and IsIndoors() and not outdoor then
+            yards = (MM_INDOOR[zoom] or 300) / 2
+        else
+            yards = (MM_OUTDOOR[zoom] or 466) / 2
         end
     end
-    for k = n + 1, (owner.nWalk or 0) do owner.walkLines[k]:Hide() end
+    local radius = Minimap:GetWidth() / 2
+    local perYard = radius / yards
+    local facing = 0
+    if GetCVar("rotateMinimap") == "1" then
+        facing = GetPlayerFacing()
+        if not facing then return nil end
+    end
+    local square = GetMinimapShape and GetMinimapShape() == "SQUARE"
+    local function project(wx, wy)
+        local a, d = QR.HBD:GetWorldVector(pinst, px, py, wx, wy)
+        if not a then return nil end
+        a = a - facing
+        return -math.sin(a) * d * perYard, math.cos(a) * d * perYard
+    end
+    return project, radius, square, pinst, px, py
+end
+
+--- ¿Esta (x, y) fuera del borde util? (redondo o cuadrado)
+local function OutsideEdge(x, y, lim, square)
+    if square then return math.max(math.abs(x), math.abs(y)) > lim end
+    return x * x + y * y > lim * lim
+end
+
+--- Lleva un punto de fuera al borde util, en la direccion del centro
+local function ClampToEdge(x, y, lim, square)
+    local k
+    if square then k = lim / math.max(math.abs(x), math.abs(y)) else k = lim / math.sqrt(x * x + y * y) end
+    return x * k, y * k
+end
+
+--- Corta el segmento (x1, y1) -> (x2, y2), que sale del minimapa, en el borde util
+local function CutAtEdge(x1, y1, x2, y2, lim, square)
+    if square then
+        -- busqueda binaria (el primer punto esta dentro)
+        local lo, hi = 0, 1
+        for _ = 1, 16 do
+            local mid = (lo + hi) / 2
+            if OutsideEdge(x1 + (x2 - x1) * mid, y1 + (y2 - y1) * mid, lim, true) then hi = mid else lo = mid end
+        end
+        return x1 + (x2 - x1) * lo, y1 + (y2 - y1) * lo
+    end
+    local dx, dy = x2 - x1, y2 - y1
+    local A, B, C = dx * dx + dy * dy, 2 * (x1 * dx + y1 * dy), x1 * x1 + y1 * y1 - lim * lim
+    local disc = B * B - 4 * A * C
+    if A > 0 and disc >= 0 then
+        local tt = (-B + math.sqrt(disc)) / (2 * A)
+        return x1 + dx * tt, y1 + dy * tt
+    end
+    return x2, y2
+end
+
+--- Camino a pie en el minimapa (Navigation/Walk.lua): los tramos que quedan, hasta el borde. -> true si lo dibuja
+function MapLines:MinimapWalk(owner, cfg, project, radius, square, pinst, px, py)
+    local n = 0
+    local walk = QR.Walk and QR.Walk:Remaining(px, py, pinst, QR.target)
+    if walk and #walk >= 2 then
+        local lim = radius - MM_EDGE
+        local prev = { 0, 0 }
+        for i = 2, #walk do
+            local x2, y2 = project(walk[i].x, walk[i].y)
+            if not x2 then break end
+            local x1, y1 = prev[1], prev[2]
+            -- el tramo que sale del minimapa se corta en el borde (y ahi se acaba)
+            local out = OutsideEdge(x2, y2, lim, square)
+            local ex, ey = x2, y2
+            if out then ex, ey = CutAtEdge(x1, y1, x2, y2, lim, square) end
+            local dx, dy = ex - x1, ey - y1
+            local len = math.sqrt(dx * dx + dy * dy)
+            if len > 1 then
+                if n == 0 then   -- el primer trozo no tapa la flecha del jugador
+                    local cut = math.min(len * 0.5, 7)
+                    x1, y1, len = x1 + dx / len * cut, y1 + dy / len * cut, len - cut
+                end
+                n = n + 1
+                local l = owner.walkLines[n]
+                if not l then
+                    l = NewAnimatedLine(owner, "ARTWORK")
+                    owner.walkLines[n] = l
+                end
+                l:SetStartPoint("CENTER", Minimap, x1, y1)
+                l:SetEndPoint("CENTER", Minimap, ex, ey)
+                PaintLine(l, len, cfg.thicknessMinimap or 4, cfg.alphaMinimap or 0.9)
+                l:Show()
+            end
+            if out then break end
+            prev = { x2, y2 }
+        end
+    end
+    for k = n + 1, owner.nWalk do owner.walkLines[k]:Hide() end
     owner.nWalk = n
     return n > 0
 end
 
+local function HideMinimap(owner)
+    owner.line:Hide()
+    owner.marker:Hide()
+    for k = 1, owner.nWalk do owner.walkLines[k]:Hide() end
+    owner.nWalk = 0
+end
+
 function MapLines:UpdateMinimap()
-    local owner, pin = self.mm, self.mmTarget
+    local owner = self.mm
     local cfg = QR.db.lines
-    if not (QR.target and cfg.minimap and QR.db.enabled and pin:IsShown()) then
-        owner.line:Hide()
-        for k = 1, (owner.nWalk or 0) do owner.walkLines[k]:Hide() end
-        owner.nWalk = 0
+    local t = QR.target
+    if not (t and t.wx and cfg.minimap and QR.db.enabled) or (UnitOnTaxi and UnitOnTaxi("player")) then
+        HideMinimap(owner)
         return
     end
-    if self:MinimapWalk(owner, cfg) then owner.line:Hide(); return end
-    local mx, my = Minimap:GetCenter()
-    local tx, ty = pin:GetCenter()
-    if not (mx and tx) then owner.line:Hide(); return end
-    local ps, ms = pin:GetEffectiveScale(), Minimap:GetEffectiveScale()
-    tx, ty = tx * ps / ms, ty * ps / ms
-    local dx, dy = tx - mx, ty - my
-    local len = math.sqrt(dx * dx + dy * dy)
-    if len < 8 then owner.line:Hide(); return end
-    local ux, uy = dx / len, dy / len
+    local project, radius, square, pinst, px, py = MinimapProjection()
+    if not project or pinst ~= t.instance then HideMinimap(owner) return end
+    local tx, ty = project(t.wx, t.wy)
+    if not tx then HideMinimap(owner) return end
+
+    -- marcador: en su sitio o flotando en el borde, en la direccion del destino
+    local mlim = radius - MM_MARKER / 2
+    local mx, my = tx, ty
+    if OutsideEdge(mx, my, mlim, square) then mx, my = ClampToEdge(mx, my, mlim, square) end
+    owner.marker:ClearAllPoints()
+    owner.marker:SetPoint("CENTER", Minimap, "CENTER", mx, my)
+    owner.marker:SetShown(owner.painted and true or false)
+
+    if self:MinimapWalk(owner, cfg, project, radius, square, pinst, px, py) then owner.line:Hide() return end
+
+    -- sin camino: recta hasta el marcador
+    local len = math.sqrt(mx * mx + my * my)
+    if len < 8 then owner.line:Hide() return end
+    local ux, uy = mx / len, my / len
     local cut = 7
     owner.line:SetStartPoint("CENTER", Minimap, ux * cut, uy * cut)
-    owner.line:SetEndPoint("CENTER", Minimap, dx - ux * 6, dy - uy * 6)
+    owner.line:SetEndPoint("CENTER", Minimap, mx - ux * 6, my - uy * 6)
     PaintLine(owner.line, len - cut - 6, cfg.thicknessMinimap or 4, cfg.alphaMinimap or 0.9)
     owner.line:Show()
 end
@@ -743,12 +805,13 @@ end
 -- Cambio de destino
 ---------------------------------------------------------------------------
 function MapLines:OnTargetChanged(t)
-    local pins = QR.HBDPins
-    pins:RemoveMinimapIcon(REF, self.mmTarget)
-    self.mmTarget:Hide()
+    local owner = self.mm
+    owner.painted = nil
+    owner.marker:Hide()
     if not t or not QR.db.enabled or not QR.db.lines.minimap then return end
-    PaintMarker(self.mmTarget.marker, t, 18)
-    pins:AddMinimapIconWorld(REF, self.mmTarget, t.instance, t.wx, t.wy, true)
+    owner.marker:SetSize(MM_MARKER, MM_MARKER)
+    PaintMarker(owner.marker, t, MM_MARKER)
+    owner.painted = true
 end
 
 function MapLines:Init()
@@ -760,7 +823,7 @@ function MapLines:Init()
     QR:On("SKIN_CHANGED", function() MapLines:InvalidateWorld() end)
     QR:On("HISTORY_CHANGED", function()
         MapLines:InvalidateWorld()   -- (numero del paso en el marcador)
-        if QR.target and MapLines.mmTarget:IsShown() then PaintMarker(MapLines.mmTarget.marker, QR.target, 18) end
+        if QR.target and MapLines.mm.painted then PaintMarker(MapLines.mm.marker, QR.target, MM_MARKER) end
     end)
     self:OnTargetChanged(QR.target)
 end

@@ -36,3 +36,37 @@ QR:ExtendLocale("ruRU", {
     ["Map lines: the world map was not open while measuring."] = "Линии на карте: карта мира не была открыта во время замера.",
     ["Map lines: %d frames, %.3f ms average, %.3f ms max per frame, %d route lines."] = "Линии на карте: кадров %d, в среднем %.3f мс, максимум %.3f мс на кадр, линий маршрута: %d.",
 })
+
+-- Opciones > Estado: estado de los addons de rutas a pie (QuestieRouter_Nav y los mapas de cada continente)
+local STATUS_KEYS = {
+    "STATUS", "Walking routes engine", "Eastern Kingdoms walking maps", "Kalimdor walking maps",
+    "Active and working", "Active (loads when a route is needed)", "Active (loads on that continent)",
+    "Not installed", "Disabled", "Enabled: reload the interface to use it", "The routes engine is disabled",
+    "Out of date: tick \"Load out of date AddOns\"", "Cannot load: %s", "The routes engine failed to load",
+    "Loaded with errors (/console scriptErrors 1 and /reload)", "Loaded, but its maps failed to load",
+    "Enable", "Reload",
+}
+local enStatus = {}
+for _, k in ipairs(STATUS_KEYS) do enStatus[k] = true end
+QR:ExtendLocale("enUS", enStatus)
+
+QR:ExtendLocale("esES", {
+    ["STATUS"] = "ESTADO",
+    ["Walking routes engine"] = "Motor de rutas a pie",
+    ["Eastern Kingdoms walking maps"] = "Mapas a pie de los Reinos del Este",
+    ["Kalimdor walking maps"] = "Mapas a pie de Kalimdor",
+    ["Active and working"] = "Activo y funcionando",
+    ["Active (loads when a route is needed)"] = "Activo (se carga al calcular una ruta)",
+    ["Active (loads on that continent)"] = "Activo (se carga al llegar a ese continente)",
+    ["Not installed"] = "No instalado",
+    ["Disabled"] = "Desactivado",
+    ["Enabled: reload the interface to use it"] = "Activado: recarga la interfaz para usarlo",
+    ["The routes engine is disabled"] = "El motor de rutas está desactivado",
+    ["Out of date: tick \"Load out of date AddOns\""] = "Desactualizado: marca \"Cargar addons desactualizados\"",
+    ["Cannot load: %s"] = "No se puede cargar: %s",
+    ["The routes engine failed to load"] = "El motor de rutas no se pudo cargar",
+    ["Loaded with errors (/console scriptErrors 1 and /reload)"] = "Cargado con errores (/console scriptErrors 1 y /reload)",
+    ["Loaded, but its maps failed to load"] = "Cargado, pero sus mapas no se pudieron leer",
+    ["Enable"] = "Activar",
+    ["Reload"] = "Recargar",
+})
