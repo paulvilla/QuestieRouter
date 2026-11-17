@@ -56,6 +56,12 @@ local function SegDist(px, py, ax, ay, bx, by)
     return Dist(px, py, ax + t * dx, ay + t * dy), t
 end
 
+--- ¿Es el camino guardado el de este destino? (misma posicion: el router crea un objeto nuevo en cada refresco)
+local function SameGoal(path, t, pinst)
+    return path and t and t.wx and path.inst == pinst and path.inst == t.instance
+        and Dist(path.dx, path.dy, t.wx, t.wy) <= 8
+end
+
 --- tramo del camino mas cercano al jugador: indice del segmento (i -> i + 1) y distancia
 function Walk:Nearest(px, py)
     local path = self.path
@@ -74,7 +80,7 @@ end
 --- el punto al que apunta la flecha: el siguiente punto del camino a mas de AHEAD yardas (nil: recto al destino)
 function Walk:Waypoint(px, py, pinst, t)
     local path = self.path
-    if not (path and t and path.inst == pinst and path.target == t) then return nil end
+    if not SameGoal(path, t, pinst) then return nil end
     local i = self:Nearest(px, py)
     if not i then return nil end
     path.progress = i
@@ -88,7 +94,7 @@ end
 --- el camino que dibuja el mapa: los puntos que quedan desde el jugador (nil si no hay)
 function Walk:Remaining(px, py, pinst, t)
     local path = self.path
-    if not (path and t and path.inst == pinst and path.target == t) then return nil end
+    if not SameGoal(path, t, pinst) then return nil end
     local i = path.progress or 1
     local out = { { x = px, y = py } }
     for k = i + 1, #path.points do out[#out + 1] = path.points[k] end
@@ -157,7 +163,7 @@ function Walk:Update()
     -- cerca: recto solo si de verdad se puede ir recto (no a traves de un muro ni hacia dentro de un edificio)
     if dist < NEAR and Straight(E, pinst, px, py, pz, t.wx, t.wy) == true then self:Clear() return end
     local path = self.path
-    local need = not path or path.target ~= t or Dist(path.dx, path.dy, t.wx, t.wy) > DEST_MOVED
+    local need = not SameGoal(path, t, pinst) or Dist(path.dx, path.dy, t.wx, t.wy) > DEST_MOVED
         or (path.style ~= (QR.db.travel.routeStyle or "balanced"))
     if not need then
         local _, d = self:Nearest(px, py)
@@ -202,6 +208,67 @@ function Walk:Update()
     end
 end
 
+---------------------------------------------------------------------------
+-- Resto de tramos a pie de un viaje (despues de bajar del barco, del vuelo, al cruzar a otra zona...): el router los
+-- da en linea recta; aqui se cambian por el camino del motor, de uno en uno, y se guardan para no repetirlos.
+---------------------------------------------------------------------------
+local LEG_CACHE_MAX = 64
+Walk.legCache, Walk.legOrder, Walk.legFail = {}, {}, {}
+
+local function LegKey(inst, x1, y1, x2, y2, style)
+    return string.format("%d:%.0f:%.0f:%.0f:%.0f:%s", inst, x1 / 4, y1 / 4, x2 / 4, y2 / 4, style)
+end
+
+local function Remember(key, pts)
+    if not Walk.legCache[key] then
+        Walk.legOrder[#Walk.legOrder + 1] = key
+        if #Walk.legOrder > LEG_CACHE_MAX then Walk.legCache[table.remove(Walk.legOrder, 1)] = nil end
+    end
+    Walk.legCache[key] = pts
+end
+
+--- cambia los tramos a pie del viaje que ya estan calculados; pide el siguiente que falte. -> true si cambio algo
+function Walk:RefineRoute(route)
+    local E = self:Engine()
+    if not (route and route.segments and E and E.Available) then return false end
+    local style = QR.db.travel.routeStyle or "balanced"
+    local changed = false
+    for _, seg in ipairs(route.segments) do
+        local a, b = seg.points and seg.points[1], seg.points and seg.points[#seg.points]
+        if seg.kind == "walk" and not seg.fromPlayer and not seg.refined and a and b and a[1] == b[1]
+            and #seg.points == 2 and E.Available(a[1]) then
+            local key = LegKey(a[1], a[2], a[3], b[2], b[3], style)
+            local pts = self.legCache[key]
+            if pts then
+                seg.points, seg.refined = pts, true
+                changed = true
+            elseif not self.legPending and not self.legFail[key] then
+                -- (coordenadas del motor: x al norte, y al oeste; las de HereBeDragons al reves)
+                local token = {}
+                self.legPending = token
+                local inst = a[1]
+                local ok = pcall(E.Find, inst, { x = a[3], y = a[2] }, { x = b[3], y = b[2] }, function(points)
+                    if Walk.legPending ~= token then return end
+                    Walk.legPending = nil
+                    if not points or #points < 2 then Walk.legFail[key] = true return end
+                    local out = {}
+                    for _, p in ipairs(points) do out[#out + 1] = { inst, p.y, p.x } end
+                    -- los extremos exactos del router (el muelle, el maestro de vuelo, el cruce)
+                    out[1], out[#out] = { inst, a[2], a[3] }, { inst, b[2], b[3] }
+                    Remember(key, out)
+                    -- se aplica en el siguiente tick (la ruta puede haberse rehecho mientras tanto)
+                end, { profile = UnitFactionGroup("player"), style = style })
+                if not ok then self.legPending = nil; self.legFail[key] = true end
+            end
+        end
+    end
+    if changed then
+        route.canvasCache = nil   -- (MapLines vuelve a pasar los tramos al mapa)
+        QR:Fire("WALK_PATH")
+    end
+    return changed
+end
+
 function Walk:Init()
     local acc = 0
     local f = CreateFrame("Frame")
@@ -211,8 +278,17 @@ function Walk:Init()
         acc = 0
         local ok, err = pcall(Walk.Update, Walk)
         if not ok and QR.db.debug then QR:Print("Walk: " .. tostring(err)) end
+        -- el resto de tramos a pie del viaje (si los hay)
+        local t = QR.target
+        if Enabled() and t and t.route then
+            ok, err = pcall(Walk.RefineRoute, Walk, t.route)
+            if not ok and QR.db.debug then QR:Print("Walk: " .. tostring(err)) end
+        end
     end)
-    QR:On("SETTINGS_CHANGED", function() if not Enabled() then Walk:Clear() end end)
+    QR:On("SETTINGS_CHANGED", function()
+        if not Enabled() then Walk:Clear() end
+        wipe(Walk.legFail)   -- (con otro estilo, los tramos que fallaron se vuelven a intentar)
+    end)
     -- cargar el motor un poco despues de entrar (no en el momento de mas carga)
     C_Timer.After(6, function() if Enabled() then Walk:Engine() end end)
 end

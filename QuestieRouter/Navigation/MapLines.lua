@@ -644,10 +644,85 @@ function MapLines:CreateMinimap()
     owner:SetScript("OnUpdate", function() MapLines:UpdateMinimap() end)
 end
 
+-- diametro en yardas que abarca el minimapa en cada nivel de zoom (fuera / dentro de edificios)
+local MM_OUTDOOR = { [0] = 466 + 2 / 3, 400, 333 + 1 / 3, 266 + 2 / 3, 200, 133 + 1 / 3 }
+local MM_INDOOR = { [0] = 300, 240, 180, 120, 80, 50 }
+
+--- Camino a pie en el minimapa (Navigation/Walk.lua): los tramos que quedan, hasta el borde. -> true si lo dibuja
+function MapLines:MinimapWalk(owner, cfg)
+    owner.walkLines = owner.walkLines or {}
+    local n = 0
+    local px, py, pinst = QR.HBD:GetPlayerWorldPosition()
+    local walk = px and QR.Walk and QR.Walk:Remaining(px, py, pinst, QR.target)
+    if walk and #walk >= 2 then
+        local zoom = Minimap:GetZoom() or 0
+        local indoors = GetCVar and GetCVar("minimapZoom") ~= nil and IsIndoors and IsIndoors()
+        local yards = (indoors and MM_INDOOR or MM_OUTDOOR)[zoom] or 466
+        local radius = Minimap:GetWidth() / 2
+        local perYard = radius / (yards / 2)
+        local rotate = GetCVar and GetCVar("rotateMinimap") == "1"
+        local facing = rotate and (GetPlayerFacing() or 0) or 0
+        local prev
+        for i, p in ipairs(walk) do
+            local x, y = 0, 0
+            if i > 1 then
+                local a, d = QR.HBD:GetWorldVector(pinst, px, py, p.x, p.y)
+                if not a then break end
+                a = a - facing
+                x, y = -math.sin(a) * d * perYard, math.cos(a) * d * perYard
+            end
+            local pt = { x, y }
+            if prev then
+                local x1, y1, x2, y2 = prev[1], prev[2], pt[1], pt[2]
+                -- el tramo que sale del minimapa se corta en el borde (y ahi se acaba)
+                local out = x2 * x2 + y2 * y2 > (radius - 4) ^ 2
+                if out then
+                    local dx, dy = x2 - x1, y2 - y1
+                    local A, B, C = dx * dx + dy * dy, 2 * (x1 * dx + y1 * dy), x1 * x1 + y1 * y1 - (radius - 4) ^ 2
+                    local disc = B * B - 4 * A * C
+                    if A > 0 and disc >= 0 then
+                        local tt = (-B + math.sqrt(disc)) / (2 * A)
+                        x2, y2 = x1 + dx * tt, y1 + dy * tt
+                    end
+                end
+                local dx, dy = x2 - x1, y2 - y1
+                local len = math.sqrt(dx * dx + dy * dy)
+                if len > 1 then
+                    if n == 0 then   -- el primer trozo no tapa la flecha del jugador
+                        local cut = math.min(len * 0.5, 7)
+                        x1, y1, len = x1 + dx / len * cut, y1 + dy / len * cut, len - cut
+                    end
+                    n = n + 1
+                    local l = owner.walkLines[n]
+                    if not l then
+                        l = NewAnimatedLine(owner, "ARTWORK")
+                        owner.walkLines[n] = l
+                    end
+                    l:SetStartPoint("CENTER", Minimap, x1, y1)
+                    l:SetEndPoint("CENTER", Minimap, x2, y2)
+                    PaintLine(l, len, cfg.thicknessMinimap or 4, cfg.alphaMinimap or 0.9)
+                    l:Show()
+                end
+                if out then break end
+            end
+            prev = pt
+        end
+    end
+    for k = n + 1, (owner.nWalk or 0) do owner.walkLines[k]:Hide() end
+    owner.nWalk = n
+    return n > 0
+end
+
 function MapLines:UpdateMinimap()
     local owner, pin = self.mm, self.mmTarget
     local cfg = QR.db.lines
-    if not (QR.target and cfg.minimap and QR.db.enabled and pin:IsShown()) then owner.line:Hide(); return end
+    if not (QR.target and cfg.minimap and QR.db.enabled and pin:IsShown()) then
+        owner.line:Hide()
+        for k = 1, (owner.nWalk or 0) do owner.walkLines[k]:Hide() end
+        owner.nWalk = 0
+        return
+    end
+    if self:MinimapWalk(owner, cfg) then owner.line:Hide(); return end
     local mx, my = Minimap:GetCenter()
     local tx, ty = pin:GetCenter()
     if not (mx and tx) then owner.line:Hide(); return end

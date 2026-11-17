@@ -237,8 +237,10 @@ function UI:Create()
         UI:SaveAnchor()
     end)
 
+    -- iconos a la derecha, en dos filas: abajo ir al paso actual, bloquear y rutas de vuelo; encima, opciones
+    -- graficas y menu
     local controls = CreateFrame("Frame", nil, f.banner)
-    controls:SetSize(120, 18)
+    controls:SetSize(120, 40)
     controls:SetPoint("BOTTOMRIGHT", -8, 6)
     controls:SetFrameLevel(f.banner:GetFrameLevel() + 5)
     local lock = IconButton(controls, "Lock", function()
@@ -252,9 +254,7 @@ function UI:Create()
     end
     f.lock = lock
     local menu = IconButton(controls, "Menu", L["Menu (also right-click on the picture)"], function() QR.Menu:OpenMain() end)
-    menu:SetPoint("RIGHT")
     local cog = IconButton(controls, "Cog", L["Graphics options"], function() QR.Options:Toggle() end)
-    cog:SetPoint("RIGHT", menu, "LEFT", -4, 0)
     -- vuelos en las rutas de viaje: blanco activado, rojo desactivado
     local flights = IconButton(controls, "Gryphon", function()
         return QR.db.travel.flights and L["Flight routes: on (click to stop using them)"] or L["Flight routes: off (click to use them)"]
@@ -270,8 +270,12 @@ function UI:Create()
         return 0.95, 0.28, 0.25
     end
     flights.icon:SetVertexColor(flights.BaseColor())
-    flights:SetPoint("RIGHT", cog, "LEFT", -4, 0)
+    -- fila de abajo (de derecha a izquierda): rutas de vuelo, bloquear, ir al paso actual
+    flights:SetPoint("BOTTOMRIGHT")
     lock:SetPoint("RIGHT", flights, "LEFT", -4, 0)
+    -- fila de arriba: menu (a la derecha) y opciones graficas
+    menu:SetPoint("BOTTOMRIGHT", flights, "TOPRIGHT", 0, 4)
+    cog:SetPoint("RIGHT", menu, "LEFT", -4, 0)
     -- ir al paso actual: vuelve a colocar la lista en el paso en el que estas
     local toCurrent = IconButton(controls, "ScrollTop", L["Go to the current step"], function() UI:ScrollToCurrent() end)
     toCurrent:SetPoint("RIGHT", lock, "LEFT", -4, 0)
