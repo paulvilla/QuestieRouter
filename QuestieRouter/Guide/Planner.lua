@@ -381,6 +381,8 @@ function Planner:Update()
         self.plan = nil
         return nil
     end
+    -- (todo esto va seguido: el estado de cada mision se calcula una vez y se reutiliza, ver Bridge:QuestStatus)
+    QR.Bridge:BeginStatusMemo()
     local tasks = self:BuildTasks(guide)
     QR.Steps:CheckCompletions(guide)
     -- Pasos agrupados (coger por NPC, hacer por mision, entregar por NPC) y orden simulado
@@ -437,6 +439,7 @@ function Planner:Update()
         end
     end
     QR:Fire("PLAN_UPDATED", self.plan)
+    QR.Bridge:EndStatusMemo()
     return task
 end
 

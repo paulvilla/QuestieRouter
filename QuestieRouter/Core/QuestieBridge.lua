@@ -217,7 +217,7 @@ end
 
 --- Estado de una mision para el jugador actual.
 ---@return string "done" | "active" | "available" | "lowlevel" | "locked"
-function Bridge:QuestStatus(questId)
+local function ComputeStatus(self, questId)
     if Questie.db.char.complete[questId] then return "done" end
     if self.ActiveQuests.Get(questId) then return "active" end
     local ok, doable = pcall(self.QuestieDB.IsDoable, questId)
@@ -225,6 +225,31 @@ function Bridge:QuestStatus(questId)
     local req = self.QuestieDB.QueryQuestSingle(questId, "requiredLevel") or 1
     if req > UnitLevel("player") then return "lowlevel" end
     return "available"
+end
+
+-- Durante una actualizacion del planificador (Planner:Update, todo seguido en el mismo fotograma: nada cambia en
+-- medio) el estado de cada mision se calcula una sola vez; antes se pedia varias veces por mision.
+local statusMemo, statusMemoOn, statusMemoTime = {}, false, nil
+function Bridge:BeginStatusMemo()
+    wipe(statusMemo)
+    statusMemoOn, statusMemoTime = true, GetTime()
+end
+function Bridge:EndStatusMemo()
+    statusMemoOn = false
+    wipe(statusMemo)
+end
+
+function Bridge:QuestStatus(questId)
+    -- (la memoria solo vale en el fotograma en que se abrio: si algo fallo y no se cerro, no se usa despues)
+    if statusMemoOn and statusMemoTime == GetTime() and questId ~= nil then
+        local s = statusMemo[questId]
+        if not s then
+            s = ComputeStatus(self, questId)
+            statusMemo[questId] = s
+        end
+        return s
+    end
+    return ComputeStatus(self, questId)
 end
 
 -- Motivos por los que este personaje no podra coger nunca la mision (no es cuestion de esperar o de hacer otra antes)
@@ -276,8 +301,10 @@ local FAR = 1e7 -- distancia ficticia para puntos en otro continente
 --- Punto mas cercano al jugador de una tabla de spawns de Questie { [areaId] = { {x,y}, ... } }.
 ---@return table|nil point { areaId, uiMapId, x, y (0-1), wx, wy, instance, dist }
 function Bridge:NearestSpawn(spawns, px, py, pinst)
-    local best, bestD
-    for areaId, list in pairs(spawns or {}) do
+    -- (la tabla del resultado se crea una sola vez, al final: antes, una por cada spawn que mejoraba al anterior)
+    local bestD, bestArea, bestSpawn, bestW
+    if not spawns then return nil end
+    for areaId, list in pairs(spawns) do
         for _, spawn in pairs(list) do
             local w = WorldOf(self, areaId, spawn)
             if w then
@@ -288,14 +315,27 @@ function Bridge:NearestSpawn(spawns, px, py, pinst)
                     d = FAR
                 end
                 if not bestD or d < bestD then
-                    bestD = d
-                    best = { areaId = areaId, uiMapId = w[4], x = spawn[1] / 100, y = spawn[2] / 100,
-                             wx = w[1], wy = w[2], instance = w[3], dist = d }
+                    bestD, bestArea, bestSpawn, bestW = d, areaId, spawn, w
                 end
             end
         end
     end
-    return best
+    if not bestD then return nil end
+    return { areaId = bestArea, uiMapId = bestW[4], x = bestSpawn[1] / 100, y = bestSpawn[2] / 100,
+             wx = bestW[1], wy = bestW[2], instance = bestW[3], dist = bestD }
+end
+
+-- Objetos de Questie: QuestieDB:GetObject no los guarda (crea la tabla y sus spawns en cada llamada, y entonces la
+-- cache de coordenadas de WorldOf tampoco servia). Son datos fijos: se guardan aqui.
+local objectCache = {}
+function Bridge:GetObject(objId)
+    if not objId then return nil end
+    local o = objectCache[objId]
+    if not o then
+        o = self.QuestieDB:GetObject(objId)
+        if o then objectCache[objId] = o end
+    end
+    return o
 end
 
 --- Guias de evento: NPCs y objetos que la base de datos tiene en varias zonas pero que ahora solo estan en una
@@ -379,26 +419,35 @@ end
 
 --- Punto mas cercano de quien da / recibe una mision (quest.Starts o quest.Finisher). Dentro de una mazmorra, su
 --- entrada (p.inDungeon dice cual).
+local function Consider(self, best, p, name, npcId, px, py, pinst)
+    if not p then return best end
+    p.name, p.npcId = name, npcId
+    p = self:OutsidePoint(p, px, py, pinst)
+    if p and (not best or p.dist < best.dist) then return p end
+    return best
+end
+
 function Bridge:NearestNpcOrObject(holder, px, py, pinst)
     local best
-    local function consider(p, name, npcId)
-        if not p then return end
-        p.name, p.npcId = name, npcId
-        p = self:OutsidePoint(p, px, py, pinst)
-        if p and (not best or p.dist < best.dist) then best = p end
-    end
-    for _, npcId in pairs(holder and holder.NPC or {}) do
-        local npc = self.QuestieDB:GetNPC(npcId)
-        if npc and npc.spawns and npc.friendly ~= false then
-            local spawns = OnlyArea(npc.spawns, self.npcArea[npcId])
-            consider(self:NearestSpawn(spawns, px, py, pinst) or InstanceOnly(self, spawns, px, py, pinst), npc.name, npcId)
+    if not holder then return nil end
+    if holder.NPC then
+        for _, npcId in pairs(holder.NPC) do
+            local npc = self.QuestieDB:GetNPC(npcId)
+            if npc and npc.spawns and npc.friendly ~= false then
+                local spawns = OnlyArea(npc.spawns, self.npcArea[npcId])
+                best = Consider(self, best, self:NearestSpawn(spawns, px, py, pinst) or InstanceOnly(self, spawns, px, py, pinst),
+                                npc.name, npcId, px, py, pinst)
+            end
         end
     end
-    for _, objId in pairs(holder and holder.GameObject or {}) do
-        local obj = self.QuestieDB:GetObject(objId)
-        if obj and obj.spawns then
-            local spawns = OnlyArea(obj.spawns, self.objectArea[objId])
-            consider(self:NearestSpawn(spawns, px, py, pinst) or InstanceOnly(self, spawns, px, py, pinst), obj.name, nil)
+    if holder.GameObject then
+        for _, objId in pairs(holder.GameObject) do
+            local obj = self:GetObject(objId)
+            if obj and obj.spawns then
+                local spawns = OnlyArea(obj.spawns, self.objectArea[objId])
+                best = Consider(self, best, self:NearestSpawn(spawns, px, py, pinst) or InstanceOnly(self, spawns, px, py, pinst),
+                                obj.name, nil, px, py, pinst)
+            end
         end
     end
     return best
@@ -458,25 +507,130 @@ local IN_ZONE_YARDS = 60      -- si estas a menos de esto de un spawn de una zon
 local ZONE_FALLOFF = 300      -- yardas: cuanto pesa la distancia frente al tamaño de la zona
 local CORE_YARDS = 60         -- para elegir un punto "de verdad" dentro de la zona (no un spawn suelto)
 
-local function SpawnPoints(self, spawnLists, px, py, pinst)
-    local pts = {}
-    for _, sd in pairs(spawnLists or {}) do
+-- Spawns de cada objetivo, guardados: lo que no depende de tu posicion (coordenadas y, si caben todos, las zonas)
+-- se calcula una vez; en cada actualizacion solo se pone la distancia. Antes se creaba una tabla por spawn y se
+-- rehacian las zonas (comparando cada spawn con todos) cada 1,5 s. Firma: las tablas de Questie en el mismo orden;
+-- si cambian, se rehace.
+local spawnCache = setmetatable({}, { __mode = "k" })
+
+local function SameSpawnLists(c, spawnLists)
+    local sig, k = c.sig, 0
+    for _, sd in pairs(spawnLists) do
+        if sig[k + 1] ~= sd or sig[k + 2] ~= sd.Spawns or sig[k + 3] ~= sd.Name then return false end
+        k = k + 3
+    end
+    return k == #sig
+end
+
+local function SpawnRecords(self, spawnLists)
+    local c = spawnCache[spawnLists]
+    if c and SameSpawnLists(c, spawnLists) then return c end
+    c = { sig = {}, recs = {}, sorted = {}, near = {} }
+    for _, sd in pairs(spawnLists) do
+        local sig = c.sig
+        sig[#sig + 1], sig[#sig + 2], sig[#sig + 3] = sd, sd.Spawns, sd.Name
         for areaId, list in pairs(sd.Spawns or {}) do
             for _, spawn in pairs(list) do
                 local w = spawn[1] and spawn[1] >= 0 and self:WorldPoint(areaId, spawn)
                 if w then
-                    local d = (w[3] == pinst and px) and (self.HBD:GetWorldDistance(pinst, px, py, w[1], w[2]) or 1e7) or 1e7
-                    pts[#pts + 1] = { wx = w[1], wy = w[2], instance = w[3], uiMapId = w[4], areaId = areaId,
-                                      x = spawn[1] / 100, y = spawn[2] / 100, dist = d, name = sd.Name }
+                    c.recs[#c.recs + 1] = { wx = w[1], wy = w[2], instance = w[3], uiMapId = w[4], areaId = areaId,
+                                            x = spawn[1] / 100, y = spawn[2] / 100, dist = 1e7, name = sd.Name,
+                                            idx = #c.recs + 1 }
                 end
             end
         end
     end
-    if #pts > MAX_POINTS then
-        table.sort(pts, function(a, b) return a.dist < b.dist end)
-        for i = #pts, MAX_POINTS + 1, -1 do pts[i] = nil end
+    spawnCache[spawnLists] = c
+    return c
+end
+
+-- Orden total (a igual distancia, el orden de la base de datos): da siempre el mismo resultado, se ordene como se
+-- ordene. Antes, con table.sort solo por distancia, dos spawns en el mismo sitio podian salir en cualquier orden.
+local function DistLess(a, b)
+    local da, db = a.dist, b.dist
+    return da < db or (da == db and a.idx < b.idx)
+end
+
+--- Ordena c.sorted. Al moverte el orden casi no cambia de una vez a otra: se parte del de la vez anterior y se
+--- recoloca solo lo que se ha movido (casi lineal). Si cambia mucho (p. ej. al volar o teletransportarte), table.sort.
+local function SortByDist(c, recs)
+    local sorted = c.sorted
+    if #sorted ~= #recs then
+        for i = 1, #recs do sorted[i] = recs[i] end
+        for i = #recs + 1, #sorted do sorted[i] = nil end
+        table.sort(sorted, DistLess)
+        return sorted
     end
-    return pts
+    local n, budget = #sorted, #sorted * 8
+    for i = 2, n do
+        local v = sorted[i]
+        local j = i - 1
+        while j >= 1 and DistLess(v, sorted[j]) do
+            sorted[j + 1] = sorted[j]
+            j = j - 1
+            budget = budget - 1
+        end
+        sorted[j + 1] = v
+        if budget < 0 then
+            table.sort(sorted, DistLess)
+            return sorted
+        end
+    end
+    return sorted
+end
+
+--- Vecinos fijos de cada spawn (a menos de LINK_YARDS, misma instancia), con una rejilla: se calcula una vez por
+--- objetivo. p.nb: los que unen zonas; p.nbCore: los que cuentan para ZoneTarget (a menos de CORE_YARDS).
+local EMPTY = {}
+local function BuildNeighbors(c, recs)
+    if c.neighbors then return end
+    local L2, C2 = LINK_YARDS * LINK_YARDS, CORE_YARDS * CORE_YARDS
+    local grid = {}
+    local function cell(inst, gx, gy)
+        local a = grid[inst]; if not a then return nil end
+        local b = a[gx]; return b and b[gy]
+    end
+    for _, p in ipairs(recs) do
+        local gx, gy = math.floor(p.wx / LINK_YARDS), math.floor(p.wy / LINK_YARDS)
+        p.gx, p.gy = gx, gy
+        local a = grid[p.instance] or {}; grid[p.instance] = a
+        local b = a[gx] or {}; a[gx] = b
+        local list = b[gy] or {}; b[gy] = list
+        list[#list + 1] = p
+    end
+    for _, p in ipairs(recs) do
+        local nb, nbCore = {}, {}
+        for dx = -1, 1 do
+            for dy = -1, 1 do
+                for _, q in ipairs(cell(p.instance, p.gx + dx, p.gy + dy) or EMPTY) do
+                    if q ~= p then
+                        local ex, ey = q.wx - p.wx, q.wy - p.wy
+                        local d2 = ex * ex + ey * ey
+                        if d2 <= L2 then nb[#nb + 1] = q end
+                        if d2 <= C2 then nbCore[#nbCore + 1] = q end
+                    end
+                end
+            end
+        end
+        p.nb, p.nbCore = nb, nbCore
+    end
+    c.neighbors = true
+end
+
+--- -> lista de puntos (con .dist puesta), la cache y si la lista es solo una parte (los MAX_POINTS mas cercanos).
+--- Con todos, las zonas no cambian al moverte. Los puntos son de la cache: no se devuelven tal cual.
+local function SpawnPoints(self, spawnLists, px, py, pinst)
+    local c = SpawnRecords(self, spawnLists)
+    local recs, HBD = c.recs, self.HBD
+    for i = 1, #recs do
+        local r = recs[i]
+        r.dist = (r.instance == pinst and px) and (HBD:GetWorldDistance(pinst, px, py, r.wx, r.wy) or 1e7) or 1e7
+    end
+    if #recs <= MAX_POINTS then return recs, c, false end
+    local sorted, near = SortByDist(c, recs), c.near
+    for i = 1, MAX_POINTS do near[i] = sorted[i] end
+    BuildNeighbors(c, recs)
+    return near, c, true
 end
 
 local function BuildZones(pts)
@@ -527,14 +681,108 @@ local function ZoneTarget(z)
     return best or z.near
 end
 
+--- Igual que BuildZones, para los MAX_POINTS mas cercanos de un objetivo con mas spawns: con los vecinos ya
+--- calculados (p.nb) en vez de comparar cada spawn con todos. Mismo recorrido: los vecinos de cada uno se añaden en
+--- el orden de la lista, como al recorrerla entera.
+local subsetPos, scratch = {}, {}
+local function SubsetZones(pts)
+    wipe(subsetPos)
+    for i = 1, #pts do subsetPos[pts[i]] = i end
+    local zoneOf, zones = {}, {}
+    for i = 1, #pts do
+        if not zoneOf[i] then
+            local z = { members = {} }
+            zones[#zones + 1] = z
+            zoneOf[i] = z
+            local queue, head = { i }, 1
+            while queue[head] do
+                local p = pts[queue[head]]
+                head = head + 1
+                z.members[#z.members + 1] = p
+                if not z.nearD or p.dist < z.nearD then z.near, z.nearD = p, p.dist end
+                local n = 0
+                for _, q in ipairs(p.nb) do
+                    local j = subsetPos[q]
+                    if j and not zoneOf[j] then n = n + 1; scratch[n] = j end
+                end
+                for k = n + 1, #scratch do scratch[k] = nil end
+                if n > 1 then table.sort(scratch) end
+                for k = 1, n do
+                    zoneOf[scratch[k]] = z
+                    queue[#queue + 1] = scratch[k]
+                end
+            end
+        end
+    end
+    return zones
+end
+
+--- Igual que ZoneTarget, con los vecinos ya calculados: los de p.nbCore que estan en la lista (estan a menos de
+--- LINK_YARDS, asi que son de su misma zona) mas el propio p.
+local function SubsetZoneTarget(z)
+    local need = math.min(3, #z.members)
+    local best
+    for _, p in ipairs(z.members) do
+        if not best or p.dist < best.dist then
+            local n = 1
+            for _, q in ipairs(p.nbCore) do if subsetPos[q] then n = n + 1 end end
+            if n >= need then best = p end
+        end
+    end
+    return best or z.near
+end
+
+--- Igual que ZoneTarget, para zonas guardadas: cuantos vecinos tiene cada spawn no cambia al moverte, asi que se
+--- cuenta una vez (z.core[i]: tiene suficientes vecinos).
+local function CachedZoneTarget(z)
+    local members, core = z.members, z.core
+    if not core then
+        core = {}
+        local C2 = CORE_YARDS * CORE_YARDS
+        local need = math.min(3, #members)
+        for i, p in ipairs(members) do
+            local n = 0
+            for _, q in ipairs(members) do
+                local dx, dy = q.wx - p.wx, q.wy - p.wy
+                if dx * dx + dy * dy <= C2 then n = n + 1 end
+            end
+            core[i] = n >= need
+        end
+        z.core = core
+    end
+    local best
+    for i, p in ipairs(members) do
+        if (not best or p.dist < best.dist) and core[i] then best = p end
+    end
+    return best or z.near
+end
+
 --- Mejor sitio para hacer un objetivo a partir de sus spawns:
 ---   1) si ya estas dentro de una zona del objetivo, esa (no te manda a otra con los mismos bichos);
 ---   2) si no, la zona con mejor relacion tamaño / distancia (la grande gana si esta relativamente cerca).
 --- poi (opcional): area que marca el juego; la zona que la contiene recibe un pequeño extra.
 function Bridge:BestSpawnArea(spawnLists, px, py, pinst, poi)
-    local pts = SpawnPoints(self, spawnLists, px, py, pinst)
+    if not spawnLists then return nil end
+    local pts, cache, subset = SpawnPoints(self, spawnLists, px, py, pinst)
     if #pts == 0 then return nil end
-    local zones = BuildZones(pts)
+    local zones
+    if subset then
+        zones = SubsetZones(pts)
+    else
+        -- todos los spawns: las zonas son siempre las mismas; solo cambia cual es el mas cercano de cada una
+        zones = cache.zones
+        if not zones then
+            zones = BuildZones(pts)
+            cache.zones = zones
+        end
+        for _, z in ipairs(zones) do
+            local near, nearD
+            for _, p in ipairs(z.members) do
+                if not nearD or p.dist < nearD then near, nearD = p, p.dist end
+            end
+            z.near, z.nearD = near, nearD
+        end
+    end
     local chosen, inZone
     for _, z in ipairs(zones) do
         if z.nearD <= IN_ZONE_YARDS and (not chosen or #z.members > #chosen.members) then chosen, inZone = z, true end
@@ -553,10 +801,11 @@ function Bridge:BestSpawnArea(spawnLists, px, py, pinst, poi)
             if not bestScore or score > bestScore then chosen, bestScore = z, score end
         end
     end
-    local target = inZone and chosen.near or ZoneTarget(chosen)
-    target.clusterSize = #chosen.members
-    target.inZone = inZone
-    return target
+    local src = inZone and chosen.near or (subset and SubsetZoneTarget(chosen) or CachedZoneTarget(chosen))
+    -- (copia: los puntos son de la cache y quien recibe el destino lo modifica)
+    return { wx = src.wx, wy = src.wy, instance = src.instance, uiMapId = src.uiMapId, areaId = src.areaId,
+             x = src.x, y = src.y, dist = src.dist, name = src.name,
+             clusterSize = #chosen.members, inZone = inZone }
 end
 
 --- Donde ir para los objetivos de una mision: la zona de spawns (en la que estas, o la mejor cercana); el area

@@ -5,15 +5,16 @@ QR.Changelogs = QR.Changelogs or {}
 QR.Changelogs.esES = {
     {
         version = "0.10.6", date = "2026-11-18",
-        title = "Líneas de ruta más fluidas en el mapa y el minimapa",
+        title = "Más estabilidad con las líneas de ruta y el planificador de la guía",
         lines = {
             "# Cambios",
-            "Las líneas de ruta del mapa del mundo y del minimapa consumen mucho menos: el juego ya no se ralentiza al moverte o al hacer zoom en el mapa con una ruta activa. Se ven exactamente igual que antes.",
-            "La ruta ya no se vuelve a calcular si no ha cambiado nada, así que desaparecen los pequeños tirones cada pocos segundos.",
+            "Las líneas de ruta del mapa del mundo y del minimapa consumen mucho menos: mejora la estabilidad al moverte o al hacer zoom en el mapa con una ruta activa. Se ven exactamente igual que antes.",
+            "La ruta ya no se vuelve a calcular si no ha cambiado nada: mejora la estabilidad mientras juegas.",
+            "La guía elige el siguiente paso con mucho menos trabajo y casi sin gastar memoria, también en misiones con muchos enemigos u objetos repartidos por la zona: mejora la estabilidad mientras te mueves.",
             "# Arreglos",
             "Ventana de novedades: los títulos largos ya no se salen de la ventana.",
             "# Añadidos",
-            "/qr perf ahora muestra cuánto consume cada parte del addon (mapa, minimapa, flecha y cálculo de rutas), para encontrar ralentizaciones más fácilmente.",
+            "/qr perf ahora muestra cuánto consume cada parte del addon (mapa, minimapa, flecha, cálculo de rutas, planificador de la guía y ventana de la guía).",
         },
     },
     {
@@ -98,7 +99,7 @@ QR.Changelogs.esES = {
             "Los canjes de premios con vales llevan el icono de monedas, porque solo son una compra.",
             "Arreglado el error al elegir la fortuna de Sayge (Events.lua:126) y el contador de vales en WoW Forever.",
             "Las guías de zonas y mazmorras solo incluyen misiones que existen en WoW Forever (nada de otras expansiones ni por encima del nivel 60). Guías nuevas: Monte Hyjal, Riverglades y Shen'dralas.",
-            "Mapa del mundo: sin tirones al hacer zoom con una ruta (OpenMap). Las líneas y los marcadores solo se redibujan cuando algo cambia, y los vuelos usan menos puntos.",
+            "Mapa del mundo: mejora la estabilidad al hacer zoom con una ruta (OpenMap). Las líneas y los marcadores solo se redibujan cuando algo cambia, y los vuelos usan menos puntos.",
             "Nuevo comando /qr perf: mide durante 10 segundos lo que tardan las líneas del mapa.",
             "El título del banner ya no se pisa con la hora: si no cabe, se corta con \"...\".",
         },

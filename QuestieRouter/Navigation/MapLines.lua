@@ -715,6 +715,12 @@ local PERF_PARTS = {
     { "Arrow", function() return QR.Arrow end, "OnUpdate" },
     { "Target refresh", function() return QR.Target end, "Refresh" },
     { "Guide planner", function() return QR.Planner end, "Update" },
+    -- (partes del planificador de la guia: van dentro de su tiempo)
+    { "  Guide planner: tasks", function() return QR.Planner end, "BuildTasks" },
+    { "  Guide planner: objective areas", function() return QR.Bridge end, "ObjectiveArea" },
+    { "  Guide planner: quest givers", function() return QR.Bridge end, "NearestNpcOrObject" },
+    { "  Guide planner: step order", function() return QR.Steps end, "Simulate" },
+    { "  Guide window", function() return QR.GuideUI end, "Refresh" },
     { "Travel planner", function() return QR.Router end, "Plan" },
 }
 
@@ -793,6 +799,16 @@ local MM_INDOOR = { [0] = 300, 240, 180, 120, 80, 50 }
 local MM_MARKER = 18
 local MM_EDGE = 4        -- px: las lineas acaban un poco antes del borde
 
+-- Proyeccion del fotograma actual (la pone MinimapProjection). Antes era una funcion nueva en cada fotograma: memoria
+-- que acababa en pausas del recolector.
+local mmInst, mmPx, mmPy, mmFacing, mmPerYard
+local function MinimapProject(wx, wy)
+    local a, d = QR.HBD:GetWorldVector(mmInst, mmPx, mmPy, wx, wy)
+    if not a then return nil end
+    a = a - mmFacing
+    return -math.sin(a) * d * mmPerYard, math.cos(a) * d * mmPerYard
+end
+
 --- Proyeccion del mundo al minimapa para este fotograma: -> funcion(wx, wy) -> (x, y) en px desde el centro, el
 --- radio en px y si el minimapa es cuadrado; nil sin posicion del jugador
 local function MinimapProjection()
@@ -821,13 +837,8 @@ local function MinimapProjection()
         if not facing then return nil end
     end
     local square = GetMinimapShape and GetMinimapShape() == "SQUARE"
-    local function project(wx, wy)
-        local a, d = QR.HBD:GetWorldVector(pinst, px, py, wx, wy)
-        if not a then return nil end
-        a = a - facing
-        return -math.sin(a) * d * perYard, math.cos(a) * d * perYard
-    end
-    return project, radius, square, pinst, px, py, facing, yards
+    mmInst, mmPx, mmPy, mmFacing, mmPerYard = pinst, px, py, facing, perYard
+    return MinimapProject, radius, square, pinst, px, py, facing, yards
 end
 
 --- ¿Esta (x, y) fuera del borde util? (redondo o cuadrado)

@@ -5,15 +5,16 @@ QR.Changelogs = QR.Changelogs or {}
 QR.Changelogs.enUS = {
     {
         version = "0.10.6", date = "2026-11-18",
-        title = "Smoother route lines on the map and minimap",
+        title = "Better stability with route lines and the guide planner",
         lines = {
             "# Changes",
-            "Route lines on the world map and the minimap now use much less power: the game no longer slows down when you move or zoom the map with a route active. They look exactly the same as before.",
-            "The route is no longer recalculated when nothing has changed, so there are no small hitches every few seconds.",
+            "Route lines on the world map and the minimap use much less power: better stability when you move or zoom the map with a route active. They look exactly the same as before.",
+            "The route is no longer recalculated when nothing has changed: better stability while you play.",
+            "The guide picks the next step with much less work and almost no memory use, also in quests with many enemies or objects spread across the zone: better stability while you move.",
             "# Bug fixes",
             "What's new window: long titles no longer go past the edge of the window.",
             "# Added",
-            "/qr perf now shows how much each part of the addon uses (map, minimap, arrow and route planning), to find slowdowns more easily.",
+            "/qr perf now shows how much each part of the addon uses (map, minimap, arrow, route planning, guide planner and guide window).",
         },
     },
     {
@@ -98,7 +99,7 @@ QR.Changelogs.enUS = {
             "Ticket prize turn-ins use a coin icon, since they are only a purchase.",
             "Fixed the error when choosing Sayge's fortune (Events.lua:126) and the ticket count on WoW Forever.",
             "Zone and dungeon guides only include quests that exist on WoW Forever (no content from other expansions or above level 60). New guides: Mount Hyjal, Riverglades and Shen'dralas.",
-            "World map: no more stutter when zooming with a route (OpenMap). Lines and markers are only redrawn when something changes, and flight paths use fewer points.",
+            "World map: better stability when zooming with a route (OpenMap). Lines and markers are only redrawn when something changes, and flight paths use fewer points.",
             "New /qr perf command: measures for 10 seconds how long the map lines take.",
             "The banner title no longer overlaps the clock: if it doesn't fit, it's cut with \"...\".",
         },

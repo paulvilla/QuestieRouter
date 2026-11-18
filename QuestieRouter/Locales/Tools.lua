@@ -48,6 +48,15 @@ QR:ExtendLocale("esES", {
     ["World map: player line"] = "Mapa del mundo: línea del jugador", ["Minimap"] = "Minimapa", ["Arrow"] = "Flecha",
     ["Target refresh"] = "Refresco del destino", ["Guide planner"] = "Planificador de la guía",
     ["Travel planner"] = "Planificador de viajes",
+    ["  Guide planner: tasks"] = "  Planificador de la guía: tareas",
+    ["  Guide planner: objective areas"] = "  Planificador de la guía: zonas de los objetivos",
+    ["  Guide planner: quest givers"] = "  Planificador de la guía: quién da y recibe las misiones",
+    ["  Guide planner: step order"] = "  Planificador de la guía: orden de los pasos",
+    ["  Guide window"] = "  Ventana de la guía",
+})
+QR:ExtendLocale("enUS", {
+    ["  Guide planner: tasks"] = true, ["  Guide planner: objective areas"] = true,
+    ["  Guide planner: quest givers"] = true, ["  Guide planner: step order"] = true, ["  Guide window"] = true,
 })
 
 -- Opciones > Estado: estado de los addons de rutas a pie (QuestieRouter_Nav y los mapas de cada continente)

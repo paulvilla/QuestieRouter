@@ -162,7 +162,7 @@ local function EstimateObjectivePoint(quest, from)
             local npc = DB:GetNPC(od.Id)
             if npc then consider(npc.spawns, npc.name) end
         elseif od.Type == "object" then
-            local obj = DB:GetObject(od.Id)
+            local obj = B:GetObject(od.Id)
             if obj then consider(obj.spawns, obj.name) end
         elseif od.Type == "item" then
             local ok, drops = pcall(DB.QueryItemSingle, od.Id, "npcDrops")
