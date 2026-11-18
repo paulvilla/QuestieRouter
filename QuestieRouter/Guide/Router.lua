@@ -767,6 +767,10 @@ end
 --- Ruta mas rapida desde (sx, sy, sinst) en la zona szone hasta (gx, gy, ginst) en la zona gzone.
 --- walkOnly: solo a pie (con los cruces), para comparar con el transporte.
 --- Devuelve la lista de tramos { { kind = "walk"|"border"|"flight"|"boat"|..., from, to, extra }, ... } y el coste
+-- ultima ruta calculada (normal y solo a pie) para no repetirla con los mismos datos; WALK marca un tramo a pie
+local planMemo = {}
+local WALK = {}
+
 function Router:Plan(sx, sy, sinst, szone, gx, gy, ginst, gzone, walkOnly)
     local cfg = QR.db.travel
     local speed = GroundSpeed()
@@ -784,13 +788,25 @@ function Router:Plan(sx, sy, sinst, szone, gx, gy, ginst, gzone, walkOnly)
     end
     if not pathLen then BuildStatic() end
     if not graph or graph.key ~= GraphKey(cfg) then graph = BuildGraph(cfg) end
+    -- Mismos datos (origen, destino, zonas, grafo, velocidad y estilo de ruta) = misma ruta: se devuelve la anterior
+    -- sin recalcular. Pasa en cada refresco del destino (cada 1,5 s) mientras estas quieto, y dos veces seguidas
+    -- cuando se compara con ir a pie. Las piernas que devuelve no las modifica nadie.
+    local rough = RoughFactor()
+    local m = planMemo[walkOnly and 2 or 1]
+    if m and m.graph == graph and m.speed == speed and m.rough == rough and m.sx == sx and m.sy == sy
+        and m.sinst == sinst and m.szone == szone and m.gx == gx and m.gy == gy and m.ginst == ginst
+        and m.gzone == gzone then
+        return m.legs, m.cost
+    end
     local P, E = graph.pts, graph.edges
     P[1] = { x = sx, y = sy, inst = sinst, zone = szone, start = true }
     P[2] = { x = gx, y = gy, inst = ginst, zone = gzone, goal = true }
     local N = #P
 
     -- Dijkstra (pocos cientos de puntos: lineal es suficiente). Los tramos a pie se calculan al vuelo.
-    local dist, prev, done = { [1] = 0 }, {}, {}
+    -- (de donde se llega a cada punto: prevU = punto anterior, prevE = tramo, o WALK para ir a pie; sin crear dos
+    -- tablas en cada mejora como antes)
+    local dist, prevU, prevE, done = { [1] = 0 }, {}, {}, {}
     while true do
         local u, best
         for i, d in pairs(dist) do
@@ -803,7 +819,7 @@ function Router:Plan(sx, sy, sinst, szone, gx, gy, ginst, gzone, walkOnly)
             if e[3] == "border" or e[3] == "road" or not walkOnly then
                 local cost = e[2] or (e[4].dist / speed + (e[3] == "border" and CROSS_COST or 0))
                 local v, nd = e[1], best + cost
-                if not dist[v] or nd < dist[v] then dist[v], prev[v] = nd, { u, e } end
+                if not dist[v] or nd < dist[v] then dist[v], prevU[v], prevE[v] = nd, u, e end
             end
         end
         for v = 2, N do
@@ -811,21 +827,30 @@ function Router:Plan(sx, sy, sinst, szone, gx, gy, ginst, gzone, walkOnly)
             if v ~= u and not done[v] and pv.inst == pu.inst then
                 local d = Dist(pu.x, pu.y, pv.x, pv.y)
                 local f = WalkFactor(pu.zone, pv.zone)
-                if f == 1 and pu.zone and pu.zone == pv.zone and roughZone[pu.zone] and d > ROAD_SNAP then f = RoughFactor() end
+                if f == 1 and pu.zone and pu.zone == pv.zone and roughZone[pu.zone] and d > ROAD_SNAP then f = rough end
                 local nd = best + d * f / speed
                 if pv.kind == "flightmaster" then nd = nd + TAXI_OVERHEAD end
-                if not dist[v] or nd < dist[v] then dist[v], prev[v] = nd, { u, { v, nil, "walk" } } end
+                if not dist[v] or nd < dist[v] then dist[v], prevU[v], prevE[v] = nd, u, WALK end
             end
         end
     end
-    if not dist[2] then return nil end
-    local legs, v = {}, 2
-    while prev[v] do
-        local u, e = prev[v][1], prev[v][2]
-        table.insert(legs, 1, { kind = e[3], from = P[u], to = P[v], extra = e[4] })
-        v = u
+    local legs, cost
+    if dist[2] then
+        legs, cost = {}, dist[2]
+        local v = 2
+        while prevU[v] do
+            local u, e = prevU[v], prevE[v]
+            if e == WALK then
+                table.insert(legs, 1, { kind = "walk", from = P[u], to = P[v] })
+            else
+                table.insert(legs, 1, { kind = e[3], from = P[u], to = P[v], extra = e[4] })
+            end
+            v = u
+        end
     end
-    return legs, dist[2]
+    planMemo[walkOnly and 2 or 1] = { graph = graph, speed = speed, rough = rough, sx = sx, sy = sy, sinst = sinst,
+        szone = szone, gx = gx, gy = gy, ginst = ginst, gzone = gzone, legs = legs, cost = cost }
+    return legs, cost
 end
 
 --- Nombre corto de la zona de un punto: el maestro de vuelo mas cercano ("Ventormenta, Elwynn")
@@ -1130,6 +1155,7 @@ end
 function Router:ClearRouteFrom()
     wipe(fromCache)
     wipe(fromOrder)
+    wipe(planMemo)   -- (y la ultima ruta calculada: p. ej. la velocidad del vuelo no cambia la clave del grafo)
 end
 
 ---------------------------------------------------------------------------

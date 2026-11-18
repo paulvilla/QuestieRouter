@@ -76,6 +76,10 @@ function WhatsNew:Build()
 
     -- registro de cambios con barra
     f.logTitle = c:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+    -- (con ancho: un titulo largo pasa a la linea siguiente en vez de salirse por la derecha)
+    f.logTitle:SetJustifyH("LEFT")
+    f.logTitle:SetWordWrap(true)
+    f.logTitle:SetSpacing(2)
     f.scroll = CreateFrame("ScrollFrame", nil, c, "UIPanelScrollFrameTemplate")
     f.scroll:SetPoint("BOTTOMRIGHT", c, "BOTTOMRIGHT", -28, 10)
     f.log = CreateFrame("Frame", nil, f.scroll)
@@ -134,6 +138,7 @@ function WhatsNew:Show()
     end
     f.logTitle:ClearAllPoints()
     f.logTitle:SetPoint("TOPLEFT", f.content, "TOPLEFT", 18, -top)
+    f.logTitle:SetPoint("RIGHT", f.content, "RIGHT", -18, 0)
     f.logTitle:SetText(log and log.title or "")
     f.scroll:ClearAllPoints()
     f.scroll:SetPoint("TOPLEFT", f.logTitle, "BOTTOMLEFT", 0, -8)

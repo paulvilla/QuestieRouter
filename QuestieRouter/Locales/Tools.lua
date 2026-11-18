@@ -37,6 +37,19 @@ QR:ExtendLocale("ruRU", {
     ["Map lines: %d frames, %.3f ms average, %.3f ms max per frame, %d route lines."] = "Линии на карте: кадров %d, в среднем %.3f мс, максимум %.3f мс на кадр, линий маршрута: %d.",
 })
 
+-- /qr perf: cada parte medida por separado
+QR:ExtendLocale("enUS", {
+    ["  %s: %d calls, %.3f ms average, %.3f ms max, %.2f ms/s, %.1f KB/s"] = true,
+    ["World map: player line"] = true, ["Minimap"] = true, ["Arrow"] = true,
+    ["Target refresh"] = true, ["Guide planner"] = true, ["Travel planner"] = true,
+})
+QR:ExtendLocale("esES", {
+    ["  %s: %d calls, %.3f ms average, %.3f ms max, %.2f ms/s, %.1f KB/s"] = "  %s: %d llamadas, %.3f ms de media, %.3f ms como máximo, %.2f ms/s, %.1f KB/s",
+    ["World map: player line"] = "Mapa del mundo: línea del jugador", ["Minimap"] = "Minimapa", ["Arrow"] = "Flecha",
+    ["Target refresh"] = "Refresco del destino", ["Guide planner"] = "Planificador de la guía",
+    ["Travel planner"] = "Planificador de viajes",
+})
+
 -- Opciones > Estado: estado de los addons de rutas a pie (QuestieRouter_Nav y los mapas de cada continente)
 local STATUS_KEYS = {
     "STATUS", "Walking routes engine", "Eastern Kingdoms walking maps", "Kalimdor walking maps",

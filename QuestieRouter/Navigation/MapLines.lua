@@ -37,33 +37,40 @@ local function NewAnimatedLine(owner, layer)
     return line
 end
 
---- Ajusta grosor, color, estilo y la fase de la animacion.
+--- Desplazamiento continuo del dibujo hacia el destino (fase de la animacion) con las repeticiones y la franja de la
+--- textura guardadas en la linea (line.tile, line.v1, line.v2)
+local function PhaseNow(line, phase)
+    local u1, u2 = -phase, line.tile - phase
+    line:SetTexCoord(u1, line.v1, u1, line.v2, u2, line.v1, u2, line.v2)
+end
+
+--- Ajusta grosor, color, estilo y la fase de la animacion (lineas del minimapa).
 --- length y thickness en LAS MISMAS unidades (las del marco donde esta la linea): asi el dibujo
 --- conserva sus proporciones con cualquier zoom, como en Zygor.
-local function PaintLine(line, length, thickness, alpha, styleOverride, color)
+--- El color, la mezcla y la franja del estilo solo se vuelven a poner si cambia stamp (ajustes, color de la zona o
+--- su transicion); antes se ponian en cada fotograma con el mismo valor.
+local function PaintLine(line, length, thickness, alpha, stamp)
     local cfg = QR.db.lines
-    local style = styleOverride or cfg.style or 1
-    line:SetThickness(thickness)
-    if color then
-        line:SetVertexColor(color[1], color[2], color[3], alpha)
-    elseif cfg.colorMode == "WHITE" then
-        line:SetVertexColor(1, 1, 1, alpha)
-    elseif cfg.colorMode == "CUSTOM" then
-        local c = cfg.customColor or { 1, 0.82, 0.3 }
-        line:SetVertexColor(c[1], c[2], c[3], alpha)
-    else
-        local r, g, b = QR.Skin:Color("accent")
-        line:SetVertexColor(r * 0.8 + 0.2, g * 0.8 + 0.2, b * 0.8 + 0.2, alpha)
+    if line.paintStamp ~= stamp then
+        line.paintStamp = stamp
+        local style = cfg.style or 1
+        if cfg.colorMode == "WHITE" then
+            line:SetVertexColor(1, 1, 1, alpha)
+        elseif cfg.colorMode == "CUSTOM" then
+            local c = cfg.customColor or { 1, 0.82, 0.3 }
+            line:SetVertexColor(c[1], c[2], c[3], alpha)
+        else
+            local r, g, b = QR.Skin:Color("accent")
+            line:SetVertexColor(r * 0.8 + 0.2, g * 0.8 + 0.2, b * 0.8 + 0.2, alpha)
+        end
+        line:SetBlendMode(style == 4 and "ADD" or "BLEND")
+        -- medio texel hacia dentro: al reducir la textura no se cuelan las franjas vecinas
+        line.v1, line.v2 = (style - 1) / 4 + 0.016, style / 4 - 0.016
     end
-    line:SetBlendMode(style == 4 and "ADD" or "BLEND")
+    line:SetThickness(thickness)
     -- cada repeticion del dibujo ocupa 4 veces el grosor (cada franja de la textura mide 32x8)
-    local tile = math.max(0.5, length / (thickness * 4) * (cfg.density or 1))
-    -- desplazamiento continuo hacia el destino
-    local phase = (GetTime() / math.max(0.2, cfg.speed or 1.4)) % 1
-    local u1, u2 = -phase, tile - phase
-    -- medio texel hacia dentro: al reducir la textura no se cuelan las franjas vecinas
-    local v1, v2 = (style - 1) / 4 + 0.016, style / 4 - 0.016
-    line:SetTexCoord(u1, v1, u1, v2, u2, v1, u2, v2)
+    line.tile = math.max(0.5, length / (thickness * 4) * (cfg.density or 1))
+    PhaseNow(line, (GetTime() / math.max(0.2, cfg.speed or 1.4)) % 1)
 end
 
 ---------------------------------------------------------------------------
@@ -203,7 +210,9 @@ function MapLines:CreateWorldMap()
     owner.glow = owner:CreateTexture(nil, "OVERLAY", nil, 6)
     owner.glow:SetTexture(MEDIA .. "Textures\\SoftPanelCircle.tga")
     owner.glow:Hide()
-    owner.st = { geo = true, paint = true }
+    -- styleStamp: sube al repintar (ajustes, color de la zona): las lineas del camino a pie se vuelven a colorear
+    -- solo cuando cambia
+    owner.st = { geo = true, paint = true, styleStamp = 1 }
 
     -- el lienzo solo se actualiza mientras el mapa esta abierto
     owner:SetScript("OnUpdate", function()
@@ -224,6 +233,29 @@ end
 function MapLines:InvalidateWorld()
     local st = self.wm and self.wm.st
     if st then st.geo, st.paint = true, true end
+end
+
+--- WALK_PATH: camino a pie nuevo del jugador o un tramo de la ruta refinado por el terreno. Si la ruta de viaje sigue
+--- igual (Walk:RefineRoute borra su canvasCache cuando cambia un tramo) basta con la linea del jugador; si no, todo.
+function MapLines:OnWalkPath()
+    local st = self.wm and self.wm.st
+    if not st then return end
+    local t = QR.target
+    local function intact(r) return not r or r.canvasCache ~= nil end
+    local via = t and (t.via or (t.final and t.final.via))
+    if t and intact(t.kind == "travel" and t.route or nil) and intact(via and via.route) then
+        st.walkDirty = true
+    else
+        st.geo, st.paint = true, true
+    end
+end
+
+--- Transicion del color de la zona (SKIN_FADE): las lineas del camino a pie siguen el color en cada paso, como
+--- antes (se recoloreaban en cada recolocacion)
+function MapLines:OnSkinFade()
+    local st = self.wm and self.wm.st
+    if st then st.styleStamp, st.walkDirty = st.styleStamp + 1, true end
+    if self.mm then self.mm.styleStamp = (self.mm.styleStamp or 0) + 1 end
 end
 
 function MapLines:UpdateWorldMapLevel()
@@ -337,6 +369,8 @@ function MapLines:UpdateWorldMap()
         if pmap then ax, ay = CanvasFromZone(pmap, px, py) end
         if ax ~= st.ax or ay ~= st.ay then st.ax, st.ay, moved = ax, ay, true end
     end
+    -- camino a pie nuevo (WALK_PATH) o color de la zona en transicion: solo la linea del jugador
+    if st.walkDirty then st.walkDirty, moved = false, true end
 
     -- 3. Zoom
     local zoomed = math.abs(scale - (st.scale or 0)) > 1e-5
@@ -348,6 +382,7 @@ function MapLines:UpdateWorldMap()
     local repaint = st.paint or geo
     if st.paint then
         st.paint = false
+        st.styleStamp = st.styleStamp + 1
         st.markerKey, st.endKey = nil, nil
         for k = 1, owner.nRoute do
             local l = owner.routeLines[k]
@@ -414,7 +449,11 @@ function MapLines:UpdateWorldMap()
     if animate or geo or zoomed or moved then
         if animate then st.animAt, st.phase = now, Phase() end
         local phase = st.phase or 0
-        for k = 1, owner.nRoute do PhaseLine(owner.routeLines[k], phase) end
+        -- la ruta de viaje solo cambia de fase al animar o de repeticiones con el zoom / al recolocar: al moverse
+        -- (solo cambia la linea del jugador) se queda como estaba
+        if animate or geo or zoomed then
+            for k = 1, owner.nRoute do PhaseLine(owner.routeLines[k], phase) end
+        end
         if owner.line:IsShown() then PhaseLine(owner.line, phase) end
         for k = 1, (owner.nWalk or 0) do PhaseLine(owner.walkLines[k], phase) end
         if animate and st.bx and not badge then
@@ -424,25 +463,68 @@ function MapLines:UpdateWorldMap()
     end
 end
 
+--- Coordenadas del lienzo (0..1) de los puntos del camino a pie, guardadas por camino y por mapa que se ve: las
+--- posiciones en el lienzo no cambian con el zoom ni al moverse (antes se recalculaban todas en cada fotograma de
+--- zoom y cada 0,1 s al andar). Se calculan al pedirlas (false: el punto no cae en este mapa).
+local function WalkCanvas(owner, path)
+    local host = WorldMapFrame:GetMapID()
+    local stitched = OpenMapStitched() and true or false
+    local c = owner.walkCanvas
+    if not c or c.path ~= path or c.host ~= host or c.stitched ~= stitched then
+        c = { path = path, host = host, stitched = stitched, x = {}, y = {} }
+        owner.walkCanvas = c
+    end
+    return c
+end
+
+local function WalkPoint(c, pts, k, pinst)
+    local x = c.x[k]
+    if x == nil then
+        local cx, cy = CanvasFromWorld(pts[k].x, pts[k].y, pinst)
+        c.x[k], c.y[k] = cx or false, cy or false
+        x = c.x[k]
+    end
+    if not x then return nil end
+    return x, c.y[k]
+end
+
 --- Linea del jugador al destino, con los extremos recortados para no tapar la flecha ni el marcador
 function MapLines:LayoutPlayerLine(owner, W, H, scale)
     local st = owner.st
     local line = owner.line
-    -- camino a pie por el terreno (Navigation/Walk.lua): la linea sigue el camino en vez de ir recta
+    -- camino a pie por el terreno (Navigation/Walk.lua): la linea sigue el camino en vez de ir recta. Los puntos son
+    -- el jugador, lo que queda del camino y, si hace falta, el final (Walk:RemainingInfo; sin crear tablas). Cada linea
+    -- solo se vuelve a anclar, a dimensionar o a colorear si su valor cambia.
     owner.walkLines = owner.walkLines or {}
     local n = 0
     local px, py, pinst = QR.HBD:GetPlayerWorldPosition()
-    local walk = px and QR.Walk and QR.Walk:Remaining(px, py, pinst, QR.target)
-    if walk and #walk >= 2 then
+    local pts, wi, gx, gy, addGoal
+    if px and QR.Walk then pts, wi, gx, gy, addGoal = QR.Walk:RemainingInfo(px, py, pinst, QR.target) end
+    local count = pts and (1 + math.max(0, #pts - wi) + (addGoal and 1 or 0)) or 0
+    if count >= 2 then
         local cfg = QR.db.lines
         local thick = (cfg.thicknessWorld or 9) / scale
-        local prev
-        for i, p in ipairs(walk) do
-            local cx, cy = CanvasFromWorld(p.x, p.y, pinst)
+        local alpha = cfg.alphaWorld or 0.9
+        local stamp = st.styleStamp
+        local c = WalkCanvas(owner, QR.Walk.path)
+        local prevX, prevY
+        for k = 0, count - 1 do
+            local cx, cy
+            if k == 0 then
+                cx, cy = CanvasFromWorld(px, py, pinst)
+            elseif wi + k <= #pts then
+                cx, cy = WalkPoint(c, pts, wi + k, pinst)
+            else
+                if c.gx ~= gx or c.gy ~= gy then
+                    local gcx, gcy = CanvasFromWorld(gx, gy, pinst)
+                    c.gx, c.gy, c.gcx, c.gcy = gx, gy, gcx, gcy
+                end
+                cx, cy = c.gcx, c.gcy
+            end
             if cx then
-                local pt = { cx * W, -cy * H }
-                if prev then
-                    local x1, y1, x2, y2 = prev[1], prev[2], pt[1], pt[2]
+                local X, Y = cx * W, -cy * H
+                if prevX then
+                    local x1, y1, x2, y2 = prevX, prevY, X, Y
                     local dx, dy = x2 - x1, y2 - y1
                     local len = math.sqrt(dx * dx + dy * dy)
                     if len > 0.5 then
@@ -457,14 +539,23 @@ function MapLines:LayoutPlayerLine(owner, W, H, scale)
                             l = NewAnimatedLine(owner, "OVERLAY")
                             owner.walkLines[n] = l
                         end
-                        StyleLine(l, cfg.alphaWorld or 0.9)
-                        l:SetStartPoint("TOPLEFT", owner, x1, y1)
-                        l:SetEndPoint("TOPLEFT", owner, x2, y2)
-                        SizeLine(l, len, thick)
+                        if l.styleStamp ~= stamp then
+                            StyleLine(l, alpha)
+                            l.styleStamp, l.sizeStamp = stamp, nil
+                        end
+                        if l.x1 ~= x1 or l.y1 ~= y1 or l.x2 ~= x2 or l.y2 ~= y2 then
+                            l:SetStartPoint("TOPLEFT", owner, x1, y1)
+                            l:SetEndPoint("TOPLEFT", owner, x2, y2)
+                            l.x1, l.y1, l.x2, l.y2 = x1, y1, x2, y2
+                        end
+                        if l.sizeStamp ~= stamp or l.len ~= len or l.thick ~= thick then
+                            SizeLine(l, len, thick)
+                            l.sizeStamp, l.len, l.thick = stamp, len, thick
+                        end
                         l:Show()
                     end
                 end
-                prev = pt
+                prevX, prevY = X, Y
             end
         end
     end
@@ -615,21 +706,61 @@ function MapLines:LayoutRoute(owner, t, W, H)
     if not st.fx then owner.endMarker:Hide() end
 end
 
---- /qr perf: mide lo que tarda la capa del mapa del mundo durante 'seconds' segundos y lo escribe en el chat
+--- Partes que mide /qr perf ademas de la capa del mapa del mundo: { texto, tabla, funcion }. Se envuelven solo
+--- mientras se mide (y se dejan como estaban al terminar). El tiempo de cada una incluye lo que llama (el refresco del
+--- destino incluye el planificador de la guia y el de viajes).
+local PERF_PARTS = {
+    { "World map: player line", function() return MapLines end, "LayoutPlayerLine" },
+    { "Minimap", function() return MapLines end, "UpdateMinimap" },
+    { "Arrow", function() return QR.Arrow end, "OnUpdate" },
+    { "Target refresh", function() return QR.Target end, "Refresh" },
+    { "Guide planner", function() return QR.Planner end, "Update" },
+    { "Travel planner", function() return QR.Router end, "Plan" },
+}
+
+--- /qr perf: mide lo que tarda la capa del mapa del mundo (y cada parte de PERF_PARTS) durante 'seconds' segundos y lo
+--- escribe en el chat: llamadas, ms de media y maximo, ms por segundo y memoria creada (KB por segundo)
 function MapLines:StartPerf(seconds)
     local L = QR.L
     seconds = seconds or 10
+    if self.perf then return end
     self.perf = { frames = 0, total = 0, max = 0 }
+    local parts, restore = {}, {}
+    for _, d in ipairs(PERF_PARTS) do
+        local obj = d[2]()
+        local orig = obj and obj[d[3]]
+        if type(orig) == "function" then
+            local r = { name = d[1], calls = 0, total = 0, max = 0, kb = 0 }
+            parts[#parts + 1] = r
+            restore[#restore + 1] = { obj, d[3], orig }
+            obj[d[3]] = function(...)
+                local m0, t0 = collectgarbage("count"), debugprofilestop()
+                local a, b, c, e = orig(...)
+                local ms, kb = debugprofilestop() - t0, collectgarbage("count") - m0
+                r.calls, r.total = r.calls + 1, r.total + ms
+                if ms > r.max then r.max = ms end
+                if kb > 0 then r.kb = r.kb + kb end   -- (negativo: paso el recolector en medio)
+                return a, b, c, e
+            end
+        end
+    end
     QR:Print(string.format(L["Measuring the map lines for %d s: open the world map and zoom in and out."], seconds))
     C_Timer.After(seconds, function()
+        for _, x in ipairs(restore) do x[1][x[2]] = x[3] end
         local p = MapLines.perf
         MapLines.perf = nil
         if not p or p.frames == 0 then
             QR:Print(L["Map lines: the world map was not open while measuring."])
-            return
+        else
+            QR:Print(string.format(L["Map lines: %d frames, %.3f ms average, %.3f ms max per frame, %d route lines."],
+                p.frames, p.total / p.frames, p.max, MapLines.wm and MapLines.wm.nRoute or 0))
         end
-        QR:Print(string.format(L["Map lines: %d frames, %.3f ms average, %.3f ms max per frame, %d route lines."],
-            p.frames, p.total / p.frames, p.max, MapLines.wm and MapLines.wm.nRoute or 0))
+        for _, r in ipairs(parts) do
+            if r.calls > 0 then
+                QR:Print(string.format(L["  %s: %d calls, %.3f ms average, %.3f ms max, %.2f ms/s, %.1f KB/s"],
+                    L[r.name], r.calls, r.total / r.calls, r.max, r.total / seconds, r.kb / seconds))
+            end
+        end
     end)
 end
 
@@ -646,6 +777,8 @@ function MapLines:CreateMinimap()
     owner.line = NewAnimatedLine(owner, "ARTWORK")
     owner.walkLines = {}
     owner.nWalk = 0
+    owner.styleStamp = 1      -- sube con los ajustes y el color de la zona (PaintLine: recolorear)
+    owner.sig = {}            -- lo que se dibujo en el ultimo fotograma (MinimapSame)
     -- marcador del destino (por encima de las lineas)
     local m = NewMarker(owner)
     m:SetFrameLevel(owner:GetFrameLevel() + 2)
@@ -694,7 +827,7 @@ local function MinimapProjection()
         a = a - facing
         return -math.sin(a) * d * perYard, math.cos(a) * d * perYard
     end
-    return project, radius, square, pinst, px, py
+    return project, radius, square, pinst, px, py, facing, yards
 end
 
 --- ¿Esta (x, y) fuera del borde util? (redondo o cuadrado)
@@ -734,14 +867,20 @@ end
 --- Camino a pie en el minimapa (Navigation/Walk.lua): los tramos que quedan, hasta el borde. -> true si lo dibuja
 function MapLines:MinimapWalk(owner, cfg, project, radius, square, pinst, px, py)
     local n = 0
-    local walk = QR.Walk and QR.Walk:Remaining(px, py, pinst, QR.target)
-    if walk and #walk >= 2 then
+    -- lo que queda del camino sin crear tablas (antes, una tabla con todo el camino en cada fotograma)
+    local pts, wi, gx, gy, addGoal
+    if QR.Walk then pts, wi, gx, gy, addGoal = QR.Walk:RemainingInfo(px, py, pinst, QR.target) end
+    local count = pts and (1 + math.max(0, #pts - wi) + (addGoal and 1 or 0)) or 0
+    if count >= 2 then
         local lim = radius - MM_EDGE
-        local prev = { 0, 0 }
-        for i = 2, #walk do
-            local x2, y2 = project(walk[i].x, walk[i].y)
+        local stamp = owner.styleStamp
+        local px1, py1 = 0, 0
+        for i = 2, count do
+            local wx, wy
+            if wi + i - 1 <= #pts then wx, wy = pts[wi + i - 1].x, pts[wi + i - 1].y else wx, wy = gx, gy end
+            local x2, y2 = project(wx, wy)
             if not x2 then break end
-            local x1, y1 = prev[1], prev[2]
+            local x1, y1 = px1, py1
             -- el tramo que sale del minimapa se corta en el borde (y ahi se acaba)
             local out = OutsideEdge(x2, y2, lim, square)
             local ex, ey = x2, y2
@@ -761,11 +900,11 @@ function MapLines:MinimapWalk(owner, cfg, project, radius, square, pinst, px, py
                 end
                 l:SetStartPoint("CENTER", Minimap, x1, y1)
                 l:SetEndPoint("CENTER", Minimap, ex, ey)
-                PaintLine(l, len, cfg.thicknessMinimap or 4, cfg.alphaMinimap or 0.9)
+                PaintLine(l, len, cfg.thicknessMinimap or 4, cfg.alphaMinimap or 0.9, stamp)
                 l:Show()
             end
             if out then break end
-            prev = { x2, y2 }
+            px1, py1 = x2, y2
         end
     end
     for k = n + 1, owner.nWalk do owner.walkLines[k]:Hide() end
@@ -774,10 +913,38 @@ function MapLines:MinimapWalk(owner, cfg, project, radius, square, pinst, px, py
 end
 
 local function HideMinimap(owner)
+    owner.sig.valid = false
     owner.line:Hide()
     owner.marker:Hide()
     for k = 1, owner.nWalk do owner.walkLines[k]:Hide() end
     owner.nWalk = 0
+end
+
+--- Ajustes o color de la zona cambiados: las lineas del minimapa se vuelven a colorear y a colocar
+function MapLines:RestyleMinimap()
+    local owner = self.mm
+    if owner then owner.styleStamp = (owner.styleStamp or 0) + 1 end
+end
+
+--- ¿Ha cambiado algo de lo que decide donde van las lineas del minimapa desde el ultimo fotograma? (posicion,
+--- orientacion, zoom, forma, destino, camino a pie y su progreso, colores, marcador). Si no, el dibujo es el mismo y
+--- solo avanza la animacion. -> true si sigue todo igual (y si no, lo apunta para el siguiente fotograma)
+local function MinimapSame(owner, t, px, py, pinst, facing, yards, radius, square)
+    local W = QR.Walk
+    local path = W and W.path
+    local prog = path and path.progress
+    local pending = W and W.pending and true or false
+    local s = owner.sig
+    if s.valid and s.t == t and s.tx == t.wx and s.ty == t.wy and s.px == px and s.py == py and s.pinst == pinst
+        and s.facing == facing and s.yards == yards and s.radius == radius and s.square == square
+        and s.path == path and s.prog == prog and s.pending == pending and s.stamp == owner.styleStamp
+        and s.painted == owner.painted then
+        return true
+    end
+    s.valid, s.t, s.tx, s.ty, s.px, s.py, s.pinst = true, t, t.wx, t.wy, px, py, pinst
+    s.facing, s.yards, s.radius, s.square = facing, yards, radius, square
+    s.path, s.prog, s.pending, s.stamp, s.painted = path, prog, pending, owner.styleStamp, owner.painted
+    return false
 end
 
 function MapLines:UpdateMinimap()
@@ -788,8 +955,15 @@ function MapLines:UpdateMinimap()
         HideMinimap(owner)
         return
     end
-    local project, radius, square, pinst, px, py = MinimapProjection()
+    local project, radius, square, pinst, px, py, facing, yards = MinimapProjection()
     if not project or pinst ~= t.instance then HideMinimap(owner) return end
+    -- quieto (sin girar, sin zoom...): las lineas siguen donde estaban; solo avanza la animacion
+    if MinimapSame(owner, t, px, py, pinst, facing, yards, radius, square) then
+        local phase = (GetTime() / math.max(0.2, cfg.speed or 1.4)) % 1
+        for k = 1, owner.nWalk do PhaseNow(owner.walkLines[k], phase) end
+        if owner.line:IsShown() and owner.line.tile then PhaseNow(owner.line, phase) end
+        return
+    end
     local tx, ty = project(t.wx, t.wy)
     if not tx then HideMinimap(owner) return end
 
@@ -810,7 +984,7 @@ function MapLines:UpdateMinimap()
     local cut = 7
     owner.line:SetStartPoint("CENTER", Minimap, ux * cut, uy * cut)
     owner.line:SetEndPoint("CENTER", Minimap, mx - ux * 6, my - uy * 6)
-    PaintLine(owner.line, len - cut - 6, cfg.thicknessMinimap or 4, cfg.alphaMinimap or 0.9)
+    PaintLine(owner.line, len - cut - 6, cfg.thicknessMinimap or 4, cfg.alphaMinimap or 0.9, owner.styleStamp)
     owner.line:Show()
 end
 
@@ -831,9 +1005,12 @@ function MapLines:Init()
     self:CreateMinimap()
     self:CreateWorldMap()
     QR:On("TARGET_CHANGED", function(t) MapLines:OnTargetChanged(t); MapLines:InvalidateWorld() end)
-    QR:On("SETTINGS_CHANGED", function() MapLines:OnTargetChanged(QR.target); MapLines:InvalidateWorld() end)
-    QR:On("WALK_PATH", function() MapLines:InvalidateWorld() end)
-    QR:On("SKIN_CHANGED", function() MapLines:InvalidateWorld() end)
+    QR:On("SETTINGS_CHANGED", function()
+        MapLines:OnTargetChanged(QR.target); MapLines:InvalidateWorld(); MapLines:RestyleMinimap()
+    end)
+    QR:On("WALK_PATH", function() MapLines:OnWalkPath() end)
+    QR:On("SKIN_CHANGED", function() MapLines:InvalidateWorld(); MapLines:RestyleMinimap() end)
+    QR:On("SKIN_FADE", function() MapLines:OnSkinFade() end)
     QR:On("HISTORY_CHANGED", function()
         MapLines:InvalidateWorld()   -- (numero del paso en el marcador)
         if QR.target and MapLines.mm.painted then PaintMarker(MapLines.mm.marker, QR.target, MM_MARKER) end

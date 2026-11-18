@@ -4,6 +4,19 @@ local _, QR = ...
 QR.Changelogs = QR.Changelogs or {}
 QR.Changelogs.esES = {
     {
+        version = "0.10.6", date = "2026-11-18",
+        title = "Líneas de ruta más fluidas en el mapa y el minimapa",
+        lines = {
+            "# Cambios",
+            "Las líneas de ruta del mapa del mundo y del minimapa consumen mucho menos: el juego ya no se ralentiza al moverte o al hacer zoom en el mapa con una ruta activa. Se ven exactamente igual que antes.",
+            "La ruta ya no se vuelve a calcular si no ha cambiado nada, así que desaparecen los pequeños tirones cada pocos segundos.",
+            "# Arreglos",
+            "Ventana de novedades: los títulos largos ya no se salen de la ventana.",
+            "# Añadidos",
+            "/qr perf ahora muestra cuánto consume cada parte del addon (mapa, minimapa, flecha y cálculo de rutas), para encontrar ralentizaciones más fácilmente.",
+        },
+    },
+    {
         version = "0.10.5", date = "2026-11-17",
         title = "Puntos en el mapa, guías de clase más completas, notas de misión e iconos de Questie",
         lines = {

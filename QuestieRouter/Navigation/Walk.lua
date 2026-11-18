@@ -108,17 +108,24 @@ local function Usable(path, t, pinst, px, py)
 end
 
 --- tramo del camino mas cercano al jugador: indice del segmento (i -> i + 1) y distancia
+--- La flecha (cada fotograma), el minimapa (cada fotograma) y el mapa del mundo lo piden con la misma posicion: con el
+--- mismo camino, la misma posicion y el mismo tramo de inicio el resultado es el mismo, asi que se reutiliza (sin
+--- recorrer otra vez el camino).
+local nearMemo = {}
 function Walk:Nearest(px, py)
     local path = self.path
     if not path then return nil end
     local pts = path.points
-    local best, bi = nil, nil
     -- se busca desde el ultimo tramo conocido hacia delante (y un poco hacia atras), sin volver al principio
     local from = math.max(1, (path.progress or 1) - 2)
+    local m = nearMemo
+    if m.path == path and m.px == px and m.py == py and m.from == from then return m.i, m.d end
+    local best, bi = nil, nil
     for i = from, #pts - 1 do
         local d = SegDist(px, py, pts[i].x, pts[i].y, pts[i + 1].x, pts[i + 1].y)
         if not best or d < best then best, bi = d, i end
     end
+    m.path, m.px, m.py, m.from, m.i, m.d = path, px, py, from, bi, best
     return bi, best
 end
 
@@ -144,18 +151,30 @@ function Walk:Waypoint(px, py, pinst, t)
     return nil
 end
 
---- el camino que dibuja el mapa: los puntos que quedan desde el jugador (nil si no hay)
-function Walk:Remaining(px, py, pinst, t)
+--- Lo que queda del camino desde el jugador, sin crear tablas (las lineas lo piden en cada fotograma):
+--- -> points (los del camino), i (los que quedan son points[i + 1 .. #points]), gx, gy (el final) y addGoal (si hay
+--- que añadir el final despues del ultimo punto); nil si no hay camino. Lo que queda es: el jugador,
+--- points[i + 1 .. #points] y, con addGoal, (gx, gy). Mismo resultado que Walk:Remaining.
+function Walk:RemainingInfo(px, py, pinst, t)
     local path = self.path
     if not Usable(path, t, pinst, px, py) then return nil end
     local i = self:Advance(px, py) or path.progress or 1
-    local out = { { x = px, y = py } }
-    for k = i + 1, #path.points do out[#out + 1] = path.points[k] end
+    local pts = path.points
     -- el final: el destino de este camino o, con el camino viejo mientras llega el nuevo, el destino actual
     local gx, gy = path.dx, path.dy
     if not SameGoal(path, t, pinst) then gx, gy = t.wx, t.wy end
-    local last = out[#out]
-    if Dist(last.x, last.y, gx, gy) > GOAL_GAP then out[#out + 1] = { x = gx, y = gy } end
+    local lx, ly = px, py
+    if i + 1 <= #pts then lx, ly = pts[#pts].x, pts[#pts].y end
+    return pts, i, gx, gy, Dist(lx, ly, gx, gy) > GOAL_GAP
+end
+
+--- el camino que dibuja el mapa: los puntos que quedan desde el jugador (nil si no hay)
+function Walk:Remaining(px, py, pinst, t)
+    local pts, i, gx, gy, addGoal = self:RemainingInfo(px, py, pinst, t)
+    if not pts then return nil end
+    local out = { { x = px, y = py } }
+    for k = i + 1, #pts do out[#out + 1] = pts[k] end
+    if addGoal then out[#out + 1] = { x = gx, y = gy } end
     return out
 end
 

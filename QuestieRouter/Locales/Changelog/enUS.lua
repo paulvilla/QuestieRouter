@@ -4,6 +4,19 @@ local _, QR = ...
 QR.Changelogs = QR.Changelogs or {}
 QR.Changelogs.enUS = {
     {
+        version = "0.10.6", date = "2026-11-18",
+        title = "Smoother route lines on the map and minimap",
+        lines = {
+            "# Changes",
+            "Route lines on the world map and the minimap now use much less power: the game no longer slows down when you move or zoom the map with a route active. They look exactly the same as before.",
+            "The route is no longer recalculated when nothing has changed, so there are no small hitches every few seconds.",
+            "# Bug fixes",
+            "What's new window: long titles no longer go past the edge of the window.",
+            "# Added",
+            "/qr perf now shows how much each part of the addon uses (map, minimap, arrow and route planning), to find slowdowns more easily.",
+        },
+    },
+    {
         version = "0.10.5", date = "2026-11-17",
         title = "Map waypoints, more complete class guides, quest notes and Questie icons",
         lines = {
